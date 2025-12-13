@@ -511,7 +511,7 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-cjr3-kvU.mjs')
+    component: () => import('./index-DUgD8Gxg.mjs')
   },
   {
     name: "webform",
@@ -2443,8 +2443,8 @@ const plugins = [
 ];
 const layouts = {
   blank: defineAsyncComponent(() => import('./blank-B5OZ5S0Y.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-YVP8Lm0Q.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-BWtwInxG.mjs').then((m) => m.default || m))
+  default: defineAsyncComponent(() => import('./default-MubX46Hj.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-CXJCmkqN.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",

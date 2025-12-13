@@ -470,7 +470,7 @@ const isCallBackVisible = ref(false);
 
     <!-- Начало блока почему мы? -->
 
-    <div class="container pb-[64px]">
+    <!-- <div class="container pb-[64px]">
       <div class="flex flex-col items-center py-[64px]">
         <h4 class="text-[#3D3D3D] text-[14px] flex items-center gap-2">
           <svg
@@ -528,7 +528,7 @@ const isCallBackVisible = ref(false);
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Конец блока почему мы? -->
 
@@ -643,7 +643,7 @@ const isCallBackVisible = ref(false);
                 fill="#C16371"
               />
             </svg>
-            AMORA SCHOOL
+            G.T. Factory
             <svg
               width="6"
               height="6"
@@ -692,7 +692,7 @@ const isCallBackVisible = ref(false);
 
     <!-- Начало блока контактов и карты -->
 
-    <div class="relative">
+    <div class="relative max-sm:pb-10 max-sm:flex max-sm:flex-col max-sm:items-center">
       <div
         class="bg-white 
         rounded-[500px] 
@@ -706,17 +706,22 @@ const isCallBackVisible = ref(false);
         -translate-x-1/2 
         -translate-y-1/2 
         p-5
-        max-sm:h-[520px]
-        max-sm:w-[360px]
-        max-sm:rounded-[200px]
-        max-sm:top-1/2
-        max-sm:left-1/2
-        max-sm:-translate-x-1/2
-        max-sm:-translate-y-1/2
-        "
+        max-sm:relative
+        max-sm:top-0
+        max-sm:left-0
+        max-sm:translate-x-0
+        max-sm:translate-y-0
+        max-sm:h-auto
+        max-sm:w-full
+        max-sm:max-w-[320px]
+        max-sm:rounded-[40px]
+        max-sm:px-6
+        max-sm:my-6
+        max-sm:transform-none
+      "
       >
         <div
-          class="flex flex-col items-center justify-center h-full max-w-[400px] mx-auto"
+          class="flex flex-col items-center justify-center h-full max-w-[400px] mx-auto max-sm:py-8"
         >
           <div class="flex items-center gap-2 mb-[12px]">
             <svg
@@ -822,7 +827,8 @@ const isCallBackVisible = ref(false);
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3563.7815620197525!2d69.28589395273634!3d41.31384208318647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef55936150175%3A0x3a43610644438544!2sAmora%20brand!5e0!3m2!1sru!2s!4v1764417057696!5m2!1sru!2s"
         width="100%"
-        height="800px"
+        height="800"
+        class="max-sm:h-[420px]"
         style="border: 0"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"

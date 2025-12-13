@@ -79,7 +79,7 @@ watch(
           <NuxtLink
             to="/school"
             class="font-[masvol] text-[52px] max-sm:text-[34px]"
-            >Школа AMORA</NuxtLink
+            >Школа G.T. Factory</NuxtLink
           >
           <NuxtLink
             to="/brand"
