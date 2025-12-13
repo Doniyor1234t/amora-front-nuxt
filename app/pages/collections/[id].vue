@@ -1,68 +1,54 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { AxiosError } from "axios";
-import { useApiQuery } from "@/composables/useApiService";
+import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
+import type { StrapiListResponse } from "@/types/strapi";
+import {
+  type Collection,
+  type Product,
+  type ProductsResponse,
+  type StrapiCollectionAttributes,
+  type StrapiProductAttributes,
+  mapCollectionFromResponse,
+  mapProductsResponse,
+} from "@/utils/catalogMappers";
 
 definePageMeta({
   layout: "header-only",
 });
 
-interface CollectionImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface CollectionResponse {
-  id: number;
-  name: string;
-  slug: string;
-  description?: string;
-  images: CollectionImage[];
-}
-
-interface ProductImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  price: string;
-  currency?: string;
-  description?: string;
-  images: ProductImage[];
-}
-
-interface ProductsResponse {
-  items: Product[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 const route = useRoute();
-const collectionIdParam = computed(() => route.params.id as string);
-const collectionId = computed(() => Number(collectionIdParam.value));
-const isValidCollectionId = computed(
-  () => !Number.isNaN(collectionId.value) && collectionId.value > 0
-);
+const collectionSlug = computed(() => route.params.id as string);
+const isValidCollectionSlug = computed(() => Boolean(collectionSlug.value));
+
+const { normalizeMediaCollection } = useStrapi();
 
 const {
   data: collectionResponse,
   isLoading: isCollectionLoading,
   isError: isCollectionError,
-} = useApiQuery<CollectionResponse, AxiosError>(
-  ["collection", collectionId],
+} = useStrapiQuery<
+  StrapiListResponse<StrapiCollectionAttributes>,
+  Error,
+  Collection | null
+>(
+  ["collection", collectionSlug],
   () => ({
-    url: `/collections/${collectionId.value}`,
-    method: "GET",
+    path: "/collections",
+    query: {
+      filters: {
+        slug: { $eq: collectionSlug.value },
+        isActive: { $eq: true },
+      },
+      pagination: {
+        page: 1,
+        pageSize: 1,
+      },
+      populate: ["images"],
+    },
   }),
   {
-    enabled: computed(() => isValidCollectionId.value),
+    enabled: isValidCollectionSlug,
+    select: (response: StrapiListResponse<StrapiCollectionAttributes>) => mapCollectionFromResponse(response, normalizeMediaCollection),
   }
 );
 
@@ -70,20 +56,33 @@ const {
   data: collectionProductsResponse,
   isLoading: isCollectionProductsLoading,
   isError: isCollectionProductsError,
-} = useApiQuery<ProductsResponse, AxiosError>(
-  ["collection-products", collectionId],
+} = useStrapiQuery<
+  StrapiListResponse<StrapiProductAttributes>,
+  Error,
+  ProductsResponse
+>(
+  ["collection-products", collectionSlug],
   () => ({
-    url: "/products",
-    method: "GET",
-    params: {
-      collectionId: collectionId.value,
-      page: 1,
-      pageSize: 40,
+    path: "/products",
+    query: {
+      filters: {
+        isActive: { $eq: true },
+        collection: {
+          slug: { $eq: collectionSlug.value },
+        },
+      },
+      pagination: {
+        page: 1,
+        pageSize: 40,
+      },
+      populate: ["images"],
+      sort: ["publishedAt:desc"],
     },
   }),
   {
-    enabled: computed(() => isValidCollectionId.value),
+    enabled: isValidCollectionSlug,
     keepPreviousData: true,
+    select: (response: StrapiListResponse<StrapiProductAttributes>) => mapProductsResponse(response, normalizeMediaCollection),
   }
 );
 
@@ -121,7 +120,7 @@ const getProductImage = (product: Product) => {
     return placeholderProductImage;
   }
   const [firstImage] = product.images;
-  return firstImage?.url ? `https://amora-brand.uz${firstImage?.url}` : firstImage?.path ?? placeholderProductImage;
+  return firstImage?.url ?? firstImage?.path ?? placeholderProductImage;
 };
 
 const formatPrice = (price?: string, currency?: string) => {
@@ -134,7 +133,7 @@ const formatPrice = (price?: string, currency?: string) => {
 
 <template>
   <div class="pt-[72px]">
-    <div v-if="!isValidCollectionId" class="container py-20 text-center">
+    <div v-if="!isValidCollectionSlug" class="container py-20 text-center">
       <p class="text-[#C16371] text-lg">
         Некорректный идентификатор коллекции.
       </p>
@@ -243,7 +242,7 @@ const formatPrice = (price?: string, currency?: string) => {
                 {{ product.name }}
               </h2>
               <p class="text-xs text-[#9B9B9B]">
-                {{ formatPrice(product.price, product.currency) }}
+                {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
               </p>
             </div>
           </div>

@@ -44,6 +44,14 @@ const swiper = useSwiper(containerRef);
 
 const router = useRouter();
 
+const goToProduct = (item) => {
+  const identifier = item?.slug ?? item?.id;
+  if (!identifier) {
+    return;
+  }
+  router.push(`/catalog/${identifier}`);
+};
+
 defineExpose({
     swiper,
 });
@@ -152,7 +160,7 @@ defineExpose({
       <SwiperSlide v-for="(item, idx) in props.items" :key="idx">
         <div
           class="w-full flex flex-col justify-center"
-          @click="router.push(`/catalog/${item.id}`)"
+          @click="goToProduct(item)"
         >
           <div class="bg-[#F5F5F5] rounded-3xl h-[360px] p-[25px]">
             <img :src="item.img" alt="" class="w-full h-full object-contain"/>

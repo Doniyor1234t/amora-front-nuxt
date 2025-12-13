@@ -1,0 +1,1 @@
+export { default } from "file:///Users/doniyor/Projects/amora/amora-front-nuxt/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"

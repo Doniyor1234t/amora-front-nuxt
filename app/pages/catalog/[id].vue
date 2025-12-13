@@ -1,54 +1,74 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { AxiosError } from "axios";
-import { useApiQuery } from "@/composables/useApiService";
+import { createError } from "h3";
+import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
+import type { StrapiListResponse } from "@/types/strapi";
+import {
+  type Product,
+  type StrapiProductAttributes,
+  mapProductFromResponse,
+} from "@/utils/catalogMappers";
 
 definePageMeta({
   layout: "header-only",
 });
 
-interface ProductImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface ProductCollection {
-  id: number;
-  name: string;
-  description?: string;
-}
-
-interface ProductResponse {
-  id: number;
-  name: string;
-  slug: string;
-  price: string;
-  currency?: string;
-  fabric?: string;
-  color?: string;
-  fit?: string;
-  availableSizes?: string[];
-  description?: string;
-  collection?: ProductCollection;
-  images: ProductImage[];
-}
-
 const route = useRoute();
-const productId = computed(() => route.params.id as string);
+const runtimeConfig = useRuntimeConfig();
+const defaultLocale =
+  runtimeConfig.public?.defaultLocale ?? runtimeConfig.public?.strapiLocale ?? "ru";
+const currentLocale = computed(
+  () => (route.params.locale as string | undefined) ?? defaultLocale
+);
+const productSlug = computed(() => route.params.id as string);
+const { normalizeMediaCollection } = useStrapi();
 
 const {
   data: productResponse,
   isLoading: isProductLoading,
   isError: isProductError,
-} = useApiQuery<ProductResponse, AxiosError>(
-  ["product", productId],
+} = useStrapiQuery<
+  StrapiListResponse<StrapiProductAttributes>,
+  Error,
+  Product
+>(
+  ["product", productSlug, currentLocale],
   () => ({
-    url: `/products/${productId.value}`,
-    method: "GET",
+    path: "/products",
+    // Strapi forbids `/products/:id` for public users when i18n is enabled,
+    // so we query `/products` with a slug filter, locale, and populated relations instead.
+    query: {
+      filters: {
+        slug: { $eq: productSlug.value },
+        isActive: { $eq: true },
+      },
+      populate: ["images", "collection"],
+      locale: currentLocale.value,
+      pagination: {
+        page: 1,
+        pageSize: 1,
+      },
+    },
   }),
   {
-    enabled: computed(() => Boolean(productId.value)),
+    enabled: computed(() => Boolean(productSlug.value)),
+    select: (response: StrapiListResponse<StrapiProductAttributes>) => {
+      if (!response?.data?.length) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: "Product not found",
+        });
+      }
+
+      const mapped = mapProductFromResponse(response, normalizeMediaCollection);
+      if (!mapped) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: "Product not found",
+        });
+      }
+      return mapped;
+    },
   }
 );
 
@@ -57,7 +77,7 @@ const product = computed(() => productResponse.value);
 const placeholderImage = "/images/Product-bg.jpg";
 const productImage = computed(() => {
   const firstImage = product.value?.images?.[0];
-  return firstImage?.url ? `https://amora-brand.uz${firstImage?.url}` : firstImage?.path ?? placeholderImage;
+  return firstImage?.url ?? firstImage?.path ?? placeholderImage;
 });
 
 const formatPrice = (price?: string, currency?: string): string => {
@@ -139,7 +159,7 @@ const fitText = computed(() => product.value?.fit ?? "Параметры уто�
               {{ product.name }}
             </h1>
             <p class="font-bold text-[20px] max-sm:text-[18px]">
-              {{ formatPrice(product.price, product.currency) }}
+              {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
             </p>
           </div>
 

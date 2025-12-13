@@ -3,56 +3,60 @@ import { computed, ref, watchEffect } from "vue";
 import Drawer from "primevue/drawer";
 import RadioButton from "primevue/radiobutton";
 import Checkbox from "primevue/checkbox";
-import type { AxiosError } from "axios";
-import { useApiQuery } from "@/composables/useApiService";
-
-interface ProductImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  price: string;
-  currency?: string;
-  description?: string;
-  images: ProductImage[];
-}
-
-interface ProductsResponse {
-  items: Product[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
+import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
+import type { StrapiListResponse } from "@/types/strapi";
+import {
+  type Product,
+  type ProductsResponse,
+  type StrapiProductAttributes,
+  mapProductsResponse,
+} from "@/utils/catalogMappers";
 
 const PAGE_SIZE = 12;
 const currentPage = ref(1);
 
+const { normalizeMediaCollection } = useStrapi();
+
+const productsQueryKey = computed(() => ["products", currentPage.value]);
+
 const {
   data: productsResponse,
   isLoading: isProductsLoading,
+  isFetching: isProductsFetching,
   isError: isProductsError,
-} = useApiQuery<ProductsResponse, AxiosError>(
-  ["products", currentPage],
+} = useStrapiQuery<
+  StrapiListResponse<StrapiProductAttributes>,
+  Error,
+  ProductsResponse
+>(
+  productsQueryKey,
   () => ({
-    url: "/products",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-    method: "GET",
-    params: {
-      page: currentPage.value,
-      pageSize: PAGE_SIZE,
+    path: "/products",
+    query: {
+      filters: {
+        isActive: { $eq: true },
+      },
+      pagination: {
+        page: currentPage.value,
+        pageSize: PAGE_SIZE,
+      },
+      sort: ["publishedAt:desc"],
+      populate: ["images", "collection"],
     },
   }),
   {
     keepPreviousData: true,
+    select: (response: StrapiListResponse<StrapiProductAttributes>) => mapProductsResponse(response, normalizeMediaCollection),
   }
+);
+const skeletonItems = computed(() =>
+  Array.from({ length: PAGE_SIZE }, (_, index) => index)
+);
+const showSkeletonGrid = computed(
+  () => isProductsLoading.value && !products.value.length
+);
+const isUpdatingPage = computed(
+  () => !showSkeletonGrid.value && isProductsFetching.value
 );
 
 const products = computed(() => productsResponse.value?.items ?? []);
@@ -63,10 +67,7 @@ const getProductImage = (product: Product): string => {
     return placeholderProductImage;
   }
   const [firstImage] = product.images;
-  if (firstImage?.url) {
-    return `https://amora-brand.uz${firstImage.url}`;
-  }
-  return firstImage?.path ?? placeholderProductImage;
+  return firstImage?.url ?? firstImage?.path ?? placeholderProductImage;
 };
 
 const formatPrice = (price?: string, currency?: string): string => {
@@ -142,8 +143,10 @@ const goToNextPage = () => {
 
 const router = useRouter();
 const goToProduct = (product: Product) => {
-  const slugOrId = product.id || product.slug;
-  router.push(`/catalog/${slugOrId}`);
+  // Product detail queries expect a slug because Strapi's public API can't use `/products/:id` with i18n.
+  // Fallback to the numeric id only if slug is missing to preserve legacy links.
+  const identifier = product.slug || String(product.id);
+  router.push(`/catalog/${identifier}`);
 };
 
 const collectionDrawer = ref(false);
@@ -205,8 +208,21 @@ const sizeChecked = ref([]);
       </div>
       <!-- Список продуктов -->
       <div class="container mx-auto mt-[32px]">
-        <div v-if="isProductsLoading" class="py-10 text-center text-[#0F0F0F]">
-          Загрузка изделий...
+        <div
+          v-if="showSkeletonGrid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+        >
+          <div
+            v-for="index in skeletonItems"
+            :key="`skeleton-${index}`"
+            class="w-full flex flex-col gap-4"
+          >
+            <div class="bg-[#F5F5F5] rounded-3xl overflow-hidden h-[360px] animate-pulse" />
+            <div class="px-[24px] py-[20px] space-y-3">
+              <div class="h-3 w-3/4 bg-[#E2E2E2] rounded-full animate-pulse" />
+              <div class="h-3 w-1/2 bg-[#E2E2E2] rounded-full animate-pulse" />
+            </div>
+          </div>
         </div>
         <div
           v-else-if="isProductsError"
@@ -220,31 +236,53 @@ const sizeChecked = ref([]);
         >
           Пока нет доступных изделий.
         </div>
-        <div
-          v-else
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
-        >
+        <div v-else class="relative">
           <div
-            v-for="product in products"
-            :key="product.id"
-            class="w-full flex flex-col justify-center cursor-pointer"
-            @click="goToProduct(product)"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
           >
-            <div class="bg-[#F5F5F5] rounded-3xl overflow-hidden">
-              <img
-                :src="getProductImage(product)"
-                :alt="product.name"
-                class="w-full h-full object-contain"
-              />
-            </div>
+            <div
+              v-for="product in products"
+              :key="product.id"
+              class="w-full flex flex-col justify-center cursor-pointer"
+              @click="goToProduct(product)"
+            >
+              <div class="bg-[#F5F5F5] rounded-3xl overflow-hidden">
+                <img
+                  :src="getProductImage(product)"
+                  :alt="product.name"
+                  class="w-full h-full object-contain"
+                />
+              </div>
 
-            <div class="px-[24px] py-[20px] text-[#3D3D3D]">
-              <h2 class="pb-[8px] text-xs tracking-[0.16em] uppercase">
-                {{ product.name }}
-              </h2>
-              <p class="text-xs text-[#9B9B9B]">
-                {{ formatPrice(product.price, product.currency) }}
-              </p>
+              <div class="px-[24px] py-[20px] text-[#3D3D3D]">
+                <h2 class="pb-[8px] text-xs tracking-[0.16em] uppercase">
+                  {{ product.name }}
+                </h2>
+                <p class="text-xs text-[#9B9B9B]">
+                  {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="isUpdatingPage"
+            class="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none"
+          >
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 w-full px-2"
+            >
+              <div
+                v-for="index in skeletonItems"
+                :key="`overlay-skeleton-${index}`"
+                class="hidden sm:flex flex-col gap-4 animate-pulse"
+              >
+                <div class="bg-[#F5F5F5] rounded-3xl h-[320px]" />
+                <div class="px-[24px] py-[12px] space-y-2">
+                  <div class="h-3 w-2/3 bg-[#E2E2E2] rounded-full" />
+                  <div class="h-3 w-1/2 bg-[#E2E2E2] rounded-full" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

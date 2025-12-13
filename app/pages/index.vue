@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { AxiosError } from "axios";
 import Banner from "@/components/shared/Banner.vue";
 import ProductsSlider from "@/components/shared/ProductsSlider.vue";
 import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
-import { useApiQuery } from "@/composables/useApiService";
+import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
+import type { StrapiListResponse } from "@/types/strapi";
+import {
+  type Product,
+  type ProductsResponse,
+  type StrapiProductAttributes,
+  mapProductsResponse,
+} from "@/utils/catalogMappers";
 
 const banners = ref([
   {
@@ -189,38 +195,46 @@ const fallbackCarouselItems = Array.from({ length: 10 }, () => ({
   price: "200$",
 }));
 
-interface RecentProductImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface RecentProduct {
-  id: number;
-  name: string;
-  slug: string;
-  price: string;
-  currency?: string;
-  images: RecentProductImage[];
-}
+const { normalizeMediaCollection } = useStrapi();
 
 const {
   data: recentProductsResponse,
   isLoading: isRecentLoading,
   isError: isRecentError,
-} = useApiQuery<RecentProduct[], AxiosError>(["recent-products"], {
-  url: "/products/recent",
-  method: "GET",
-});
+} = useStrapiQuery<
+  StrapiListResponse<StrapiProductAttributes>,
+  Error,
+  ProductsResponse
+>(
+  ["recent-products"],
+  {
+    path: "/products",
+    query: {
+      // filters: {
+      //   isActive: { $eq: true },
+      // },
+      sort: ["publishedAt:desc"],
+      // pagination: {
+      //   page: 1,
+      //   pageSize: 10,
+      // },
+      // populate: ["images"],
+      populate: "*",
+    },
+  },
+  {
+    select: (response: StrapiListResponse<StrapiProductAttributes>) => mapProductsResponse(response, normalizeMediaCollection),
+  }
+);
 
 const placeholderProductImage = "/images/products/Image.png";
 
-const getProductImage = (product: RecentProduct): string => {
+const getProductImage = (product: Product): string => {
   if (!product.images?.length) {
     return placeholderProductImage;
   }
   const [firstImage] = product.images;
-  return firstImage?.url ? `https://amora-brand.uz${firstImage.url}` : (firstImage?.path ?? placeholderProductImage);
+  return firstImage?.url ?? firstImage?.path ?? placeholderProductImage;
 };
 
 const formatPrice = (price?: string, currency?: string): string => {
@@ -230,20 +244,19 @@ const formatPrice = (price?: string, currency?: string): string => {
   return currency ? `${price} ${currency}` : price;
 };
 
-const recentProducts = computed(
-  () => recentProductsResponse.value ?? []
-);
+const recentProducts = computed(() => recentProductsResponse.value?.items ?? []);
 
 const productsCarousel = computed(() => {
   if (isRecentLoading.value || isRecentError.value || !recentProducts.value.length) {
     return fallbackCarouselItems;
   }
 
-  return recentProducts.value.map((product) => ({
+  return recentProducts.value.map((product: Product) => ({
     id: product.id,
+    slug: product.slug,
     img: getProductImage(product),
     name: product.name,
-    price: formatPrice(product.price, product.currency),
+    price: formatPrice(product.price, product.currency ? product.currency : undefined),
   }));
 });
 

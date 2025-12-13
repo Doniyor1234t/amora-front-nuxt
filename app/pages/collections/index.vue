@@ -1,29 +1,14 @@
 <script setup lang="ts">
-import type { AxiosError } from "axios";
 import ProductsSlider from "@/components/shared/ProductsSlider.vue";
-import { useApiQuery } from "@/composables/useApiService";
-
-interface CollectionImage {
-  id: number;
-  url?: string;
-  path?: string;
-}
-
-interface Collection {
-  id: number;
-  name: string;
-  slug: string;
-  description?: string;
-  isActive: boolean;
-  images: CollectionImage[];
-}
-
-interface CollectionsResponse {
-  items: Collection[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
+import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
+import type { StrapiListResponse } from "@/types/strapi";
+import {
+  type Collection,
+  type CollectionsResponse,
+  type StrapiCollectionAttributes,
+  mapCollectionsResponse,
+} from "@/utils/catalogMappers";
+import { computed, ref } from "vue";
 
 const productsCarousel = ref(
   Array.from({ length: 10 }, (_, i) => ({
@@ -33,20 +18,35 @@ const productsCarousel = ref(
   }))
 );
 
-const { data, isLoading: isCollectionsLoading, isError: isCollectionsError } =
-  useApiQuery<CollectionsResponse, AxiosError>(["collections"], 
-    {
-      url: "/collections",
-      method: "GET",
-      params: {
-        // isActive: true,
-        page: 1,
-        pageSize: 20,
-      },
+const { normalizeMediaCollection } = useStrapi();
+
+const {
+  data,
+  isLoading: isCollectionsLoading,
+  isError: isCollectionsError,
+} = useStrapiQuery<
+  StrapiListResponse<StrapiCollectionAttributes>,
+  Error,
+  CollectionsResponse
+>(
+  ["collections"],
+  {
+    path: "/collections",
+    query: {
+      // filters: {
+      //   isActive: { $eq: true },
+      // },
+      // pagination: {
+      //   page: 1,
+      //   pageSize: 20,
+      // },
+      populate: "*",
     },
-    {
-    }
-  );
+  },
+  {
+    select: (response: StrapiListResponse<StrapiCollectionAttributes>) => mapCollectionsResponse(response, normalizeMediaCollection),
+  }
+);
 
 const collections = computed(() => data.value?.items ?? []);
 const placeholderCollectionImage = "/images/collections/Collection-product-1.png";
