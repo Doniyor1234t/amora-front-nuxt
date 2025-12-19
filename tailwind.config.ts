@@ -12,6 +12,9 @@ export default <Config>{
         sans: ['MontserratLight', 'ui-sans-serif', 'system-ui'],
         myfont: ['masvol', 'sans-serif'],
       },
+      fontWeight: {
+        'zero': '0', // You can name it anything you like, e.g., 'hairline-zero'
+      },
     },
   },
   plugins: [],

@@ -498,8 +498,14 @@ const unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU = /* @__PURE__ */ defin
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-const __nuxt_page_meta$2 = {
+const __nuxt_page_meta$4 = {
   layout: "blank"
+};
+const __nuxt_page_meta$3 = {
+  layout: "default"
+};
+const __nuxt_page_meta$2 = {
+  layout: "default"
 };
 const __nuxt_page_meta$1 = {
   layout: "header-only"
@@ -509,21 +515,43 @@ const __nuxt_page_meta = {
 };
 const _routes = [
   {
+    name: "brand",
+    path: "/brand",
+    component: () => import('./brand-8Y0fCmUH.mjs')
+  },
+  {
     name: "index",
     path: "/",
-    component: () => import('./index-DUgD8Gxg.mjs')
+    component: () => import('./index-oc5y3_Dl.mjs')
+  },
+  {
+    name: "atelie",
+    path: "/atelie",
+    component: () => import('./atelie-DdDKzPA0.mjs')
   },
   {
     name: "webform",
     path: "/webform",
-    meta: __nuxt_page_meta$2 || {},
+    meta: __nuxt_page_meta$4 || {},
     component: () => import('./webform-Q-bSYmK1.mjs')
+  },
+  {
+    name: "auth",
+    path: "/auth",
+    meta: __nuxt_page_meta$3 || {},
+    component: () => import('./index-D7GdbBvy.mjs')
+  },
+  {
+    name: "auth-sign-up",
+    path: "/auth/sign-up",
+    meta: __nuxt_page_meta$2 || {},
+    component: () => import('./sign-up-CqLVCraR.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-Dl7e-xRT.mjs')
+    component: () => import('./_id_-Cnso12-W.mjs')
   },
   {
     name: "catalog",
@@ -2443,7 +2471,7 @@ const plugins = [
 ];
 const layouts = {
   blank: defineAsyncComponent(() => import('./blank-B5OZ5S0Y.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-MubX46Hj.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-BQgb6zSJ.mjs').then((m) => m.default || m)),
   "header-only": defineAsyncComponent(() => import('./header-only-CXJCmkqN.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({

@@ -75,9 +75,8 @@ const {
 const product = computed(() => productResponse.value);
 
 const placeholderImage = "/images/Product-bg.jpg";
-const productImage = computed(() => {
-  const firstImage = product.value?.images?.[0];
-  return firstImage?.url ?? firstImage?.path ?? placeholderImage;
+const productImages = computed(() => {
+  return product.value?.images?.map(img => img?.url ?? img?.path ?? placeholderImage) ?? [placeholderImage];
 });
 
 const formatPrice = (price?: string, currency?: string): string => {
@@ -100,38 +99,38 @@ const descriptionText = computed(
 const composition = computed(() => {
   const fabric = product.value?.fabric
     ? `${product.value.fabric}`
-    : undefined;
-  const care = ["Сухая чистка", "Не отбеливать"];
-
-  return [fabric, ...care].filter(Boolean);
+    : "Состав уточняйте у менеджера";
+  return [fabric];
 });
+
+const careInstructions = computed(() => ["Сухая чистка", "Не отбеливать"]);
 
 const availableSizesText = computed(() => {
   const sizes = product.value?.availableSizes;
   return sizes?.length ? sizes.join(", ") : "Размеры уточняйте у менеджера";
 });
-
-const fitText = computed(() => product.value?.fit ?? "Параметры уточняйте у менеджера");
 </script>
 
 <template>
   <div class="pt-[72px]">
-    <div class="grid grid-cols-2 max-sm:grid-cols-1 min-h-[calc(100vh-72px)]">
-      <div class="relative">
-        <img
-          :src="productImage"
-          alt="Product image"
-          class="w-full h-full object-cover object-top"
-        />
-        <div class="absolute top-0 left-0 w-full h-full bg-black/40"></div>
-        <div
-          class="absolute bottom-6 left-6 bg-white/80 px-5 py-3 rounded-full text-xs tracking-[0.2em] uppercase text-[#3D3D3D]"
-        >
-          {{ collectionName }}
+    <div class="grid grid-cols-2 overflow-hidden max-sm:grid-cols-1 min-h-[calc(100vh-72px)]">
+      <div class="flex overflow-y-auto no-scrollbar flex-col h-[calc(100vh-72px)]">
+        <div class="relative min-h-[calc(100vh-72px)]" v-for="value in [...productImages]">
+          <img
+            :src="value"
+            alt="Product image"
+            class="h-full w-full object-cover object-top"
+          />
+          <div class="absolute top-0 left-0 w-full h-full"></div>
+          <div
+            class="absolute bottom-6 left-6 bg-white/80 px-5 py-3 rounded-full text-xs tracking-[0.2em] uppercase text-[#3D3D3D]"
+          >
+            {{ collectionName }}
+          </div>
         </div>
       </div>
       <div
-        class="pt-[100px] pl-[40px] pr-[40px] max-sm:px-4 max-sm:pt-[32px] overflow-y-auto"
+        class="h-[calc(100vh-72px)] overflow-y-auto pt-[100px] pl-[40px] pr-[40px] max-sm:px-4 max-sm:pt-[32px]"
       >
         <div
           v-if="isProductLoading"
@@ -163,37 +162,36 @@ const fitText = computed(() => product.value?.fit ?? "Параметры уто�
             </p>
           </div>
 
-          <div class="flex flex-col gap-2 mt-2">
-            <p class="text-xs tracking-[0.2em] text-[#3D3D3D]">Описание</p>
-            <p class="text-sm leading-relaxed">
+          <div class="flex flex-col gap-2">
+            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Размер</p>
+            <p class="text-[15px] uppercase tracking-[0.2em] text-[#EEE9E4]">
+              {{ availableSizesText }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Описание</p>
+            <p class="text-[15px] leading-relaxed tracking-[0.05em] text-[#3D3D3D]">
               {{ descriptionText }}
             </p>
           </div>
 
-          <div class="flex flex-col gap-3 mt-4 text-sm">
-            <p class="text-xs tracking-[0.2em] text-[#3D3D3D] uppercase">
-              Состав и уход
-            </p>
-            <ul class="flex flex-col gap-2 uppercase">
+          <div class="flex flex-col gap-4 text-[15px] text-[#C9C5C0]">
+            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Состав</p>
+            <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D]">
               <li v-for="(item, index) in composition" :key="index">
                 {{ item }}
               </li>
             </ul>
           </div>
 
-          <div class="grid grid-cols-2 gap-4 text-sm uppercase max-sm:grid-cols-1">
-            <div class="flex flex-col gap-2">
-              <span class="text-xs tracking-[0.2em] text-[#3D3D3D]">
-                Размеры
-              </span>
-              <p>{{ availableSizesText }}</p>
-            </div>
-            <div class="flex flex-col gap-2">
-              <span class="text-xs tracking-[0.2em] text-[#3D3D3D]">
-                Посадка
-              </span>
-              <p>{{ fitText }}</p>
-            </div>
+          <div class="flex flex-col gap-4 text-[15px]">
+            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Уход</p>
+            <ul class="flex flex-col gap-1 uppercase">
+              <li v-for="(item, index) in careInstructions" :key="`care-${index}`">
+                {{ item }}
+              </li>
+            </ul>
           </div>
 
           <div

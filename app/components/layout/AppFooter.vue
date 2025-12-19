@@ -65,7 +65,7 @@
           </p>
           
           <div class="flex items-center justify-center md:justify-start gap-4 mb-6">
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://www.youtube.com/@brandAmora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -82,9 +82,9 @@
                   fill="#0F0F0F"
                 />
               </svg>
-            </div>
+            </a>
 
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://t.me/Brand_Amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -97,9 +97,9 @@
                   fill="white"
                 />
               </svg>
-            </div>
+            </a>
 
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://www.instagram.com/brand.amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -116,7 +116,7 @@
                   fill="white"
                 />
               </svg>
-            </div>
+            </a>
           </div>
         </div>
 

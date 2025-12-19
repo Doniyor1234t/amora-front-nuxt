@@ -16,11 +16,7 @@ import '@primeuix/utils/object';
 import './index-UkdBiBMI.mjs';
 import './index-I6kJA5l7.mjs';
 import '@primeuix/styles/badge';
-import '@primeuix/styles/button';
-import './index-DA3RQQMs.mjs';
 import '@primeuix/styled';
-import '@primeuix/utils/uuid';
-import '@primeuix/styles/ripple';
 import '../nitro/nitro.mjs';
 import 'node:http';
 import 'node:https';
@@ -59,6 +55,7 @@ import '@primeuix/styles/textarea';
 import '@primeuix/styles/togglebutton';
 import '@primeuix/styles/toggleswitch';
 import '@primeuix/styles/treeselect';
+import '@primeuix/styles/button';
 import '@primeuix/styles/buttongroup';
 import '@primeuix/styles/speeddial';
 import '@primeuix/styles/splitbutton';
@@ -120,6 +117,7 @@ import '@primeuix/styles/terminal';
 import '@primevue/forms/form/style';
 import '@primevue/forms/formfield/style';
 import '@primeuix/styles/tooltip';
+import '@primeuix/styles/ripple';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -132,6 +130,8 @@ import '@iconify/vue';
 import 'axios';
 import '@tanstack/vue-query';
 import 'vue/server-renderer';
+import './index-DA3RQQMs.mjs';
+import '@primeuix/utils/uuid';
 
 var script$3 = {
   name: "WindowMaximizeIcon",
