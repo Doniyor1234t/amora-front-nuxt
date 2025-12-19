@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import YandexMap from "@/components/shared/YandexMap.vue";
 
 definePageMeta({
   layout: "blank",
@@ -169,13 +170,16 @@ async function onSubmit() {
     </div>
 
     <!-- Карта -->
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3563.7815620197525!2d69.28589395273634!3d41.31384208318647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef55936150175%3A0x3a43610644438544!2sAmora%20brand!5e0!3m2!1sru!2s!4v1764417057696!5m2!1sru!2s"
-      width="100%"
+    <YandexMap
+      :center="[41.334608, 69.323384]"
+      :zoom="17"
+      :marker="{
+        coordinates: [41.334608, 69.323384],
+        hint: 'Бутик AMORA',
+        description: 'ул. Исмаилата, 16А',
+      }"
       height="560px"
-      style="border: 0"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-    ></iframe>
+      class="rounded-[40px]"
+    />
   </div>
 </template>

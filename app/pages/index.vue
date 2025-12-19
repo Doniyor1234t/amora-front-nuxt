@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import Banner from "@/components/shared/Banner.vue";
 import ProductsSlider from "@/components/shared/ProductsSlider.vue";
+import YandexMap from "@/components/shared/YandexMap.vue";
 import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
 import type { StrapiListResponse } from "@/types/strapi";
@@ -761,7 +762,7 @@ const isCallBackVisible = ref(false);
           </p>
 
           <div class="flex items-center gap-6 mb-6">
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://www.youtube.com/@brandAmora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -778,9 +779,9 @@ const isCallBackVisible = ref(false);
                   fill="#0F0F0F"
                 />
               </svg>
-            </div>
+            </a>
 
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://t.me/Brand_Amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -793,9 +794,9 @@ const isCallBackVisible = ref(false);
                   fill="white"
                 />
               </svg>
-            </div>
+            </a>
 
-            <div class="bg-black rounded-[100px] p-[10px]">
+            <a href="https://www.instagram.com/brand.amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
               <svg
                 width="24"
                 height="24"
@@ -812,7 +813,7 @@ const isCallBackVisible = ref(false);
                   fill="white"
                 />
               </svg>
-            </div>
+            </a>
           </div>
 
           <p class="text-center text-[#3D3D3D] text-[14px] mb-2 uppercase">
@@ -824,15 +825,17 @@ const isCallBackVisible = ref(false);
         </div>
       </div>
 
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3563.7815620197525!2d69.28589395273634!3d41.31384208318647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef55936150175%3A0x3a43610644438544!2sAmora%20brand!5e0!3m2!1sru!2s!4v1764417057696!5m2!1sru!2s"
-        width="100%"
-        height="800"
-        class="max-sm:h-[420px]"
-        style="border: 0"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
+      <YandexMap
+        :center="[41.334608, 69.323384]"
+        :zoom="17"
+        :marker="{
+          coordinates: [41.334608, 69.323384],
+          hint: 'Бутик AMORA',
+          description: 'ул. Исмаилата, 16А',
+        }"
+        height="800px"
+        class="max-sm:min-h-[420px]"
+      />
     </div>
     <!-- Конец блока контактов и карты -->
   </div>

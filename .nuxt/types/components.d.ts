@@ -18,6 +18,7 @@ interface _GlobalComponents {
   'LayoutAppHeader': typeof import("../../app/components/layout/AppHeader.vue")['default']
   'SharedBanner': typeof import("../../app/components/shared/Banner.vue")['default']
   'SharedProductsSlider': typeof import("../../app/components/shared/ProductsSlider.vue")['default']
+  'SharedYandexMap': typeof import("../../app/components/shared/YandexMap.vue")['default']
   'UiAppCallBackModal': typeof import("../../app/components/ui/AppCallBackModal.vue")['default']
   'UiAppSelectButton': typeof import("../../app/components/ui/AppSelectButton.vue")['default']
   'NuxtWelcome': typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue")['default']
@@ -169,6 +170,7 @@ interface _GlobalComponents {
   'LazyLayoutAppHeader': LazyComponent<typeof import("../../app/components/layout/AppHeader.vue")['default']>
   'LazySharedBanner': LazyComponent<typeof import("../../app/components/shared/Banner.vue")['default']>
   'LazySharedProductsSlider': LazyComponent<typeof import("../../app/components/shared/ProductsSlider.vue")['default']>
+  'LazySharedYandexMap': LazyComponent<typeof import("../../app/components/shared/YandexMap.vue")['default']>
   'LazyUiAppCallBackModal': LazyComponent<typeof import("../../app/components/ui/AppCallBackModal.vue")['default']>
   'LazyUiAppSelectButton': LazyComponent<typeof import("../../app/components/ui/AppSelectButton.vue")['default']>
   'LazyNuxtWelcome': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue")['default']>
