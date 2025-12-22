@@ -275,7 +275,7 @@ const isCallBackVisible = ref(false);
     <!-- Конец баннера слайдер проекта -->
 
     <!-- Карусель начало-->
-    <ProductsSlider :items="productsCarousel" />
+    <ProductsSlider hideHeader :items="productsCarousel" />
     <!-- Карусель конец -->
 
     <!-- Начало блока коллекций-->
@@ -598,7 +598,11 @@ const isCallBackVisible = ref(false);
           </Button>
 
           <!-- модальное окно -->
-          <AppCallBackModal v-model:visible="isCallBackVisible" />
+          <AppCallBackModal
+            v-model:visible="isCallBackVisible"
+            service-type="tailoring"
+            title="Записаться на пошив"
+          />
         </div>
       </div>
 

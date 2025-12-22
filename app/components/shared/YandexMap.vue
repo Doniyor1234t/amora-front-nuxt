@@ -1,117 +1,62 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed } from "vue";
 import type { PropType } from "vue";
+import {
+  YandexMap,
+  YandexMapDefaultFeaturesLayer,
+  YandexMapDefaultSchemeLayer,
+  YandexMapMarker,
+  type YandexMapSettings,
+} from "vue-yandex-maps";
 
 type Coordinates = [number, number];
 
-const props = defineProps({
-  center: {
-    type: Array as unknown as PropType<Coordinates>,
-    required: true,
-  },
-  zoom: {
-    type: Number,
-    default: 16,
-  },
-  marker: {
-    type: Object as PropType<{
+const props = withDefaults(
+  defineProps<{
+    center: Coordinates;
+    zoom?: number;
+    marker?: {
       coordinates: Coordinates;
       hint?: string;
       description?: string;
-    }>,
-    default: () => undefined,
-  },
-  height: {
-    type: String,
-    default: "600px",
-  },
-});
-
-const mapContainer = ref<HTMLElement | null>(null);
-let mapInstance: any = null;
-
-declare global {
-  interface Window {
-    ymaps?: any;
-  }
-}
-
-let scriptPromise: Promise<void> | null = null;
-
-const loadYandexMaps = () => {
-  if (window.ymaps) {
-    return Promise.resolve();
-  }
-
-  if (scriptPromise) {
-    return scriptPromise;
-  }
-
-  scriptPromise = new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://api-maps.yandex.ru/2.1/?lang=ru_RU";
-    script.async = true;
-    script.onload = () => {
-      window.ymaps?.ready(() => resolve());
     };
-    script.onerror = () => reject(new Error("Yandex Maps failed to load"));
-    document.head.appendChild(script);
-  });
-
-  return scriptPromise;
-};
-
-const initMap = async () => {
-  if (!mapContainer.value) return;
-
-  await loadYandexMaps();
-
-  mapInstance = new window.ymaps.Map(
-    mapContainer.value,
-    {
-      center: props.center,
-      zoom: props.zoom,
-      controls: ["zoomControl"],
-    },
-    {
-      suppressMapOpenBlock: true,
-    }
-  );
-
-  if (props.marker) {
-    const { coordinates, hint, description } = props.marker;
-    const placemark = new window.ymaps.Placemark(
-      coordinates,
-      {
-        hintContent: hint,
-        balloonContent: description,
-      },
-      {
-        preset: "islands#blackIcon",
-      }
-    );
-    mapInstance.geoObjects.add(placemark);
+    height?: string;
+  }>(),
+  {
+    zoom: 16,
+    height: "600px",
   }
-};
+);
 
-onMounted(() => {
-  if (import.meta.client) {
-    initMap();
-  }
-});
-
-onBeforeUnmount(() => {
-  if (mapInstance) {
-    mapInstance.destroy();
-    mapInstance = null;
-  }
-});
+const mapSettings = computed<YandexMapSettings>(() => ({
+  location: {
+    center: props.center,
+    zoom: props.zoom,
+  },
+  behaviors: ["drag", "scrollZoom", "touch"] as const,
+}));
 </script>
 
 <template>
-  <div
-    ref="mapContainer"
-    class="w-full rounded-[40px] overflow-hidden border border-[#DCD6CE]"
-    :style="{ minHeight: height }"
-  ></div>
+  <ClientOnly>
+    <YandexMap
+      :settings="mapSettings"
+      class="w-full overflow-hidden rounded-[40px] border border-[#DCD6CE]"
+      :style="{ minHeight: height }"
+    >
+      <YandexMapDefaultSchemeLayer />
+      <YandexMapDefaultFeaturesLayer />
+
+      <YandexMapMarker
+        v-if="marker"
+        :settings="{ coordinates: marker.coordinates }"
+      >
+        <div
+          class="rounded-full bg-[#0F0F0F] px-4 py-2 text-xs uppercase tracking-[0.25em] text-white shadow-lg"
+        >
+          {{ marker.hint || "AMORA" }}
+        </div>
+      </YandexMapMarker>
+    </YandexMap>
+  </ClientOnly>
 </template>

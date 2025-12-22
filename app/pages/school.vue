@@ -140,7 +140,11 @@ const menuLinks = [
           </Button>
 
           <!-- модальное окно -->
-          <AppCallBackModal v-model:visible="isCallBackVisible" />
+          <AppCallBackModal
+            v-model:visible="isCallBackVisible"
+            service-type="training"
+            title="Записаться на обучение"
+          />
         </div>
       </div>
 

@@ -32,6 +32,7 @@ export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composab
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
 export { useApiClient, useApiQuery, useApiMutation, useStrapi, useStrapiQuery } from '../app/composables/useApiService';
 export { mapCollectionEntity, mapProductEntity, mapCollectionsResponse, mapProductsResponse, mapProductFromResponse, mapCollectionFromResponse, CollectionImage, Collection, Product, ProductsResponse, CollectionsResponse, StrapiCollectionAttributes, StrapiProductAttributes, MediaNormalizer } from '../app/utils/catalogMappers';
+export { useAuthStore, AuthUser } from '../app/stores/auth';
 export { useSwiper } from '../node_modules/nuxt-swiper/dist/runtime/composables/useSwiper.client';
 export { useImage } from '../node_modules/@nuxt/image/dist/runtime/composables';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';

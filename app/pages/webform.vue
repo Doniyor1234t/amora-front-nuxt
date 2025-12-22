@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import YandexMap from "@/components/shared/YandexMap.vue";
 
 definePageMeta({
@@ -8,22 +8,41 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 const isSubmitted = ref(false);
+const isSubmitting = ref(false);
+const submitError = ref("");
 const form = ref({
-  name: '',
-  phone: ''
+  name: "",
+  phone: "",
 });
 
 async function onSubmit() {
-  await $fetch('/leads', {
-    baseURL: 'https://amora-brand.uz/api',
-    method: 'POST',
-    body: {
-      clientName: form.value.name,
-      phone: form.value.phone,
-      source: 'SITE',
-    }
-  })
-  // isSubmitted.value = true;
+  submitError.value = "";
+
+  if (!form.value.name.trim() || !form.value.phone.trim()) {
+    submitError.value = "Заполните имя и телефон.";
+    return;
+  }
+
+  isSubmitting.value = true;
+  try {
+    await $fetch("/leads", {
+      baseURL: config.public.apiBase,
+      method: "POST",
+      body: {
+        source: "SITE",
+        serviceType: "READY_PRODUCT",
+        clientName: form.value.name,
+        phone: form.value.phone,
+        comment: "Регистрация на мини-лекцию со стилистом",
+      },
+    });
+    isSubmitted.value = true;
+  } catch (error) {
+    console.error(error);
+    submitError.value = "Не удалось отправить заявку. Попробуйте позже.";
+  } finally {
+    isSubmitting.value = false;
+  }
 }
 </script>
 
@@ -56,11 +75,16 @@ async function onSubmit() {
               class="w-full !h-10 !rounded-full !border !border-[#E5E5E5] !px-[28px] !text-[14px]"
             />
 
+            <p v-if="submitError" class="text-sm text-[#C16371]">
+              {{ submitError }}
+            </p>
+
             <Button
               type="submit"
-              class="w-full mt-[24px] !h-[44px] !rounded-full !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white flex items-center justify-center gap-2"
+              class="w-full mt-[24px] !h-[44px] !rounded-full !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white flex items-center justify-center gap-2 disabled:opacity-60"
+              :disabled="isSubmitting"
             >
-              <span>ОТПРАВИТЬ</span>
+              <span>{{ isSubmitting ? "ОТПРАВКА…" : "ОТПРАВИТЬ" }}</span>
               <svg
                 width="36"
                 height="20"

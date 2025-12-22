@@ -23,6 +23,8 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
 
    strapiUrl: string,
 
+   yandexMapsApiKey: string,
+
    vueQuery: {
       queryClientOptions: {
          defaultOptions: {

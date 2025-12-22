@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import AppSelectButton from "../ui/AppSelectButton.vue";
 import Drawer from "primevue/drawer";
+import { useAuthStore } from "@/stores/auth";
 
 enum Languages {
   UZ = "UZ",
@@ -17,6 +19,21 @@ const options = ref([
 const visible = ref(false);
 
 const route = useRoute();
+const router = useRouter();
+
+const authStore = useAuthStore();
+const { isAuthenticated } = storeToRefs(authStore);
+
+onMounted(() => {
+  authStore.initialize();
+});
+
+const handleProfileClick = () => {
+  if (!isAuthenticated.value) {
+    router.push("/auth");
+    return;
+  }
+};
 
 watch(
   () => route.fullPath,
@@ -36,7 +53,7 @@ watch(
             :options="options"
             class="md:!hidden"
           />
-          <Button variant="text" severity="secondary" class="md:!hidden">
+        <Button variant="text" severity="secondary" class="md:!hidden" @click="handleProfileClick">
           <Icon
             name="app-icon:user"
             mode="svg"
@@ -122,7 +139,7 @@ watch(
           <Icon name="app-icon:loop" mode="svg" color="#0F0F0F" height="24px" />
         </Button>
 
-        <Button variant="text" severity="secondary" class="max-sm:!hidden">
+        <Button variant="text" severity="secondary" class="max-sm:!hidden" @click="handleProfileClick">
           <Icon
             name="app-icon:user"
             mode="svg"

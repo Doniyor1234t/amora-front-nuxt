@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
+import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 import { createError } from "h3";
 import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
 import type { StrapiListResponse } from "@/types/strapi";
+import type { LeadMetadata } from "@/types/leads";
 import {
   type Product,
   type StrapiProductAttributes,
@@ -15,12 +17,20 @@ definePageMeta({
 
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
+const requestUrl = useRequestURL();
 const defaultLocale =
   runtimeConfig.public?.defaultLocale ?? runtimeConfig.public?.strapiLocale ?? "ru";
 const currentLocale = computed(
   () => (route.params.locale as string | undefined) ?? defaultLocale
 );
 const productSlug = computed(() => route.params.id as string);
+const productPageUrl = computed(() => {
+  try {
+    return new URL(`/catalog/${productSlug.value}`, requestUrl.origin).toString();
+  } catch {
+    return `/catalog/${productSlug.value}`;
+  }
+});
 const { normalizeMediaCollection } = useStrapi();
 
 const {
@@ -76,7 +86,31 @@ const product = computed(() => productResponse.value);
 
 const placeholderImage = "/images/Product-bg.jpg";
 const productImages = computed(() => {
-  return product.value?.images?.map(img => img?.url ?? img?.path ?? placeholderImage) ?? [placeholderImage];
+  return (
+    product.value?.images?.map(
+      (img) => img?.url ?? img?.path ?? placeholderImage
+    ) ?? [placeholderImage]
+  );
+});
+
+const productLeadMetadata = computed<LeadMetadata>(() => {
+  if (!product.value) {
+    return {
+      photoUrls: productImages.value.slice(0, 3),
+    };
+  }
+
+  return {
+    product: {
+      name: product.value.name,
+      collectionName: product.value.collection?.name,
+      fabric: product.value.fabric ?? null,
+      color: product.value.color ?? null,
+      size: null,
+      url: productPageUrl.value,
+    },
+    photoUrls: productImages.value.slice(0, 3),
+  };
 });
 
 const formatPrice = (price?: string, currency?: string): string => {
@@ -103,118 +137,229 @@ const composition = computed(() => {
   return [fabric];
 });
 
-const careInstructions = computed(() => ["Сухая чистка", "Не отбеливать"]);
+const careInstructions = computed(() => [
+  "Только химчистка",
+  "Деликатная стирка",
+  "Не отбеливать",
+]);
 
 const availableSizesText = computed(() => {
   const sizes = product.value?.availableSizes;
   return sizes?.length ? sizes.join(", ") : "Размеры уточняйте у менеджера";
 });
+
+const sizeOptions = computed(() => {
+  const sizes = product.value?.availableSizes;
+  if (!sizes?.length) {
+    return [];
+  }
+  return sizes
+    .map((size) =>
+      typeof size === "string" ? size.trim() : String(size ?? "")
+    )
+    .filter((size): size is string => Boolean(size));
+});
+
+const hasSizeOptions = computed(() => sizeOptions.value.length > 0);
+
+const selectedSize = ref<string | null>(null);
+
+watch(
+  sizeOptions,
+  (sizes) => {
+    selectedSize.value = sizes[0] ?? null;
+  },
+  { immediate: true }
+);
+
+type DetailSectionKey = "composition" | "care" | "description";
+
+const detailsSections = ref<Record<DetailSectionKey, boolean>>({
+  composition: false,
+  care: false,
+  description: false,
+});
+
+const toggleSection = (key: DetailSectionKey) => {
+  detailsSections.value[key] = !detailsSections.value[key];
+};
+
+const isCallbackModalOpen = ref(false);
+const openCallbackModal = () => {
+  isCallbackModalOpen.value = true;
+};
 </script>
 
 <template>
   <div class="pt-[72px]">
-    <div class="grid grid-cols-2 overflow-hidden max-sm:grid-cols-1 min-h-[calc(100vh-72px)]">
-      <div class="flex overflow-y-auto no-scrollbar flex-col h-[calc(100vh-72px)]">
-        <div class="relative min-h-[calc(100vh-72px)]" v-for="value in [...productImages]">
+    <div
+      class="grid grid-cols-2 overflow-hidden min-h-[calc(100vh-72px)] max-lg:grid-cols-[1.1fr_0.9fr] max-md:grid-cols-1"
+    >
+      <div
+        class="flex overflow-y-auto no-scrollbar flex-col h-[calc(100vh-72px)] bg-[#fff]"
+      >
+        <div
+          v-for="(value, index) in productImages"
+          :key="`product-image-${index}`"
+          class="relative min-h-[calc(100vh-72px)] flex items-center justify-center"
+        >
           <img
             :src="value"
             alt="Product image"
-            class="h-full w-full object-cover object-top"
+            class="h-full w-full object-cover object-top max-xl:object-contain"
           />
-          <div class="absolute top-0 left-0 w-full h-full"></div>
-          <div
-            class="absolute bottom-6 left-6 bg-white/80 px-5 py-3 rounded-full text-xs tracking-[0.2em] uppercase text-[#3D3D3D]"
-          >
-            {{ collectionName }}
-          </div>
         </div>
       </div>
       <div
-        class="h-[calc(100vh-72px)] overflow-y-auto pt-[100px] pl-[40px] pr-[40px] max-sm:px-4 max-sm:pt-[32px]"
+        class="h-[calc(100vh-72px)] overflow-y-auto px-[72px] py-[80px] bg-white max-xl:px-12 max-lg:px-10 max-md:px-8 max-sm:px-4 max-sm:py-8"
       >
-        <div
-          v-if="isProductLoading"
-          class="text-center text-[#0F0F0F] py-10"
-        >
+        <div v-if="isProductLoading" class="text-center text-[#0F0F0F] py-10">
           Загрузка информации о товаре...
         </div>
 
-        <div
-          v-else-if="isProductError || !product"
-          class="text-center text-[#C16371] py-10"
-        >
+        <div v-else-if="isProductError || !product" class="text-center text-[#C16371] py-10">
           Не удалось загрузить информацию о товаре. Попробуйте позже.
         </div>
 
-        <div
-          v-else
-          class="flex flex-col gap-4 w-full max-w-[600px] text-[#0F0F0F]"
-        >
-          <div class="flex flex-col gap-2">
-            <span class="text-xs tracking-[0.2em] text-[#C16371] uppercase">
+        <div v-else class="flex flex-col gap-8 w-full max-w-[620px] text-[#0F0F0F]">
+          <div class="flex justify-end">
+            <button
+              type="button"
+              class="h-12 w-12 rounded-full border border-[#E4E0DA] flex items-center justify-center hover:bg-[#F7F5F0] transition-colors"
+              aria-label="Добавить в избранное"
+            >
+              <Icon name="app-icon:heart-outlined" color="#0F0F0F" size="22" />
+            </button>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <span class="text-xs tracking-[0.4em] text-[#C16371] uppercase flex items-center gap-3">
               {{ collectionName }}
+              <span class="w-1 h-1 rounded-full bg-[#C16371]" />
             </span>
-            <h1 class="text-[64px] font-[masvol] leading-[1.1] max-sm:text-[38px]">
+            <h1 class="text-[72px] font-[masvol] leading-[1] max-lg:text-[56px] max-md:text-[46px] max-sm:text-[36px]">
               {{ product.name }}
             </h1>
-            <p class="font-bold text-[20px] max-sm:text-[18px]">
+            <p class="font-semibold text-[26px] max-sm:text-[20px]">
               {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
             </p>
           </div>
 
-          <div class="flex flex-col gap-2">
-            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Размер</p>
-            <p class="text-[15px] uppercase tracking-[0.2em] text-[#EEE9E4]">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Размер</p>
+              <span
+                v-if="selectedSize"
+                class="text-xs uppercase tracking-[0.3em] text-[#C16371]"
+              >
+                {{ selectedSize ? selectedSize.toUpperCase() : "" }}
+              </span>
+            </div>
+            <div v-if="hasSizeOptions" class="flex flex-wrap gap-3">
+              <button
+                v-for="size in sizeOptions"
+                :key="size"
+                type="button"
+                class="px-6 h-[44px] rounded-full border text-[13px] uppercase tracking-[0.25em] transition-all"
+                :class="[
+                  selectedSize === size
+                    ? '!bg-[#0F0F0F] !text-white !border-[#0F0F0F]'
+                    : 'bg-transparent border-[#E3DED7] text-[#3D3D3D]',
+                ]"
+                @click="selectedSize = size"
+              >
+                {{ size.toUpperCase() }}
+              </button>
+            </div>
+            <p
+              v-else
+              class="text-[15px] uppercase tracking-[0.2em] text-[#CDC6BF]"
+            >
               {{ availableSizesText }}
             </p>
           </div>
 
-          <div class="flex flex-col gap-3">
-            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Описание</p>
-            <p class="text-[15px] leading-relaxed tracking-[0.05em] text-[#3D3D3D]">
-              {{ descriptionText }}
-            </p>
-          </div>
-
-          <div class="flex flex-col gap-4 text-[15px] text-[#C9C5C0]">
-            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Состав</p>
-            <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D]">
-              <li v-for="(item, index) in composition" :key="index">
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-
-          <div class="flex flex-col gap-4 text-[15px]">
-            <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Уход</p>
-            <ul class="flex flex-col gap-1 uppercase">
-              <li v-for="(item, index) in careInstructions" :key="`care-${index}`">
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-
-          <div
-            class="w-full grid grid-cols-2 gap-4 mt-[32px] max-sm:grid-cols-1 max-sm:mb-10"
+          <Button
+            class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase tracking-[0.25em] w-full max-w-[280px]"
+            variant="outlined"
+            severity="primary"
+            @click="openCallbackModal"
           >
-            <Button
-              class="!rounded-[80px] !text-white !px-[28px] !h-[48px] !bg-[#0F0F0F] uppercase"
-              variant="outlined"
-              severity="primary"
-            >
-              Оставить заявку
-            </Button>
+            Купить
+          </Button>
 
-            <Button
-              class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] !h-[48px] uppercase"
-              variant="outlined"
-              severity="secondary"
-            >
-              Добавить в корзину
-            </Button>
+          <div class="flex flex-col border-t border-b border-[#E8E2DC] divide-y divide-[#E8E2DC]">
+            <div class="py-6">
+              <button
+                type="button"
+                class="w-full flex items-center justify-between"
+                @click="toggleSection('composition')"
+              >
+                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Состав</p>
+                <Icon
+                  :name="detailsSections.composition ? 'ph:caret-up' : 'ph:caret-down'"
+                  size="20"
+                  color="#0F0F0F"
+                />
+              </button>
+              <div v-if="detailsSections.composition" class="mt-4">
+                <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D] text-[15px]">
+                  <li v-for="(item, index) in composition" :key="`composition-${index}`">
+                    {{ item }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="py-6">
+              <button
+                type="button"
+                class="w-full flex items-center justify-between"
+                @click="toggleSection('care')"
+              >
+                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Уход</p>
+                <Icon
+                  :name="detailsSections.care ? 'ph:caret-up' : 'ph:caret-down'"
+                  size="20"
+                  color="#0F0F0F"
+                />
+              </button>
+              <div v-if="detailsSections.care" class="mt-4">
+                <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D] text-[15px]">
+                  <li v-for="(item, index) in careInstructions" :key="`care-${index}`">
+                    {{ item }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="py-6">
+              <button
+                type="button"
+                class="w-full flex items-center justify-between"
+                @click="toggleSection('description')"
+              >
+                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Описание</p>
+                <Icon
+                  :name="detailsSections.description ? 'ph:caret-up' : 'ph:caret-down'"
+                  size="20"
+                  color="#0F0F0F"
+                />
+              </button>
+              <div v-if="detailsSections.description" class="mt-4">
+                <p class="text-[15px] leading-relaxed tracking-[0.05em] text-[#3D3D3D]">
+                  {{ descriptionText }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <AppCallBackModal
+    v-model:visible="isCallbackModalOpen"
+    service-type="collection"
+    :metadata="productLeadMetadata"
+  />
 </template>
