@@ -160,7 +160,7 @@ const onSubmit = async () => {
   isSubmitting.value = true;
   try {
     const payload = buildPayload();
-    await $fetch("/leads", {
+    await $fetch("https://amora-brand.uz/api/leads", {
       baseURL: runtimeConfig.public.apiBase,
       method: "POST",
       body: payload,
