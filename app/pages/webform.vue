@@ -25,7 +25,7 @@ async function onSubmit() {
 
   isSubmitting.value = true;
   try {
-    await $fetch("https://amora-brand.uz/api/leads", {
+    await $fetch("https://api.amora-brand.uz/api/leads", {
       baseURL: config.public.apiBase,
       method: "POST",
       body: {
