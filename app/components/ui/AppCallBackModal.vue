@@ -193,11 +193,6 @@ onBeforeUnmount(() => {
     class="!rounded-[60px] !p-[40px] max-sm:p-[20px] max-sm:w-[90%]"
   >
     <div class="flex flex-col gap-[20px] w-[446px] max-sm:w-[100%]">
-      <h2
-        class="text-center text-[52px] leading-none font-[masvol] mb-[12px] max-sm:text-[32px]"
-      >
-        {{ props.title }}
-      </h2>
 
       <div v-if="isSubmitted" class="text-center space-y-5 py-4">
         <div class="flex flex-col items-center gap-4">
@@ -257,6 +252,11 @@ onBeforeUnmount(() => {
         @submit.prevent="onSubmit"
         class="flex flex-col gap-[16px]"
       >
+        <h2
+          class="text-center text-[52px] leading-none font-[masvol] mb-[12px] max-sm:text-[32px]"
+        >
+          {{ props.title }}
+        </h2>
         <InputText
           v-model="form.name"
           placeholder="ИМЯ ФАМИЛИЯ"

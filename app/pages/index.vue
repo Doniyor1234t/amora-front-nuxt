@@ -35,6 +35,13 @@ const banners = ref([
     description:
       "Нежная палитра в комбинации с нарочито объемными фасонами подчеркивают женственность их обладательницы",
   },
+  {
+    img: "/images/Slider-bg-4.png",
+    title: "NEW COLLECTION",
+    subtitle: "Self made woman",
+    description:
+      "Нежная палитра в комбинации с нарочито объемными фасонами подчеркивают женственность их обладательницы",
+  },
 ]);
 
 const features = [
@@ -266,586 +273,288 @@ const collectionSlider = ref<any>(null);
 const isCallBackVisible = ref(false);
 </script>
 
+
 <template>
-  <div>
-    <!-- Баннер слайдер проекта -->
+  <div class="slides-scroll">
+    <section class="slide-section--banner">
+      <div class="slide-section__fill">
+        <!-- Баннер слайдер проекта -->
+        <Banner :items="banners" />
+        <!-- Конец баннера слайдер проекта -->
+      </div>
+    </section>
+    <section class="slide-section">
+      <div class="slide-section__inner">
+        <!-- Карусель начало-->
+        <ClientOnly>
+          <ProductsSlider hideHeader :items="productsCarousel" />
+        </ClientOnly>
+        <!-- Карусель конец -->
+      </div>
+    </section>
 
-    <Banner :items="banners" />
-
-    <!-- Конец баннера слайдер проекта -->
-
-    <!-- Карусель начало-->
-    <ProductsSlider hideHeader :items="productsCarousel" />
-    <!-- Карусель конец -->
-
-    <!-- Начало блока коллекций-->
-    <div class="grid grid-cols-2 max-sm:grid-cols-1">
-      <div class="flex justify-center items-center">
-        <div class="w-[40%] max-sm:w-full max-sm:px-6">
+    <section class="slide-section">
+      <div class="slide-section__inner">
+        <div class="relative w-full h-full">
           <img
-            src="/images/Collection-img-1.png"
-            class="rounded-[40px] w-full object-cover aspect-[4/5]"
+            :src="'/images/Slider-bg-2.png'"
             alt=""
+            class="object-cover object-top w-full h-full max-sm:object-[70%]"
           />
+        </div>
+      </div>
+    </section>
 
-          <div class="flex flex-col items-center mt-[20px]">
-            <h2 class="text-[#0F0F0F] text-[52px] font-[masvol] max-sm:text-[32px]">
-              Resort collection
-            </h2>
-            <Button
-              class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:!px-[12px] max-sm:h-[32px] max-sm:!text-[12px]"
-              variant="outlined"
-              severity="secondary"
-            >
-              ПОСМОТРЕТЬ
-              <svg
-                width="36"
-                height="20"
-                viewBox="0 0 36 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="max-sm:w-[20px] max-sm:h-[20px]"
+    <section class="slide-section">
+      <div class="slide-section__inner">
+        <!-- Начао блока "Оставить заявку"-->
+        <div class="grid grid-cols-2 w-full max-sm:mt-[300px] max-sm:grid-cols-1">
+          <div class="flex justify-center items-center">
+            <div class="flex flex-col items-center max-w-[592px]">
+              <h4
+                class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px]"
               >
-                <path d="M0 10L36 10" stroke="#0F0F0F" />
-                <path
+                <svg
+                  width="6"
+                  height="6"
+                  class="shrink-0"
+                  viewBox="0 0 6 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
+                    fill="#C16371"
+                  />
+                </svg>
+                ИНДИВИДУАЛЬНЫЙ ПОШИВ AMORA
+                <svg
+                  width="6"
+                  height="6"
+                  class="shrink-0"
+                  viewBox="0 0 6 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
+                    fill="#C16371"
+                  />
+                </svg>
+              </h4>
+
+              <h2
+                class="text-[#0F0F0F] text-[52px] text-center pb-[24px] tracking-[0.05em] font-[masvol] max-sm:text-[34px]"
+              >
+                Создаём изделия, которые подчёркивают вашу индивидуальность
+              </h2>
+              <Button
+                class="!rounded-[80px] bg-black! text-[#fff]! !px-[28px] h-[44px] mt-5 max-sm:mb-6"
+                variant="outlined"
+                severity="secondary"
+                @click="isCallBackVisible = true"
+              >
+                ПОДРОБНЕЕ
+                <svg
+                  width="36"
+                  height="20"
+                  viewBox="0 0 36 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M0 10L36 10" stroke="#fff" />
+                  <path
+                    d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
+                    stroke="#fff"
+                  />
+                </svg>
+              </Button>
+
+              <!-- модальное окно -->
+              <AppCallBackModal
+                v-model:visible="isCallBackVisible"
+                service-type="tailoring"
+                title="Записаться на пошив"
+              />
+            </div>
+          </div>
+
+          <div class="relative h-full">
+            <img
+              src="/images/main-collection-1.png"
+              class="w-full max-h-[100vh] object-cover object-top"
+              alt=""
+            />
+            <div
+              class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide-section">
+      <div class="slide-section__inner">
+        <div class="grid grid-cols-2 w-full max-sm:grid-cols-1">
+          <div class="relative h-full">
+            <img
+              src="/images/main-collection-2.png"
+              class="w-full max-h-[100vh] object-cover object-top"
+              alt=""
+            />
+            <div
+              class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
+            ></div>
+          </div>
+
+          <div class="flex justify-center items-center">
+            <div class="flex flex-col items-center max-w-[592px]">
+              <h4
+                class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] max-sm:mt-6"
+              >
+                <svg
+                  width="6"
+                  height="6"
+                  class="shrink-0"
+                  viewBox="0 0 6 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
+                    fill="#C16371"
+                  />
+                </svg>
+                G.T. Factory
+                <svg
+                  width="6"
+                  height="6"
+                  class="shrink-0"
+                  viewBox="0 0 6 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
+                    fill="#C16371"
+                  />
+                </svg>
+              </h4>
+
+              <h2
+                class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
+              >
+                Премиальное обучение по конструированию и моделированию одежды
+              </h2>
+                <Button
+                class="rounded-[80px]! bg-black! text-[#fff]! px-7! h-11 mt-5 max-sm:mb-6"
+                variant="outlined"
+                severity="secondary"
+                @click="isCallBackVisible = true"
+                >
+                ПОДРОБНЕЕ
+                <svg
+                  width="36"
+                  height="20"
+                  viewBox="0 0 36 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M0 10L36 10" stroke="#fff" />
+                  <path
                   d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                  stroke="#0F0F0F"
-                />
-              </svg>
-            </Button>
+                  stroke="#fff"
+                  />
+                </svg>
+                </Button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="relative max-sm:hidden">
-        <img
-          src="/images/Collection-bg.jpg"
-          class="w-full max-h-[100vh] object-cover object-top"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 max-sm:grid-cols-1">
-      <div class="relative max-sm:hidden">
-        <img
-          src="/images/Collection-bg-2.jpg"
-          class="w-full max-h-[100vh] object-cover object-top max-sm:!object-cover max-sm:!h-[100%]"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-      <div class="flex justify-center items-center">
-        <div class="w-[40%] relative max-sm:w-[60%]">
-          <ProductsSlider
-            ref="collectionSlider"
-            :items="productsCarousel"
-            :hideHeader="true"
-            :slidesPerView="1"
-            :mobileSlidesPerView="1"
-          />
-
-          <button
-            @click="collectionSlider?.swiper?.prev()"
-            class="px-[28px] 
-            py-[12px] 
-            rounded-[80px] 
-            border 
-            border-[#CAC9C8] 
-            cursor-pointer 
-            absolute 
-            top-2/5 
-            left-0 
-            -translate-x-[60%] 
-            z-10 
-            "
-          >
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M36 10L4.76837e-07 10" stroke="#0F0F0F" />
-              <path
-                d="M10 0C10 4.82759 5.59322 10 -4.76836e-07 10C5.59322 10 10 15.1724 10 20"
-                stroke="black"
-              />
-            </svg>
-          </button>
-
-          <button
-            @click="collectionSlider?.swiper?.next()"
-            class="px-[28px] 
-            py-[12px] 
-            rounded-[80px] 
-            border 
-            border-[#CAC9C8] 
-            cursor-pointer 
-            absolute 
-            top-2/5 
-            right-0 
-            -translate-x-[-60%] 
-            z-10 
-            "
-          >
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="black"
-              />
-            </svg>
-          </button>
-
-        </div>
-      </div>
-    </div>
-    <!-- Конец блока коллекций-->
-
-    <!-- Начало блока о нас-->
-
-    <div class="w-full">
-      <img
-        src="/images/About-bg.png"
-        alt=""
-        class="w-full object-cover h-[560px]"
-      />
-    </div>
-
-    <div class="container py-[52px] max-sm:py-[20px]">
-      <div class="grid grid-cols-2 max-sm:grid-cols-1 max-sm:gap-[20px]">
-        <div>
-          <h2 class="text-[#0F0F0F] text-[52px] font-[masvol] max-sm:text-[32px]">
-            AMORA - бренд, рождённый эстетикой женственности
-          </h2>
-        </div>
-        <div>
-          <p class="text-[#3D3D3D] text-[14px] max-sm:text-[12px]">
-            AMORA — это премиальный fashion-бренд и ателье, основанное на идее
-            мягкой женственности, натуральных тканей и утончённых силуэтов.
-            Каждое изделие создаётся вручную нашими мастерами — от первых
-            эскизов до финальной драпировки, сохраняя couture-подход и
-            европейское качество.
-          </p>
-          <p class="text-[#3D3D3D] text-[14px] mt-[20px]">
-            Мы создаём одежду, в которой сочетаются ручная работа, сложный крой
-            и современная элегантность
-          </p>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-[24px] max-sm:!px-[12px] max-sm:h-[32px] max-sm:!text-[12px]"
-            variant="outlined"
-            severity="secondary"
-          >
-            НАША ИСТОРИЯ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Конец блока о нас-->
-
-    <!-- Начало блока почему мы? -->
-
-    <!-- <div class="container pb-[64px]">
-      <div class="flex flex-col items-center py-[64px]">
-        <h4 class="text-[#3D3D3D] text-[14px] flex items-center gap-2">
-          <svg
-            width="6"
-            height="6"
-            class="shrink-0"
-            viewBox="0 0 6 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-              fill="#C16371"
-            />
-          </svg>
-          ПОЧЕМУ МЫ?
-          <svg
-            width="6"
-            height="6"
-            class="shrink-0"
-            viewBox="0 0 6 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-              fill="#C16371"
-            />
-          </svg>
-        </h4>
-
-        <h1 class="text-[#0F0F0F] text-[52px] mt-[12px] font-[masvol] max-sm:text-[32px]">
-          Мы создаём одежду, а не просто вещи
-        </h1>
-      </div>
-
-      <div class="grid grid-cols-4 gap-4 h-[400px] max-sm:grid-cols-2 max-sm:h-[200px] max-sm:gap-2">
-        <div
-          v-for="(feature, index) in features"
-          :key="index"
-          class="bg-white rounded-[30px] sm:rounded-[40px] flex flex-col justify-between items-center pt-[48px] pb-[32px]"
-        >
-          <div
-            class="rounded-[100px] border-[1px] border-[#0F0F0F] p-[20px] w-[72px] h-[72px] flex justify-center items-center"
-            v-html="feature.svg"
-          >
-          </div>
-          <div class="flex flex-col items-center text-center mt-4">
-            <h2 class="text-[#0F0F0F] text-[24px] font-[masvol]">
-              {{ feature.title }}
-            </h2>
-            <p class="text-[#3D3D3D] text-[14px] mt-2">
-              {{ feature.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- Конец блока почему мы? -->
-
-    <!-- Начао блока "Оставить заявку"-->
-
-    <div class="grid grid-cols-2 max-sm:mt-[300px] max-sm:grid-cols-1">
-      <div class="flex justify-center items-center">
-        <div class="flex flex-col items-center max-w-[440px]">
-          <h4
-            class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] "
-          >
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-            ИНДИВИДУАЛЬНЫЙ ПОШИВ AMORA
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-          </h4>
-
-          <h2
-            class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
-          >
-            Создаём изделия, которые подчёркивают вашу индивидуальность
-          </h2>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
-            variant="outlined"
-            severity="secondary"
-            @click="isCallBackVisible = true"
-          >
-            ПОДРОБНЕЕ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
-
-          <!-- модальное окно -->
-          <AppCallBackModal
-            v-model:visible="isCallBackVisible"
-            service-type="tailoring"
-            title="Записаться на пошив"
-          />
-        </div>
-      </div>
-
-      <div class="relative">
-        <img
-          src="/images/Request-bg-1.png"
-          class="w-full max-h-[100vh] object-cover object-top"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 max-sm:grid-cols-1">
-      <div class="relative">
-        <img
-          src="/images/Request-bg-2.jpg"
-          class="w-full max-h-[100vh] object-cover object-top"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-
-      <div class="flex justify-center items-center">
-        <div class="flex flex-col items-center max-w-[440px]">
-          <h4
-            class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] max-sm:mt-6"
-          >
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-            G.T. Factory
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-          </h4>
-
-          <h2
-            class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
-          >
-            Премиальное обучение по конструированию и моделированию одежды
-          </h2>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
-            variant="outlined"
-            severity="secondary"
-            @click="isCallBackVisible = true"
-          >
-            ПОДРОБНЕЕ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
-        </div>
-      </div>
-    </div>
+    </section>
     <!-- Конец блока "Оставить заявку -->
 
-    <!-- Начало блока контактов и карты -->
-
-    <div class="relative max-sm:pb-10 max-sm:flex max-sm:flex-col max-sm:items-center">
-      <div
-        class="bg-white 
-        rounded-[500px] 
-        h-[680px] 
-        w-[520px] 
-        z-[9] 
-        absolute 
-        top-1/2 
-        left-1/6 
-        transform 
-        -translate-x-1/2 
-        -translate-y-1/2 
-        p-5
-        max-sm:relative
-        max-sm:top-0
-        max-sm:left-0
-        max-sm:translate-x-0
-        max-sm:translate-y-0
-        max-sm:h-auto
-        max-sm:w-full
-        max-sm:max-w-[320px]
-        max-sm:rounded-[40px]
-        max-sm:px-6
-        max-sm:my-6
-        max-sm:transform-none
-      "
-      >
-        <div
-          class="flex flex-col items-center justify-center h-full max-w-[400px] mx-auto max-sm:py-8"
-        >
-          <div class="flex items-center gap-2 mb-[12px]">
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-
-            <h4 class="text-[#3D3D3D] text-center">АДРЕС БУТКИНА AMORA</h4>
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-          </div>
-          <h2 class="text-[#0F0F0F] text-[52px] text-center font-[masvol] max-sm:text-[34px]">
-            +998 (33)-324-44-44
-          </h2>
-          <p class="text-center text-[#3D3D3D] text-[14px] mb-6 uppercase">
-            ПОЗВОНИТЕ НАМ ИЛИ СВЯЖИТЕСЬ С НАМИ В ТЕЛЕГРАМ
-          </p>
-
-          <div class="flex items-center gap-6 mb-6">
-            <a href="https://www.youtube.com/@brandAmora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M23.4985 6.18725C23.2225 5.14794 22.4093 4.32945 21.3766 4.05162C19.505 3.54687 12 3.54688 12 3.54688C12 3.54688 4.49498 3.54687 2.62336 4.05162C1.59075 4.32941 0.777516 5.14794 0.501516 6.18725C0 8.07106 0 12.0014 0 12.0014C0 12.0014 0 15.9318 0.501516 17.8156C0.777516 18.8549 1.59075 19.6734 2.62336 19.9513C4.49498 20.456 12 20.456 12 20.456C12 20.456 19.505 20.456 21.3766 19.9513C22.4093 19.6734 23.2225 18.8549 23.4985 17.8156C24 15.9318 24 12.0014 24 12.0014C24 12.0014 24 8.07106 23.4985 6.18725Z"
-                  fill="white"
-                />
-                <path
-                  d="M9.54688 15.5667L15.8196 11.9983L9.54688 8.42969V15.5667Z"
-                  fill="#0F0F0F"
-                />
-              </svg>
-            </a>
-
-            <a href="https://t.me/Brand_Amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21.4678 2.74065C18.4598 3.98625 5.56296 9.32841 1.99944 10.7845C-0.390483 11.7171 1.00848 12.5914 1.00848 12.5914C1.00848 12.5914 3.04848 13.2908 4.79712 13.8154C6.54576 14.3401 7.4784 13.7571 7.4784 13.7571L15.697 8.21961C18.6113 6.23793 17.9119 7.86993 17.2126 8.56929C15.697 10.0849 13.1906 12.4746 11.0923 14.3982C10.1597 15.2142 10.626 15.9138 11.034 16.2634C12.5496 17.5458 16.6879 20.1687 16.9212 20.3437C18.1526 21.2154 20.5747 22.4703 20.9431 19.819L22.4004 10.6678C22.8667 7.57857 23.333 4.72233 23.3914 3.90633C23.5661 1.92465 21.4678 2.74065 21.4678 2.74065Z"
-                  fill="white"
-                />
-              </svg>
-            </a>
-
-            <a href="https://www.instagram.com/brand.amora" target="_blank" class="bg-black rounded-[100px] p-[10px]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M17 2H7C4.24 2 2 4.24 2 7V17C2 19.76 4.24 22 7 22H17C19.76 22 22 19.76 22 17V7C22 4.24 19.76 2 17 2ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM17.35 7.62C16.8 7.62 16.35 7.17 16.35 6.62C16.35 6.07 16.8 5.62 17.35 5.62C17.9 5.62 18.35 6.07 18.35 6.62C18.35 7.17 17.9 7.62 17.35 7.62Z"
-                  fill="white"
-                />
-                <path
-                  d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
-                  fill="white"
-                />
-              </svg>
-            </a>
-          </div>
-
-          <p class="text-center text-[#3D3D3D] text-[14px] mb-2 uppercase">
-            на бутик можно найти по адресу:
-          </p>
-          <p class="text-center text-[#3D3D3D] text-[14px] mb-6 uppercase">
-            ул. Исмаилата, 16А
-          </p>
+    <section class="slide-section">
+      <div class="slide-section__inner">
+        <!-- Начало блока контактов и карты -->
+        <div class="relative w-full max-sm:pb-10 max-sm:flex max-sm:flex-col max-sm:items-center">
+          <ClientOnly>
+            <YandexMap
+              :center="[41.334608, 69.323384]"
+              :zoom="17"
+              :marker="{
+                coordinates: [41.334608, 69.323384],
+                hint: 'Бутик AMORA',
+                description: 'ул. Исмаилата, 16А',
+              }"
+              height="800px"
+              class="max-sm:min-h-[420px]"
+            />
+          </ClientOnly>
         </div>
+        <!-- Конец блока контактов и карты -->
       </div>
-
-      <YandexMap
-        :center="[41.334608, 69.323384]"
-        :zoom="17"
-        :marker="{
-          coordinates: [41.334608, 69.323384],
-          hint: 'Бутик AMORA',
-          description: 'ул. Исмаилата, 16А',
-        }"
-        height="800px"
-        class="max-sm:min-h-[420px]"
-      />
-    </div>
-    <!-- Конец блока контактов и карты -->
+    </section>
   </div>
 </template>
 
+
 <style>
+.slides-scroll {
+  position: relative;
+}
+
+.slide-section {
+  position: sticky;
+  top: 0;
+  /* min-height: 100vh; */
+  display: flex;
+  align-items: stretch;
+  background-color: #fff;
+}
+
+.slide-section--banner {
+  padding: 0;
+}
+
+.slide-section__inner,
+.slide-section__fill {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-section__inner {
+  /* padding: 80px 0; */
+}
+
+.slide-section__inner > * {
+  width: 100%;
+}
+
+.slide-section__fill {
+  padding: 0;
+}
+
+.slide-section__fill > * {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .slide-section {
+    position: static;
+    min-height: auto;
+  }
+
+  .slide-section__inner {
+    padding: 40px 0;
+  }
+}
+
 .banner {
   height: 100vh;
 

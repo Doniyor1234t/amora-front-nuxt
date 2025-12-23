@@ -31,7 +31,7 @@ const swiper = useSwiper(containerRef);
         disableOnInteraction: false,
       }"
       :modules="modules"
-      class="banner h-full max-sm:max-h-[450px]"
+      class="banner h-full max-sm:max-h-[100vh]"
       ref="containerRef"
     >
       <swiper-slide v-for="(slide, idx) in props.items" :key="idx">
@@ -41,8 +41,8 @@ const swiper = useSwiper(containerRef);
             alt=""
             class="object-cover object-top w-full h-full max-sm:object-[70%]"
           />
-          <div
-            class="absolute inset-0 flex items-center justify-start px-[8%] max-lg:px-[6%] max-md:px-6"
+          <!-- <div
+            class="absolute inset-0 flex items-center justify-start px-[8%] max-lg:px-[6%] max-md:px-6 max-md:hidden"
           >
             <div
               class="max-w-[480px] bg-transparent text-center rounded-[48px] px-10 py-12 max-md:rounded-[32px] max-md:px-6 max-md:py-8"
@@ -72,7 +72,7 @@ const swiper = useSwiper(containerRef);
                 </Button>
               </NuxtLink>
             </div>
-          </div>
+          </div> -->
         </div>
       </swiper-slide>
     </swiper-container>

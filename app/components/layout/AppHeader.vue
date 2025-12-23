@@ -44,7 +44,7 @@ watch(
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 w-full z-10 bg-white">
+  <header class="fixed top-0 left-0 w-full z-10 bg-transparent">
     <div class="container flex h-[72px] items-center max-sm:h-[60px]">
       <Drawer v-model:visible="visible" class="!w-[45%] max-sm:!w-[100%]">
         <div class="max-sm:w-full max-sm:flex max-sm:justify-between">
