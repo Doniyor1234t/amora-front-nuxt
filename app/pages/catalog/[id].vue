@@ -10,6 +10,7 @@ import {
   type StrapiProductAttributes,
   mapProductFromResponse,
 } from "@/utils/catalogMappers";
+import { useLikesStore } from "@/stores/likes";
 
 definePageMeta({
   layout: "header-only",
@@ -32,6 +33,7 @@ const productPageUrl = computed(() => {
   }
 });
 const { normalizeMediaCollection } = useStrapi();
+const likesStore = useLikesStore();
 
 const {
   data: productResponse,
@@ -184,6 +186,20 @@ const toggleSection = (key: DetailSectionKey) => {
   detailsSections.value[key] = !detailsSections.value[key];
 };
 
+const toggleFavorite = () => {
+  if (!product.value) {
+    return;
+  }
+  likesStore.toggle(product.value.id);
+};
+
+const isFavorite = computed(() => {
+  if (!product.value) {
+    return false;
+  }
+  return likesStore.isLiked(product.value.id);
+});
+
 const isCallbackModalOpen = ref(false);
 const openCallbackModal = () => {
   isCallbackModalOpen.value = true;
@@ -222,15 +238,6 @@ const openCallbackModal = () => {
         </div>
 
         <div v-else class="flex flex-col gap-8 w-full max-w-[620px] text-[#0F0F0F]">
-          <div class="flex justify-end">
-            <button
-              type="button"
-              class="h-12 w-12 rounded-full border border-[#E4E0DA] flex items-center justify-center hover:bg-[#F7F5F0] transition-colors"
-              aria-label="Добавить в избранное"
-            >
-              <Icon name="app-icon:heart-outlined" color="#0F0F0F" size="22" />
-            </button>
-          </div>
 
           <div class="flex flex-col gap-3">
             <span class="text-xs tracking-[0.4em] text-[#C16371] uppercase flex items-center gap-3">
@@ -278,15 +285,31 @@ const openCallbackModal = () => {
               {{ availableSizesText }}
             </p>
           </div>
-
-          <Button
-            class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase tracking-[0.25em] w-full max-w-[280px]"
-            variant="outlined"
-            severity="primary"
-            @click="openCallbackModal"
-          >
-            Купить
-          </Button>
+          <div class="flex gap-5">
+            <Button
+              class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase tracking-[0.25em] w-full max-w-[280px]"
+              variant="outlined"
+              severity="primary"
+              @click="openCallbackModal"
+            >
+              Купить
+            </Button>
+  
+            <button
+              type="button"
+              class="h-12 w-12 rounded-full border border-[#E4E0DA] flex items-center justify-center hover:bg-[#F7F5F0] transition-colors"
+              :aria-pressed="isFavorite"
+              @click="toggleFavorite"
+            >
+              <Icon
+                name="app-icon:heart-outlined"
+                mode="svg"
+                :class="isFavorite ? 'heart--liked' : ''"
+                :color="isFavorite ? '#C16371' : '#0F0F0F'"
+                size="24"
+              />
+            </button>
+          </div>
 
           <div class="flex flex-col border-t border-b border-[#E8E2DC] divide-y divide-[#E8E2DC]">
             <div class="py-6">
@@ -363,3 +386,9 @@ const openCallbackModal = () => {
     :metadata="productLeadMetadata"
   />
 </template>
+
+<style scoped>
+.heart--liked g {
+  fill: #000 !important;
+}
+</style>

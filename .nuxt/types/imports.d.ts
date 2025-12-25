@@ -124,6 +124,7 @@ declare global {
   const useImage: typeof import('../../node_modules/@nuxt/image/dist/runtime/composables').useImage
   const useLazyAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useLazyAsyncData
   const useLazyFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').useLazyFetch
+  const useLikesStore: typeof import('../../app/stores/likes').useLikesStore
   const useLink: typeof import('vue-router').useLink
   const useLoadingIndicator: typeof import('../../node_modules/nuxt/dist/app/composables/loading-indicator').useLoadingIndicator
   const useModel: typeof import('vue').useModel
@@ -338,6 +339,7 @@ declare module 'vue' {
     readonly useImage: UnwrapRef<typeof import('../../node_modules/@nuxt/image/dist/runtime/composables')['useImage']>
     readonly useLazyAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useLazyAsyncData']>
     readonly useLazyFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useLazyFetch']>
+    readonly useLikesStore: UnwrapRef<typeof import('../../app/stores/likes')['useLikesStore']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLoadingIndicator: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/loading-indicator')['useLoadingIndicator']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>

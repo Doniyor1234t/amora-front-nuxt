@@ -197,7 +197,8 @@ const features = [
   }
 ]
 
-const fallbackCarouselItems = Array.from({ length: 10 }, () => ({
+const fallbackCarouselItems = Array.from({ length: 10 }, (_, idx) => ({
+  id: `fallback-${idx}`,
   img: `/images/products/dress-1.png`,
   name: "НАЗВАНИЕ ПЛАТЬЯ",
   price: "200$",
@@ -287,8 +288,24 @@ const isCallBackVisible = ref(false);
       <div class="slide-section__inner">
         <!-- Карусель начало-->
         <ClientOnly>
-          <ProductsSlider hideHeader :items="productsCarousel" />
+          <div class="hidden md:block w-full">
+            <ProductsSlider hideHeader :items="productsCarousel" />
+          </div>
         </ClientOnly>
+        <div class="products-grid md:hidden">
+          <div
+            v-for="(item, idx) in productsCarousel.slice(0, 6)"
+            :key="item.id ?? idx"
+            class="products-grid__item"
+          >
+            <img
+              :src="item.img"
+              :alt="item.name"
+              class="products-grid__image"
+              loading="lazy"
+            />
+          </div>
+        </div>
         <!-- Карусель конец -->
       </div>
     </section>
@@ -308,9 +325,9 @@ const isCallBackVisible = ref(false);
     <section class="slide-section">
       <div class="slide-section__inner">
         <!-- Начао блока "Оставить заявку"-->
-        <div class="grid grid-cols-2 w-full max-sm:mt-[300px] max-sm:grid-cols-1">
-          <div class="flex justify-center items-center">
-            <div class="flex flex-col items-center max-w-[592px]">
+        <div class="grid grid-cols-2 w-full max-lg:gap-6 max-md:grid-cols-1 max-md:mt-10">
+          <div class="flex justify-center items-center max-md:order-2">
+            <div class="flex flex-col items-center max-w-[592px] text-center max-md:px-6">
               <h4
                 class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px]"
               >
@@ -349,7 +366,7 @@ const isCallBackVisible = ref(false);
                 Создаём изделия, которые подчёркивают вашу индивидуальность
               </h2>
               <Button
-                class="!rounded-[80px] bg-black! text-[#fff]! !px-[28px] h-[44px] mt-5 max-sm:mb-6"
+                class="!rounded-[80px] !bg-black !text-white !px-[28px] h-[44px] mt-5 max-sm:mb-6"
                 variant="outlined"
                 severity="secondary"
                 @click="isCallBackVisible = true"
@@ -379,10 +396,10 @@ const isCallBackVisible = ref(false);
             </div>
           </div>
 
-          <div class="relative h-full">
+          <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
             <img
               src="/images/main-collection-1.png"
-              class="w-full max-h-[100vh] object-cover object-top"
+              class="w-full h-full max-h-[100vh] object-cover object-top"
               alt=""
             />
             <div
@@ -395,11 +412,11 @@ const isCallBackVisible = ref(false);
 
     <section class="slide-section">
       <div class="slide-section__inner">
-        <div class="grid grid-cols-2 w-full max-sm:grid-cols-1">
-          <div class="relative h-full">
+        <div class="grid grid-cols-2 w-full max-lg:gap-6 max-md:grid-cols-1">
+          <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
             <img
               src="/images/main-collection-2.png"
-              class="w-full max-h-[100vh] object-cover object-top"
+              class="w-full h-full max-h-[100vh] object-cover object-top"
               alt=""
             />
             <div
@@ -407,8 +424,8 @@ const isCallBackVisible = ref(false);
             ></div>
           </div>
 
-          <div class="flex justify-center items-center">
-            <div class="flex flex-col items-center max-w-[592px]">
+          <div class="flex justify-center items-center max-md:order-2">
+            <div class="flex flex-col items-center max-w-[592px] text-center max-md:px-6">
               <h4
                 class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] max-sm:mt-6"
               >
@@ -446,12 +463,12 @@ const isCallBackVisible = ref(false);
               >
                 Премиальное обучение по конструированию и моделированию одежды
               </h2>
-                <Button
-                class="rounded-[80px]! bg-black! text-[#fff]! px-7! h-11 mt-5 max-sm:mb-6"
+              <Button
+                class="!rounded-[80px] !bg-black !text-white !px-[28px] h-[44px] mt-5 max-sm:mb-6"
                 variant="outlined"
                 severity="secondary"
                 @click="isCallBackVisible = true"
-                >
+              >
                 ПОДРОБНЕЕ
                 <svg
                   width="36"
@@ -466,7 +483,7 @@ const isCallBackVisible = ref(false);
                   stroke="#fff"
                   />
                 </svg>
-                </Button>
+              </Button>
             </div>
           </div>
         </div>
@@ -477,20 +494,20 @@ const isCallBackVisible = ref(false);
     <section class="slide-section">
       <div class="slide-section__inner">
         <!-- Начало блока контактов и карты -->
-        <div class="relative w-full max-sm:pb-10 max-sm:flex max-sm:flex-col max-sm:items-center">
-          <ClientOnly>
-            <YandexMap
-              :center="[41.334608, 69.323384]"
-              :zoom="17"
-              :marker="{
-                coordinates: [41.334608, 69.323384],
-                hint: 'Бутик AMORA',
-                description: 'ул. Исмаилата, 16А',
-              }"
-              height="800px"
-              class="max-sm:min-h-[420px]"
-            />
-          </ClientOnly>
+        <div class="contact-layout">
+          <div class="contact-map max-md:order-1">
+              <YandexMap
+                :center="[41.334608, 69.323384]"
+                :zoom="17"
+                :marker="{
+                  coordinates: [41.334608, 69.323384],
+                  hint: 'Бутик AMORA',
+                  description: 'ул. Исмаилата, 16А',
+                }"
+                height="800px"
+                class="contact-map__canvas"
+              />
+          </div>
         </div>
         <!-- Конец блока контактов и карты -->
       </div>
@@ -502,6 +519,27 @@ const isCallBackVisible = ref(false);
 <style>
 .slides-scroll {
   position: relative;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.products-grid__item {
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.products-grid__image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .slide-section {
@@ -544,6 +582,54 @@ const isCallBackVisible = ref(false);
   height: 100%;
 }
 
+.contact-layout {
+  display: flex;
+  width: 100%;
+  gap: 32px;
+  align-items: stretch;
+}
+
+.contact-map {
+  flex: 1 1 55%;
+  border-radius: 48px;
+  overflow: hidden;
+}
+
+.contact-map__canvas {
+  border-radius: 48px;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.contact-card {
+  flex: 1 1 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-card__inner {
+  background: #fff;
+  border-radius: 64px;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  width: 100%;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.06);
+}
+
+.contact-card__social {
+  background: #0f0f0f;
+  border-radius: 999px;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .slide-section {
     position: static;
@@ -552,6 +638,25 @@ const isCallBackVisible = ref(false);
 
   .slide-section__inner {
     padding: 40px 0;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0 16px;
+  }
+
+  .contact-layout {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .contact-map__canvas {
+    min-height: 360px;
+  }
+
+  .contact-card__inner {
+    border-radius: 32px;
+    padding: 32px 24px;
   }
 }
 

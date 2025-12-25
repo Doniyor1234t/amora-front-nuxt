@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, watchEffect } from "vue";
+import { useLikesStore } from "@/stores/likes";
 import Drawer from "primevue/drawer";
 import RadioButton from "primevue/radiobutton";
 import Checkbox from "primevue/checkbox";
@@ -103,7 +104,7 @@ const sizeDropdownOpen = ref(false);
 const sortDropdownOpen = ref(false);
 const sizeDropdownRef = ref<HTMLElement | null>(null);
 const sortDropdownRef = ref<HTMLElement | null>(null);
-const favoriteProductIds = ref<number[]>([]);
+const likesStore = useLikesStore();
 
 const sortMapping: Record<string, string[]> = {
   new: ["publishedAt:desc"],
@@ -412,18 +413,10 @@ onBeforeUnmount(() => {
 });
 
 const toggleFavorite = (productId: number) => {
-  if (favoriteProductIds.value.includes(productId)) {
-    favoriteProductIds.value = favoriteProductIds.value.filter(
-      (id) => id !== productId
-    );
-    return;
-  }
-
-  favoriteProductIds.value = [...favoriteProductIds.value, productId];
+  likesStore.toggle(productId);
 };
 
-const isFavorite = (productId: number) =>
-  favoriteProductIds.value.includes(productId);
+const isFavorite = (productId: number) => likesStore.isLiked(productId);
 </script>
 
 <template>
@@ -696,15 +689,16 @@ const isFavorite = (productId: number) =>
                     <button
                       type="button"
                       class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center transition hover:scale-105"
+                      :aria-pressed="isFavorite(product.id)"
                       @click.stop="toggleFavorite(product.id)"
                     >
-                        <Icon
+                      <Icon
                         name="app-icon:heart-outlined"
                         mode="svg"
-                        :class="isFavorite(product.id) ? 'blackIcon' : null"
-                        :color="isFavorite(product.id) ? '#000' : undefined"
+                        :class="isFavorite(product.id) ? 'heart--liked' : ''"
+                        :color="isFavorite(product.id) ? '#000' : '#0F0F0F'"
                         size="20"
-                        />
+                      />
                     </button>
                     <img
                       :src="getProductImage(product)"
@@ -1053,7 +1047,7 @@ const isFavorite = (productId: number) =>
   border-color: #0f0f0f;
 }
 
-.blackIcon g {
+.heart--liked g {
   fill: #000 !important;
 }
 

@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'https://amora-brand.uz/api',
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL ?? 'https://amora-brand.uz',
-      yandexMapsApiKey: process.env.NUXT_PUBLIC_YANDEX_MAPS_KEY ?? '',
+      yandexMapsApiKey: "12f92244-d62d-4314-b321-ab0d15f86f84",
       vueQuery: {
         queryClientOptions: {
           defaultOptions: {
