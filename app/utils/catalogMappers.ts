@@ -36,6 +36,7 @@ export interface Product {
   color?: string | null;
   fit?: string | null;
   availableSizes?: string[] | null;
+  products?: Product[] | null;
 }
 
 export interface ProductsResponse {
@@ -75,6 +76,7 @@ export interface StrapiProductAttributes {
   color?: string | null;
   fit?: string | null;
   availableSizes?: string[] | null;
+  products?: StrapiEntityRelation<StrapiProductAttributes>;
 }
 
 export type MediaNormalizer = (
@@ -149,6 +151,10 @@ export const mapProductEntity = (
     ? getEntityAttributes(collectionEntity)
     : null;
 
+  const relatedProducts = relationToArray(attributes.products)
+    .filter(isActiveEntity)
+    .map((productEntity) => mapProductEntity(productEntity, normalize));
+
   return {
     id: entity.id,
     name: attributes.name,
@@ -170,6 +176,7 @@ export const mapProductEntity = (
     color: attributes.color ?? null,
     fit: attributes.fit ?? null,
     availableSizes: attributes.availableSizes ?? null,
+    products: relatedProducts.length ? relatedProducts : null,
   };
 };
 

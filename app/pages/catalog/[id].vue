@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import "swiper/css";
+import "swiper/css/pagination";
 import { computed, ref, watch } from "vue";
 import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 import { createError } from "h3";
@@ -17,6 +19,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const router = useRouter();
 const runtimeConfig = useRuntimeConfig();
 const requestUrl = useRequestURL();
 const defaultLocale =
@@ -54,7 +57,13 @@ const {
         slug: { $eq: productSlug.value },
         isActive: { $eq: true },
       },
-      populate: ["images", "collection"],
+      populate: {
+        images: { populate: "*" },
+        collection: { populate: "*" },
+        products: {
+          populate: ["images", "collection"],
+        },
+      },
       locale: currentLocale.value,
       pagination: {
         page: 1,
@@ -87,11 +96,14 @@ const {
 const product = computed(() => productResponse.value);
 
 const placeholderImage = "/images/Product-bg.jpg";
+const getProductImageUrl = (images?: Product["images"]) => {
+  const [first] = images ?? [];
+  return first?.url ?? first?.path ?? placeholderImage;
+};
 const productImages = computed(() => {
   return (
-    product.value?.images?.map(
-      (img) => img?.url ?? img?.path ?? placeholderImage
-    ) ?? [placeholderImage]
+    product.value?.images?.map((img) => img?.url ?? img?.path ?? placeholderImage) ??
+    [placeholderImage]
   );
 });
 
@@ -175,6 +187,13 @@ watch(
 );
 
 type DetailSectionKey = "composition" | "care" | "description";
+type ComplementaryProductCard = {
+  id: number;
+  slug?: string;
+  name: string;
+  price: string;
+  image: string;
+};
 
 const detailsSections = ref<Record<DetailSectionKey, boolean>>({
   composition: false,
@@ -204,30 +223,92 @@ const isCallbackModalOpen = ref(false);
 const openCallbackModal = () => {
   isCallbackModalOpen.value = true;
 };
+const complementaryProducts = computed(() => product.value?.products ?? []);
+const complementaryProductCards = computed<ComplementaryProductCard[]>(() =>
+  complementaryProducts.value.map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+    price: formatPrice(item.price, item.currency ?? undefined),
+    image: getProductImageUrl(item.images),
+  }))
+);
+const hasComplementaryProducts = computed(
+  () => complementaryProductCards.value.length > 0
+);
+const complementarySliderRef = ref<HTMLElement | null>(null);
+const slideComplementaryProducts = (direction: "prev" | "next") => {
+  const swiperEl = complementarySliderRef.value as (HTMLElement & {
+    swiper?: { slidePrev: () => void; slideNext: () => void };
+  }) | null;
+  if (!swiperEl?.swiper) {
+    return;
+  }
+  if (direction === "prev") {
+    swiperEl.swiper.slidePrev();
+  } else {
+    swiperEl.swiper.slideNext();
+  }
+};
+const goToComplementaryProduct = (item: ComplementaryProductCard) => {
+  const identifier = item?.slug ?? item.id;
+  if (!identifier) {
+    return;
+  }
+  router.push(`/catalog/${identifier}`);
+};
+const toggleFavoriteProduct = (productId: number) => {
+  likesStore.toggle(productId);
+};
+const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 </script>
 
 <template>
   <div class="pt-[72px]">
     <div
-      class="grid grid-cols-2 overflow-hidden min-h-[calc(100vh-72px)] max-lg:grid-cols-[1.1fr_0.9fr] max-md:grid-cols-1"
+      class="flex min-h-[calc(100vh-72px)] max-md:flex-col max-lg:flex md:basis-[50%]"
     >
       <div
-        class="flex overflow-y-auto no-scrollbar flex-col h-[calc(100vh-72px)] bg-[#fff]"
+        class="flex overflow-y-auto no-scrollbar flex-col bg-[#fff] flex-1"
       >
         <div
-          v-for="(value, index) in productImages"
-          :key="`product-image-${index}`"
-          class="relative min-h-[calc(100vh-72px)] flex items-center justify-center"
+          class="md:flex max-md:hidden overflow-y-auto no-scrollbar flex-col h-full"
         >
-          <img
-            :src="value"
-            alt="Product image"
-            class="h-full w-full object-cover object-top max-xl:object-contain"
-          />
+          <div
+            v-for="(value, index) in productImages"
+            :key="`product-image-${index}`"
+            class="relative min-h-[calc(100vh-72px)] flex items-center justify-center"
+          >
+            <img
+              :src="value"
+              alt="Product image"
+              class="h-full w-full object-cover object-top max-xl:object-cover"
+            />
+          </div>
+        </div>
+
+        <div class="md:hidden w-full h-full px-4 py-6">
+          <ClientOnly>
+            <swiper-container
+              class="product-mobile-gallery"
+              :slides-per-view="1"
+              :space-between="12"
+              :pagination="{ clickable: true }"
+            >
+              <swiper-slide
+                v-for="(value, index) in productImages"
+                :key="index"
+              >
+                <div class="product-mobile-gallery__image">
+                  <img :src="value" alt="Product image" />
+                </div>
+              </swiper-slide>
+            </swiper-container>
+          </ClientOnly>
         </div>
       </div>
       <div
-        class="h-[calc(100vh-72px)] overflow-y-auto px-[72px] py-[80px] bg-white max-xl:px-12 max-lg:px-10 max-md:px-8 max-sm:px-4 max-sm:py-8"
+        class="h-[calc(100vh-72px)] overflow-y-auto px-[72px] py-[80px] bg-white max-xl:px-12 max-lg:px-10 max-md:px-8 max-sm:px-4 max-sm:py-8 max-md:h-auto max-md:relative md:sticky md:top-[72px] md:basis-[50%]"
       >
         <div v-if="isProductLoading" class="text-center text-[#0F0F0F] py-10">
           Загрузка информации о товаре...
@@ -305,7 +386,7 @@ const openCallbackModal = () => {
                 name="app-icon:heart-outlined"
                 mode="svg"
                 :class="isFavorite ? 'heart--liked' : ''"
-                :color="isFavorite ? '#C16371' : '#0F0F0F'"
+                :color="isFavorite ? '#000' : '#0F0F0F'"
                 size="24"
               />
             </button>
@@ -380,6 +461,87 @@ const openCallbackModal = () => {
       </div>
     </div>
   </div>
+  <div
+    v-if="hasComplementaryProducts"
+    class="complementary-products-section px-4 py-16 max-sm:py-10"
+  >
+    <div class="complementary-products container mx-auto">
+      <div
+        class="complementary-products__header flex items-center justify-between mb-10 max-sm:flex-col max-sm:items-start max-sm:gap-6"
+      >
+        <h2 class="text-[44px] font-[masvol] text-[#0F0F0F] max-sm:text-[32px]">
+          Дополните образ
+        </h2>
+        <div class="complementary-products__controls flex gap-4">
+          <button
+            type="button"
+            class="complementary-products__control"
+            @click="slideComplementaryProducts('prev')"
+          >
+            <Icon name="ph:arrow-left" size="16" />
+          </button>
+          <button
+            type="button"
+            class="complementary-products__control"
+            @click="slideComplementaryProducts('next')"
+          >
+            <Icon name="ph:arrow-right" size="16" />
+          </button>
+        </div>
+      </div>
+      <ClientOnly>
+        <swiper-container
+          ref="complementarySliderRef"
+          class="complementary-products__slider"
+          :space-between="24"
+          :slides-per-view="1.05"
+          :breakpoints="{
+            640: { slidesPerView: 1.4 },
+            768: { slidesPerView: 2.1 },
+            1024: { slidesPerView: 2.8 },
+            1280: { slidesPerView: 3.2 }
+          }"
+        >
+          <swiper-slide
+            v-for="item in complementaryProductCards"
+            :key="item.id"
+            class="complementary-products__slide"
+          >
+            <div
+              class="complementary-card"
+              @click="goToComplementaryProduct(item)"
+            >
+              <div class="complementary-card__image">
+                <img :src="item.image" :alt="item.name" />
+                <button
+                  type="button"
+                  class="complementary-card__favorite"
+                  :aria-pressed="isProductLiked(item.id)"
+                  @click.stop="toggleFavoriteProduct(item.id)"
+                >
+                  <Icon
+                    name="app-icon:heart-outlined"
+                    mode="svg"
+                    :color="isProductLiked(item.id) ? '#000' : '#0F0F0F'"
+                    :class="isProductLiked(item.id) ? 'heart--liked' : ''"
+                    size="22"
+                  />
+                </button>
+              </div>
+              <div class="complementary-card__info">
+                <p class="complementary-card__title">
+                  {{ item.name }}
+                </p>
+                <span class="complementary-card__price">
+                  {{ item.price }}
+                </span>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </ClientOnly>
+    </div>
+  </div>
   <AppCallBackModal
     v-model:visible="isCallbackModalOpen"
     service-type="collection"
@@ -388,7 +550,119 @@ const openCallbackModal = () => {
 </template>
 
 <style scoped>
+.product-mobile-gallery {
+  width: 100%;
+  min-height: 360px;
+}
+
+.product-mobile-gallery__image {
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+}
+
+.product-mobile-gallery__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:deep(.product-mobile-gallery .swiper-pagination-bullet) {
+  background-color: #0f0f0f;
+  opacity: 0.3;
+}
+
+:deep(.product-mobile-gallery .swiper-pagination-bullet-active) {
+  opacity: 1;
+}
+
 .heart--liked g {
   fill: #000 !important;
+}
+
+.complementary-products-section {
+  background: #f8f6f2;
+}
+
+.complementary-products__slider {
+  width: 100%;
+}
+
+.complementary-products__control {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 1px solid #d7d1ca;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f0f0f;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.complementary-products__control:hover {
+  background-color: #0f0f0f;
+  color: #fff;
+}
+
+.complementary-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #0f0f0f;
+}
+
+.complementary-card__image {
+  background: #fff;
+  border-radius: 32px;
+  padding: 32px;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.complementary-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.complementary-card__favorite {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: background-color 0.2s ease;
+}
+
+.complementary-card__favorite:hover {
+  background-color: #f7f5f0;
+}
+
+.complementary-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.complementary-card__title {
+  font-weight: 500;
+}
+
+.complementary-card__price {
+  color: #6a6967;
 }
 </style>
