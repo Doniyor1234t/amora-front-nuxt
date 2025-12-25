@@ -517,28 +517,38 @@ const _routes = [
   {
     name: "brand",
     path: "/brand",
-    component: () => import('./brand-DOEwrSTA.mjs')
+    component: () => import('./brand-DHMqC1p_.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-C9cQxXOX.mjs')
+    component: () => import('./index-DhesW5ZX.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-C29lsQzg.mjs')
+    component: () => import('./atelie-CNWUvqcd.mjs')
   },
   {
     name: "school",
     path: "/school",
-    component: () => import('./school-BEmQ4ThH.mjs')
+    component: () => import('./school-CiGFGPJI.mjs')
   },
   {
     name: "webform",
     path: "/webform",
     meta: __nuxt_page_meta$4 || {},
     component: () => import('./webform-BPo8Mq6P.mjs')
+  },
+  {
+    name: "contacts",
+    path: "/contacts",
+    component: () => import('./contacts-CeRtfKjg.mjs')
+  },
+  {
+    name: "favorites",
+    path: "/favorites",
+    component: () => import('./favorites-CaPn6w_f.mjs')
   },
   {
     name: "auth",
@@ -550,18 +560,28 @@ const _routes = [
     name: "auth-sign-up",
     path: "/auth/sign-up",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./sign-up-Cu7oVvWV.mjs')
+    component: () => import('./sign-up-DMwsqa7_.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-Cjp9oUVA.mjs')
+    component: () => import('./_id_-2_CrTguS.mjs')
+  },
+  {
+    name: "terms-of-use",
+    path: "/terms-of-use",
+    component: () => import('./terms-of-use-BZFdwcqV.mjs')
   },
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-CacsKSpc.mjs')
+    component: () => import('./index-CsN_wkag.mjs')
+  },
+  {
+    name: "privacy-policy",
+    path: "/privacy-policy",
+    component: () => import('./privacy-policy-U9OKdwgc.mjs')
   },
   {
     name: "collections-id",
@@ -572,7 +592,7 @@ const _routes = [
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-C2DUKcjZ.mjs')
+    component: () => import('./index-C8IKaVt3.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1176,15 +1196,15 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyIcon = defineAsyncComponent(() => import('./index-BbiaJ8T7.mjs').then((r) => r["default"] || r.default || r));
+const LazyIcon = defineAsyncComponent(() => import('./index-mhtzWv5E.mjs').then((r) => r["default"] || r.default || r));
 const LazyAutoComplete = defineAsyncComponent(() => import('./index-CesBSHPt.mjs').then((r) => r["default"] || r.default || r));
-const LazyCalendar = defineAsyncComponent(() => import('./index-BHU70GOl.mjs').then((r) => r["default"] || r.default || r));
+const LazyCalendar = defineAsyncComponent(() => import('./index-BMELRj96.mjs').then((r) => r["default"] || r.default || r));
 const LazyCascadeSelect = defineAsyncComponent(() => import('./index-CEuvIZq-.mjs').then((r) => r["default"] || r.default || r));
 const LazyCheckbox = defineAsyncComponent(() => import('./index-DYXoWHPz.mjs').then((r) => r["default"] || r.default || r));
 const LazyCheckboxGroup = defineAsyncComponent(() => import('./index-DFdOTjlL.mjs').then((r) => r["default"] || r.default || r));
 const LazyChips = defineAsyncComponent(() => import('./index-Bj7ySDlG.mjs').then((r) => r["default"] || r.default || r));
 const LazyColorPicker = defineAsyncComponent(() => import('./index-d_4FdcoG.mjs').then((r) => r["default"] || r.default || r));
-const LazyDatePicker = defineAsyncComponent(() => import('./index-DJUkyQW9.mjs').then((r) => r["default"] || r.default || r));
+const LazyDatePicker = defineAsyncComponent(() => import('./index-DKokVeZx.mjs').then((r) => r["default"] || r.default || r));
 const LazyDropdown = defineAsyncComponent(() => import('./index-CJNAu2mx.mjs').then((r) => r["default"] || r.default || r));
 const LazyFloatLabel = defineAsyncComponent(() => import('./index-BpGIkXp-.mjs').then((r) => r["default"] || r.default || r));
 const LazyFluid = defineAsyncComponent(() => import('./index-DTxAVkSs.mjs').then((r) => r["default"] || r.default || r));
@@ -2475,9 +2495,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-BLKHA66D.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-BEBae6Af.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-_pqpuF8Z.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-BKxBRvhK.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-Bw-J5iXf.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-Dwg2IX2N.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
