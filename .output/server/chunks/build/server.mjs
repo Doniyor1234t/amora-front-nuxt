@@ -517,17 +517,17 @@ const _routes = [
   {
     name: "brand",
     path: "/brand",
-    component: () => import('./brand-DHMqC1p_.mjs')
+    component: () => import('./brand-R09zahT4.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-DhesW5ZX.mjs')
+    component: () => import('./index-CkmhA-KD.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-CNWUvqcd.mjs')
+    component: () => import('./atelie-PYdX7qp5.mjs')
   },
   {
     name: "school",
@@ -548,25 +548,25 @@ const _routes = [
   {
     name: "favorites",
     path: "/favorites",
-    component: () => import('./favorites-CaPn6w_f.mjs')
+    component: () => import('./favorites--ti0eiwL.mjs')
   },
   {
     name: "auth",
     path: "/auth",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./index-CgQBIDgU.mjs')
+    component: () => import('./index-BuMMF2Kc.mjs')
   },
   {
     name: "auth-sign-up",
     path: "/auth/sign-up",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./sign-up-DMwsqa7_.mjs')
+    component: () => import('./sign-up-DBVdyZry.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-2_CrTguS.mjs')
+    component: () => import('./_id_-u8DT3CHH.mjs')
   },
   {
     name: "terms-of-use",
@@ -576,7 +576,7 @@ const _routes = [
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-CsN_wkag.mjs')
+    component: () => import('./index-DW_RFjy-.mjs')
   },
   {
     name: "privacy-policy",
@@ -587,12 +587,12 @@ const _routes = [
     name: "collections-id",
     path: "/collections/:id()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./_id_-HlMkoolw.mjs')
+    component: () => import('./_id_-C6I4-kIe.mjs')
   },
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-C8IKaVt3.mjs')
+    component: () => import('./index-DrooFDQM.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1196,7 +1196,7 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyIcon = defineAsyncComponent(() => import('./index-mhtzWv5E.mjs').then((r) => r["default"] || r.default || r));
+const LazyIcon = defineAsyncComponent(() => import('./index-CXsanvv1.mjs').then((r) => r["default"] || r.default || r));
 const LazyAutoComplete = defineAsyncComponent(() => import('./index-CesBSHPt.mjs').then((r) => r["default"] || r.default || r));
 const LazyCalendar = defineAsyncComponent(() => import('./index-BMELRj96.mjs').then((r) => r["default"] || r.default || r));
 const LazyCascadeSelect = defineAsyncComponent(() => import('./index-CEuvIZq-.mjs').then((r) => r["default"] || r.default || r));
@@ -2495,9 +2495,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-BKxBRvhK.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-Bw-J5iXf.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-Dwg2IX2N.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-DtTDY-D2.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-DKIutTfo.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-d0CQr6Lh.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
@@ -2763,7 +2763,7 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-tzJhfulm.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-L5kbfk7f.mjs'));
     const _Error = defineAsyncComponent(() => import('./error-500-5-4Yy4CM.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
@@ -2845,5 +2845,5 @@ let entry;
 }
 const entry_default = (ssrContext) => entry(ssrContext);
 
-export { BaseStyle as B, ConfirmationEventBus as C, DynamicDialogEventBus as D, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, __nuxt_component_0$1 as a, useRoute as b, useRuntimeConfig as c, useRouter as d, entry_default as default, nuxtLinkDefaults as e, asyncDataDefaults as f, createError as g, useAppConfig as h, FilterMatchMode as i, FilterOperator as j, navigateTo as n, resolveRouteObject as r, useNuxtApp as u };
+export { BaseStyle as B, ConfirmationEventBus as C, DynamicDialogEventBus as D, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, __nuxt_component_0$1 as a, useRoute as b, useRouter as c, useRuntimeConfig as d, entry_default as default, nuxtLinkDefaults as e, asyncDataDefaults as f, createError as g, useAppConfig as h, FilterMatchMode as i, FilterOperator as j, navigateTo as n, resolveRouteObject as r, useNuxtApp as u };
 //# sourceMappingURL=server.mjs.map

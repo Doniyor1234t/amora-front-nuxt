@@ -2,7 +2,8 @@
 
 body {
     background-color: #F3F2F1;
-    font-family: 'MontserratLight', 'ui-sans-serif', 'system-ui';
+    /* font-family: 'MontserratLight', 'ui-sans-serif', 'system-ui'; */
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {

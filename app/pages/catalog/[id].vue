@@ -131,7 +131,10 @@ const formatPrice = (price?: string, currency?: string): string => {
   if (!price) {
     return "—";
   }
-  return currency ? `${price} ${currency}` : price;
+  const currencyLook = new Intl.NumberFormat('fr');
+  const formatted = currencyLook.format(Number(price));
+  // Remove currency symbol if currency is not provided
+  return currency ? `${formatted} ${currency}` : price;
 };
 
 const collectionName = computed(
@@ -328,14 +331,14 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
             <h1 class="text-[72px] font-[masvol] leading-[1] max-lg:text-[56px] max-md:text-[46px] max-sm:text-[36px]">
               {{ product.name }}
             </h1>
-            <p class="font-semibold text-[26px] max-sm:text-[20px]">
+            <p class="font-semibold text-[20px] max-sm:text-[20px]">
               {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
             </p>
           </div>
 
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
-              <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Размер</p>
+              <p class="text-xs uppercase tracking-[0.6em] tracking-[0.6em] text-[#3D3D3D]">Размер</p>
               <span
                 v-if="selectedSize"
                 class="text-xs uppercase tracking-[0.3em] text-[#C16371]"
@@ -392,14 +395,14 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
             </button>
           </div>
 
-          <div class="flex flex-col border-t border-b border-[#E8E2DC] divide-y divide-[#E8E2DC]">
+          <div class="flex flex-col border-[#E8E2DC] divide-y divide-[#E8E2DC]">
             <div class="py-6">
               <button
                 type="button"
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('composition')"
               >
-                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Состав</p>
+                <p class="text-[14px] leading-5 uppercase font-bold text-[#0F0F0F] tracking-[0.05em]">Состав</p>
                 <Icon
                   :name="detailsSections.composition ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -407,8 +410,8 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 />
               </button>
               <div v-if="detailsSections.composition" class="mt-4">
-                <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D] text-[15px]">
-                  <li v-for="(item, index) in composition" :key="`composition-${index}`">
+                <ul class="flex flex-col gap-1">
+                  <li v-for="(item, index) in composition" class="font-300 uppercase text-[#3D3D3D] text-[14px]" :key="`composition-${index}`">
                     {{ item }}
                   </li>
                 </ul>
@@ -421,7 +424,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('care')"
               >
-                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Уход</p>
+                <p class="text-[14px] uppercase tracking-[0.05em] font-semibold text-[#0F0F0F] ">Уход</p>
                 <Icon
                   :name="detailsSections.care ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -429,7 +432,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 />
               </button>
               <div v-if="detailsSections.care" class="mt-4">
-                <ul class="flex flex-col gap-1 uppercase text-[#3D3D3D] text-[15px]">
+                <ul class="flex font-300 flex-col gap-1 uppercase text-[#3D3D3D] text-[14px]">
                   <li v-for="(item, index) in careInstructions" :key="`care-${index}`">
                     {{ item }}
                   </li>
@@ -443,7 +446,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('description')"
               >
-                <p class="text-xs uppercase tracking-[0.6em] text-[#3D3D3D]">Описание</p>
+                <p class="text-[14px] uppercase tracking-[0.05em] font-semibold text-[#0F0F0F] ">Описание</p>
                 <Icon
                   :name="detailsSections.description ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
