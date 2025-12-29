@@ -109,9 +109,9 @@
     "./types/nitro-nuxt.d.ts",
     "../node_modules/runtime/server",
     "../node_modules/dist/runtime/server",
+    "../server/**/*",
     "../shared/**/*.d.ts",
-    "./types/nitro.d.ts",
-    "../server/**/*"
+    "./types/nitro.d.ts"
   ],
   "exclude": [
     "../node_modules",

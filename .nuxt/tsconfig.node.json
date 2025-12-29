@@ -94,6 +94,8 @@
     "../.data",
     "../app/**/*",
     "../modules/*/runtime/**/*",
+    "../test/nuxt/**/*",
+    "../tests/nuxt/**/*",
     "../layers/*/app/**/*",
     "../layers/*/modules/*/runtime/**/*",
     "../modules/*/runtime/server/**/*",

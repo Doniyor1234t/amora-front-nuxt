@@ -3384,6 +3384,8 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
                            },
                         },
                      },
+
+                     css: string,
                   },
 
                   dataview: {
@@ -8102,6 +8104,8 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
                      filter: {
                         margin: string,
                      },
+
+                     css: string,
                   },
 
                   treeselect: {
@@ -8402,6 +8406,8 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
                            },
                         },
                      },
+
+                     css: string,
                   },
 
                   virtualscroller: {
@@ -8418,6 +8424,8 @@ import { RuntimeConfig as UserRuntimeConfig, PublicRuntimeConfig as UserPublicRu
                      },
                   },
                },
+
+               css: string,
 
                button: {
                   root: {

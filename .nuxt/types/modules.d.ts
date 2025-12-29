@@ -5,7 +5,7 @@ declare module '@nuxt/schema' {
     ["@nuxt/icon"]?: ModuleDependencyMeta<typeof import("@nuxt/icon").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/image"]?: ModuleDependencyMeta<typeof import("@nuxt/image").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/hints"]?: ModuleDependencyMeta<typeof import("@nuxt/hints").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
-    ["@pinia/nuxt"]?: ModuleDependencyMeta<typeof import("@pinia/nuxt").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
+    ["pinia"]?: ModuleDependencyMeta<typeof import("@pinia/nuxt").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@primevue/nuxt-module"]?: ModuleDependencyMeta<typeof import("@primevue/nuxt-module").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["nuxt-swiper"]?: ModuleDependencyMeta<typeof import("nuxt-swiper").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/devtools"]?: ModuleDependencyMeta<typeof import("@nuxt/devtools").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
@@ -95,7 +95,7 @@ declare module 'nuxt/schema' {
     ["@nuxt/icon"]?: ModuleDependencyMeta<typeof import("@nuxt/icon").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/image"]?: ModuleDependencyMeta<typeof import("@nuxt/image").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/hints"]?: ModuleDependencyMeta<typeof import("@nuxt/hints").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
-    ["@pinia/nuxt"]?: ModuleDependencyMeta<typeof import("@pinia/nuxt").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
+    ["pinia"]?: ModuleDependencyMeta<typeof import("@pinia/nuxt").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@primevue/nuxt-module"]?: ModuleDependencyMeta<typeof import("@primevue/nuxt-module").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["nuxt-swiper"]?: ModuleDependencyMeta<typeof import("nuxt-swiper").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
     ["@nuxt/devtools"]?: ModuleDependencyMeta<typeof import("@nuxt/devtools").default extends NuxtModule<infer O> ? O : Record<string, unknown>>
