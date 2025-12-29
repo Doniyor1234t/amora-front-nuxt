@@ -37,6 +37,29 @@ export interface Product {
   fit?: string | null;
   availableSizes?: string[] | null;
   products?: Product[] | null;
+  variants?: ProductVariant[] | null;
+  material?: string | null;
+  care?: string | null;
+}
+
+export interface ProductVariant {
+  id: number;
+  sku?: string | null;
+  price: string;
+  stock?: number | null;
+  isAvailable?: boolean | null;
+  color?: string | null;
+  weight?: number | null;
+  size?: VariantSize | null;
+  image?: NormalizedMedia | null;
+}
+
+export interface VariantSize {
+  id: number;
+  title?: string | null;
+  label?: string | null;
+  sortOrder?: number | null;
+  description?: string | null;
 }
 
 export interface ProductsResponse {
@@ -77,6 +100,29 @@ export interface StrapiProductAttributes {
   fit?: string | null;
   availableSizes?: string[] | null;
   products?: StrapiEntityRelation<StrapiProductAttributes>;
+  variants?: StrapiProductVariant[];
+  material?: string | null;
+  care?: string | null;
+}
+
+export interface StrapiProductVariant {
+  id: number;
+  sku?: string | null;
+  price?: string | number | null;
+  stock?: number | null;
+  isAvailable?: boolean | null;
+  color?: string | null;
+  weight?: number | null;
+  size?: StrapiRelationValue<StrapiEntity<StrapiSizeAttributes>>;
+  image?: StrapiMediaRelation;
+}
+
+export interface StrapiSizeAttributes {
+  title?: string | null;
+  label?: string | null;
+  sortOrder?: number | null;
+  isActive?: boolean | null;
+  description?: string | null;
 }
 
 export type MediaNormalizer = (
@@ -155,6 +201,36 @@ export const mapProductEntity = (
     .filter(isActiveEntity)
     .map((productEntity) => mapProductEntity(productEntity, normalize));
 
+  const productVariants =
+    attributes.variants?.map((variant) => {
+      const sizeEntity = getFirstRelationItem(variant.size);
+      const sizeAttributes = sizeEntity
+        ? getEntityAttributes(sizeEntity)
+        : null;
+      const [variantImage] = normalize(variant.image);
+
+      return {
+        id: variant.id,
+        sku: variant.sku ?? null,
+        price: normalizePrice(variant.price),
+        stock: variant.stock ?? null,
+        isAvailable: variant.isAvailable ?? null,
+        color: variant.color ?? null,
+        weight: variant.weight ?? null,
+        size:
+          sizeEntity && sizeAttributes
+            ? {
+                id: sizeEntity.id,
+                title: sizeAttributes.title ?? null,
+                label: sizeAttributes.label ?? null,
+                sortOrder: sizeAttributes.sortOrder ?? null,
+                description: sizeAttributes.description ?? null,
+              }
+            : null,
+        image: variantImage ?? null,
+      };
+    }) ?? [];
+
   return {
     id: entity.id,
     name: attributes.name,
@@ -177,6 +253,9 @@ export const mapProductEntity = (
     fit: attributes.fit ?? null,
     availableSizes: attributes.availableSizes ?? null,
     products: relatedProducts.length ? relatedProducts : null,
+    variants: productVariants.length ? productVariants : null,
+    material: attributes.material ?? null,
+    care: attributes.care ?? null,
   };
 };
 

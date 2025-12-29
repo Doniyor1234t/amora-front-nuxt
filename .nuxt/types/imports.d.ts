@@ -206,7 +206,7 @@ declare global {
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
-  export type { CollectionImage, Collection, Product, ProductsResponse, CollectionsResponse, StrapiCollectionAttributes, StrapiProductAttributes, MediaNormalizer } from '../../app/utils/catalogMappers'
+  export type { CollectionImage, Collection, Product, ProductVariant, VariantSize, ProductsResponse, CollectionsResponse, StrapiCollectionAttributes, StrapiProductAttributes, StrapiProductVariant, StrapiSizeAttributes, MediaNormalizer } from '../../app/utils/catalogMappers'
   import('../../app/utils/catalogMappers')
   // @ts-ignore
   export type { AuthUser } from '../../app/stores/auth'

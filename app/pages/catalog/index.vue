@@ -196,7 +196,11 @@ const {
         pageSize: PAGE_SIZE,
       },
       sort: activeSortQuery.value,
-      populate: ["images", "collection"],
+      populate: {
+        images: { populate: "*" },
+        collection: { populate: "*" },
+        variants: { populate: ["size", "image"] },
+      },
     },
   }),
   {

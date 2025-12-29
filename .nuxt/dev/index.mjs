@@ -951,7 +951,7 @@ const _inlineRuntimeConfig = {
   "public": {
     "apiBase": "https://cms.amora-brand.uz/api/",
     "strapiUrl": "https://cms.amora-brand.uz/",
-    "yandexMapsApiKey": "12f92244-d62d-4314-b321-ab0d15f86f84",
+    "yandexMapsApiKey": "ec38d090-6f6b-4720-a520-fc56416114a1",
     "vueQuery": {
       "queryClientOptions": {
         "defaultOptions": {

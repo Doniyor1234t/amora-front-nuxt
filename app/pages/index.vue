@@ -310,9 +310,9 @@ const isCallBackVisible = ref(false);
       </div>
     </section>
 
-    <section class="slide-section">
+    <section class="slide-section max-md:mb-[-120px]">
       <div class="slide-section__inner">
-        <div class="relative w-full h-full">
+        <div class="relative w-full h-[100vh]">
           <img
             :src="'/images/Slider-bg-2.png'"
             alt=""
@@ -491,11 +491,11 @@ const isCallBackVisible = ref(false);
     </section>
     <!-- Конец блока "Оставить заявку -->
 
-    <section class="slide-section">
+    <!-- <section class="slide-section">
       <div class="slide-section__inner">
-        <!-- Начало блока контактов и карты -->
         <div class="contact-layout">
           <div class="contact-map max-md:order-1">
+            <ClientOnly>
               <YandexMap
                 :center="[41.334608, 69.323384]"
                 :zoom="17"
@@ -507,11 +507,11 @@ const isCallBackVisible = ref(false);
                 height="800px"
                 class="contact-map__canvas"
               />
+            </ClientOnly>
           </div>
         </div>
-        <!-- Конец блока контактов и карты -->
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 

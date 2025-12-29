@@ -6,6 +6,8 @@ import {
   type LeadMetadata,
   type LeadRequestPayload,
 } from "@/types/leads";
+import { PhoneNumberWithCountryCode } from "vue3-phone-number-input";
+import "vue3-phone-number-input/dist/vue3-phone-number-input.css";
 
 const props = withDefaults(
   defineProps<{
@@ -23,9 +25,15 @@ const props = withDefaults(
 const runtimeConfig = useRuntimeConfig();
 const visible = defineModel<boolean>("visible", { default: false });
 
+const DEFAULT_COUNTRY_ISO = "uz";
+const DEFAULT_COUNTRY_DIAL_CODE = "+998";
+
+const PHONE_GROUPS = [2, 3, 2, 2];
+
 const form = reactive({
   name: "",
   phone: "",
+  countryCode: DEFAULT_COUNTRY_ISO,
   telegram: "",
   contactMethod: "",
   comment: "",
@@ -71,6 +79,7 @@ const showTrainingFields = computed(() => props.serviceType === "training");
 const resetForm = () => {
   form.name = "";
   form.phone = "";
+  form.countryCode = DEFAULT_COUNTRY_ISO;
   form.telegram = "";
   form.contactMethod = "";
   form.comment = "";
@@ -106,12 +115,41 @@ watch(
   { immediate: true }
 );
 
+const getNormalizedPhone = () => {
+  const number = form.phone?.trim() ?? "";
+  if (!number) {
+    return "";
+  }
+  return `${DEFAULT_COUNTRY_DIAL_CODE} ${number}`.trim();
+};
+
+const formatLocalPhoneNumber = (value: string) => {
+  const digits = (value ?? "").replace(/\D/g, "").slice(0, 9);
+  if (!digits) {
+    return "";
+  }
+  const parts: string[] = [];
+  let index = 0;
+  for (const groupLength of PHONE_GROUPS) {
+    const part = digits.slice(index, index + groupLength);
+    if (part) {
+      parts.push(part);
+    }
+    index += groupLength;
+    if (index >= digits.length) {
+      break;
+    }
+  }
+  return parts.join(" ");
+};
+
 const buildPayload = (): LeadRequestPayload => {
+  const normalizedPhone = getNormalizedPhone();
   const payload: LeadRequestPayload = {
     source: "SITE",
     serviceType: mapLeadServiceType(props.serviceType),
     clientName: form.name.trim(),
-    phone: form.phone.trim(),
+    phone: normalizedPhone,
   };
 
   if (form.telegram.trim()) {
@@ -149,10 +187,39 @@ const buildPayload = (): LeadRequestPayload => {
   return payload;
 };
 
+const enforceUzbekistanCode = () => {
+  if (form.countryCode !== DEFAULT_COUNTRY_ISO) {
+    form.countryCode = DEFAULT_COUNTRY_ISO;
+  }
+};
+
+const phoneInputModel = computed({
+  get: () => form.phone,
+  set: (value: string) => {
+    form.phone = formatLocalPhoneNumber(value);
+  },
+});
+
+const socials = [
+  {
+    name: "youtube",
+    url: "https://www.youtube.com/@brandAmora",
+  },
+  {
+    name: "telegram",
+    url: "https://t.me/brandamora",
+  },
+  {
+    name: "instagram",
+    url: "https://www.instagram.com/brand.amora/",
+  }
+]
+
 const onSubmit = async () => {
   submitError.value = "";
 
-  if (!form.name.trim() || !form.phone.trim()) {
+  const normalizedPhone = getNormalizedPhone();
+  if (!form.name.trim() || !normalizedPhone) {
     submitError.value = "Пожалуйста, укажите имя и телефон.";
     return;
   }
@@ -190,11 +257,11 @@ onBeforeUnmount(() => {
     :closable="false"
     :showHeader="false"
     :draggable="false"
-    class="!rounded-[60px] !p-[40px] max-sm:p-[20px] max-sm:w-[90%]"
+    class="!rounded-[10px] !p-[40px] max-sm:p-[20px]! max-sm:w-[90%]"
   >
     <div class="flex flex-col gap-[20px] w-[446px] max-sm:w-[100%]">
 
-      <div v-if="isSubmitted" class="text-center space-y-5 py-4">
+      <div v-if="true" class="text-center space-y-5 py-4">
         <div class="flex flex-col items-center gap-4">
           <svg
             width="48"
@@ -211,32 +278,34 @@ onBeforeUnmount(() => {
               stroke-linejoin="round"
             />
           </svg>
-          <h3 class="text-[40px] font-[masvol] text-[#0F0F0F]">
-            Ваша заявка принята.
-          </h3>
-          <p class="text-xs uppercase tracking-[0.28em] text-[#6E6E6E]">
-            Мы будем рады разделить с вами атмосферу новой коллекции и пространства бренда
-          </p>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-[40px] max-md:text-[32px] font-[masvol] text-[#0F0F0F]">
+              Ваша заявка принята.
+            </h3>
+            <p class="text-xs max-md:text-[12px] tracking-[0.08em] leading-[18px] font-light text-[#6E6E6E]">
+              Мы будем рады разделить с вами атмосферу новой коллекции и пространства бренда
+            </p>
+          </div>
         </div>
         <div
           class="flex items-center justify-center gap-4 text-white text-sm"
         >
           <NuxtLink
-            v-for="social in ['youtube', 'telegram', 'instagram']"
-            :key="social"
-            href="#"
+            v-for="social in socials"
+            :key="social.name"
+            :href="social.url"
             class="flex h-11 w-11 items-center justify-center rounded-full bg-black"
           >
             <Icon
-              :name="`ri:${social}-line`"
+              :name="`app-icon:${social.name}`"
               color="#ffffff"
               :size="20"
             />
           </NuxtLink>
         </div>
-        <div class="text-[11px] uppercase tracking-[0.3em] text-[#6E6E6E]">
-          <p class="mb-2">НА БУТИК МОЖНО НАЙТИ ПО АДРЕСУ:</p>
-          <p>УЛ. ИСМАИЛАТА, 16А</p>
+        <div class="text-[12px] tracking-[0.05em] text-[#6E6E6E]">
+          <p class="mb-2">Наш бутик можно найти по адресу:</p>
+          <p>ул. Исмаилата, 16А</p>
         </div>
         <Button
           type="button"
@@ -252,26 +321,40 @@ onBeforeUnmount(() => {
         @submit.prevent="onSubmit"
         class="flex flex-col gap-[16px]"
       >
-        <h2
-          class="text-center text-[52px] leading-none font-[masvol] mb-[12px] max-sm:text-[32px]"
-        >
-          {{ props.title }}
-        </h2>
+        <div class="flex flex-col gap-2 max-md:gap-2.5 mb-4">
+          <h2
+            class="text-center text-[52px] leading-none text-[#0F0F0F] font-[masvol] max-sm:text-[32px]"
+          >
+            {{ props.title }}
+          </h2>
+          <p
+            class="text-center text-[14px] tracking-[0.08em] font-light leading-[20px] text-[#3D3D3D]"
+          >
+            Оставьте заявку, и мы свяжемся с вами для подтверждения покупки и деталей.
+          </p>
+        </div>
         <InputText
           v-model="form.name"
-          placeholder="ИМЯ ФАМИЛИЯ"
+          placeholder="Имя фамилия"
           class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
         />
+        <div class="phone-input-wrapper">
+          <PhoneNumberWithCountryCode
+            v-model:phone_number="phoneInputModel"
+            :country_code="form.countryCode"
+            @update:country_code="enforceUzbekistanCode"
+            placeholder="00 000 00 00"
+            country-placeholder="Поиск"
+            country-lebel="Узбекистан"
+            :maxlength="9"
+            type="tel"
+          />
+        </div>
         <InputText
-          v-model="form.phone"
-          placeholder="+998  00 000 00 00"
+          v-model="form.telegram"
+          placeholder="@telegram"
           class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
         />
-        <!-- <InputText
-          v-model="form.telegram"
-          placeholder="@username"
-          class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
-        /> -->
 
         <div v-if="showContactMethod" class="flex flex-col gap-2">
           <label class="text-xs uppercase tracking-[0.3em] text-[#7D7D7D]">
@@ -375,5 +458,86 @@ onBeforeUnmount(() => {
 .toast-fade-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+.phone-input-wrapper {
+  width: 100%;
+}
+
+.phone-input-wrapper :deep(label[for="country"]) {
+  display: none;
+}
+
+.phone-input-wrapper :deep(.phone_input) {
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid #E5E5E5;
+  background-color: #fff;
+}
+
+.phone-input-wrapper :deep(.phone_input input) {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: #0f0f0f;
+  border: none;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+}
+
+.phone-input-wrapper :deep(.phone_input input::placeholder) {
+  color: #9b9b9b;
+}
+
+.phone-input-wrapper :deep(.phone_input .dropdown) {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
+.phone-input-wrapper :deep(.phone_input .select-dropdown) {
+  display: none !important;
+}
+
+.phone-input-wrapper :deep(.phone_input .select) {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: auto;
+}
+
+.phone-input-wrapper :deep(.phone_input .select__label) {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+}
+
+.phone-input-wrapper :deep(.phone_input .default-flag) {
+  display: none;
+}
+
+.phone-input-wrapper :deep(.phone_input .default-item span) {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: #0f0f0f;
+}
+
+.phone-input-wrapper :deep(.phone_input .borders) {
+  display: none;
+}
+
+.phone-input-wrapper :deep(.phone_input .dropdown) {
+  width: auto;
 }
 </style>

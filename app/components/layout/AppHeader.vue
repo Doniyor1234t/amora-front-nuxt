@@ -190,8 +190,8 @@ const handleFavoritesClick = () => {
 
 .logo-svg {
   color: #000;
-  mix-blend-mode: difference;
-  filter: invert(1);
+  /* mix-blend-mode: difference; */
+  /* filter: invert(1); */
   position: relative;
   z-index: 10;
   transition: color 0.2s ease;

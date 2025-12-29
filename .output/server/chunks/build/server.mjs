@@ -517,28 +517,28 @@ const _routes = [
   {
     name: "brand",
     path: "/brand",
-    component: () => import('./brand-R09zahT4.mjs')
+    component: () => import('./brand-CDzoi97M.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-CkmhA-KD.mjs')
+    component: () => import('./index-BtaVXS79.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-PYdX7qp5.mjs')
+    component: () => import('./atelie-KJ9cfBpf.mjs')
   },
   {
     name: "school",
     path: "/school",
-    component: () => import('./school-CiGFGPJI.mjs')
+    component: () => import('./school-BXn4a7VO.mjs')
   },
   {
     name: "webform",
     path: "/webform",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./webform-BPo8Mq6P.mjs')
+    component: () => import('./webform-DJ-rvAKz.mjs')
   },
   {
     name: "contacts",
@@ -548,7 +548,7 @@ const _routes = [
   {
     name: "favorites",
     path: "/favorites",
-    component: () => import('./favorites--ti0eiwL.mjs')
+    component: () => import('./favorites-BzsPr3Mq.mjs')
   },
   {
     name: "auth",
@@ -560,13 +560,13 @@ const _routes = [
     name: "auth-sign-up",
     path: "/auth/sign-up",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./sign-up-DBVdyZry.mjs')
+    component: () => import('./sign-up-C81_lEHM.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-u8DT3CHH.mjs')
+    component: () => import('./_id_-D5wTjqYT.mjs')
   },
   {
     name: "terms-of-use",
@@ -576,7 +576,7 @@ const _routes = [
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-DW_RFjy-.mjs')
+    component: () => import('./index-DiqPPcXQ.mjs')
   },
   {
     name: "privacy-policy",
@@ -587,12 +587,12 @@ const _routes = [
     name: "collections-id",
     path: "/collections/:id()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./_id_-C6I4-kIe.mjs')
+    component: () => import('./_id_-CunMLmch.mjs')
   },
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-DrooFDQM.mjs')
+    component: () => import('./index-Baru2guw.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1196,8 +1196,8 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyIcon = defineAsyncComponent(() => import('./index-CXsanvv1.mjs').then((r) => r["default"] || r.default || r));
-const LazyAutoComplete = defineAsyncComponent(() => import('./index-CesBSHPt.mjs').then((r) => r["default"] || r.default || r));
+const LazyIcon = defineAsyncComponent(() => import('./index-DlB9AjWU.mjs').then((r) => r["default"] || r.default || r));
+const LazyAutoComplete = defineAsyncComponent(() => import('./index-CjiD9VyE.mjs').then((r) => r["default"] || r.default || r));
 const LazyCalendar = defineAsyncComponent(() => import('./index-BMELRj96.mjs').then((r) => r["default"] || r.default || r));
 const LazyCascadeSelect = defineAsyncComponent(() => import('./index-CEuvIZq-.mjs').then((r) => r["default"] || r.default || r));
 const LazyCheckbox = defineAsyncComponent(() => import('./index-DYXoWHPz.mjs').then((r) => r["default"] || r.default || r));
@@ -2495,9 +2495,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-DtTDY-D2.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-DKIutTfo.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-d0CQr6Lh.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-DvMyux6k.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-BEH59TOd.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-D0j-mc2T.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",

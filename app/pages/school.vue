@@ -56,8 +56,8 @@ const menuLinks = [
 <template>
   <div class="bg-[#F6F4F1] pb-20 pt-[88px] text-[#1F1B16]">
     <section class="container mx-auto px-4">
-      <div class="rounded-[60px] bg-white px-6 py-67 text-center shadow-[0_40px_120px_rgba(35,31,27,0.08)]">
-        <p class="text-xs uppercase tracking-[0.5em] text-[#C79D9B]">• {{ hero.badge }} •</p>
+      <div class="rounded-[8px] bg-white px-6 py-67 text-center shadow-[0_40px_120px_rgba(35,31,27,0.08)]">
+        <p class="text-xs uppercase tracking-[0.05em] text-[#C79D9B]">• {{ hero.badge }} •</p>
         <h1 class="mt-6 font-[masvol] text-[68px] text-[#1F1B16] max-md:text-[48px]">
           {{ hero.title }}
         </h1>
@@ -76,7 +76,7 @@ const menuLinks = [
 
 
 
-    <div class="grid mt-[64px] grid-cols-2 max-sm:mt-[300px] max-sm:grid-cols-1" v-for="value in courses.slice(0, 1)">
+    <div class="grid mt-[64px] grid-cols-2 max-sm:mt-[100px] max-sm:mx-5 max-sm:grid-cols-1" v-for="value in courses.slice(0, 1)">
       <div class="flex justify-center items-center">
         <div class="flex flex-col items-center max-w-[440px]">
           <h4
@@ -116,7 +116,7 @@ const menuLinks = [
           >
             {{ value.title }}
           </h2>
-          <p>{{ value.description }}</p>
+          <p class="text-sm text-center text-[#7A7874]">{{ value.description }}</p>
           <Button
             class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
             variant="outlined"
@@ -160,8 +160,8 @@ const menuLinks = [
       </div>
     </div>
 
-    <div class="grid grid-cols-2 max-sm:grid-cols-1" v-for="value in courses.slice(1, 2)">
-      <div class="relative">
+    <div class="grid grid-cols-2 max-sm:grid-cols-1 max-sm:mx-5" v-for="value in courses.slice(1, 2)">
+      <div class="relative max-sm:order-2">
         <img
           src="/images/Request-bg-2.jpg"
           class="w-full max-h-[100vh] object-cover object-top"
@@ -211,7 +211,7 @@ const menuLinks = [
           >
             {{ value.title }}
           </h2>
-          <p>{{ value.description }}</p>
+          <p class="text-sm text-center text-[#7A7874]">{{ value.description }}</p>
           <Button
             class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
             variant="outlined"

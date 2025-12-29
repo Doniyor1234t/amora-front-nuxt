@@ -75,7 +75,10 @@ const {
         page: 1,
         pageSize: 40,
       },
-      populate: ["images"],
+      populate: {
+        images: { populate: "*" },
+        variants: { populate: ["size", "image"] },
+      },
       sort: ["publishedAt:desc"],
     },
   }),

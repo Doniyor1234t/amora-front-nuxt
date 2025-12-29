@@ -39,7 +39,11 @@ const {
         id: { $in: likedIds.value },
         isActive: { $eq: true },
       },
-      populate: ["images", "collection"],
+      populate: {
+        images: { populate: "*" },
+        collection: { populate: "*" },
+        variants: { populate: ["size", "image"] },
+      },
       pagination: {
         page: 1,
         pageSize: likedIds.value.length || 1,

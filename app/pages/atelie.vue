@@ -19,20 +19,20 @@ const features = [
 
 const steps = [
   {
-    title: "Режем ткани",
-    description: "Тон-определение и выбор материи.",
+    title: "Резка ткани",
+    description: "Точность до миллиметра.",
   },
   {
     title: "Примерка",
-    description: "Поиск идеальной формы и силуэта.",
+    description: "Поиск идеальной формы.",
   },
   {
     title: "Драпировка",
-    description: "Сборка и формирование ткани.",
+    description: "Скульптурирование ткани.",
   },
   {
     title: "Детали",
-    description: "Съёмка всех швов и оформление.",
+    description: "Финальные штрихи.",
   },
   {
     title: "Готово",
@@ -89,10 +89,10 @@ const menuLinks = [
 </script>
 
 <template>
-  <div class="bg-[#F6F5F2] pb-20 pt-[104px]">
+  <div class="bg-[#F6F5F2] pb-20 max-md:pt-0 pt-[104px]">
     <section class="container mx-auto px-4">
       <div
-        class="rounded-[60px] bg-white px-[48px] py-[298px] text-center max-md:px-[32px]"
+        class="rounded-[8px] bg-white px-[48px] py-[298px] text-center max-md:px-[32px]"
       >
         <p class="text-xs uppercase tracking-[0.4em] text-[#7F7C77]">
           • Ателье AMORA •
@@ -124,13 +124,13 @@ const menuLinks = [
         <div
           v-for="feature in features"
           :key="feature.title"
-          class="rounded-[40px] bg-white px-[40px] h-[320px] py-[48px] text-center shadow-[0_25px_60px_rgba(0,0,0,0.05)] flex flex-col items-center justify-between"
+          class="rounded-[8px] bg-white px-[40px] h-[320px] py-[48px] text-center flex flex-col items-center justify-between"
         >
           <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#0F0F0F]">
             <Icon :name="feature.icon" size="28" class="text-[#0F0F0F]" />
           </div>
           <div class="">
-            <h3 class="mt-6 text-lg font-semibold uppercase tracking-[0.15em] text-[#0F0F0F]">
+            <h3 class="mt-6 text-lg font-[masvol] font-semibold uppercase tracking-[0.15em] text-[#0F0F0F]">
               {{ feature.title }}
             </h3>
             <p class="mt-3 text-sm text-[#7F7C77]">
@@ -153,14 +153,14 @@ const menuLinks = [
         <div
           v-for="(step, index) in steps"
           :key="step.title"
-          class="flex font-[masvol] items-center gap-8 rounded-[32px] bg-white px-10 py-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
+          class="flex items-center gap-8 rounded-[8px] bg-white px-10 py-8"
         >
-          <div class="text-[52px] w-[72px] text-center font-[0] text-[#0F0F0F]">{{ index + 1 }}</div>
+          <div class="text-[52px] font-[masvol] w-[72px] text-center font-[0] text-[#0F0F0F]">{{ index + 1 }}</div>
           <div>
-            <p class="text-lg font-semibold uppercase tracking-[0.2em] text-[#0F0F0F]">
+            <p class="text-lg font-[masvol]  font-semibold tracking-[0.2em] text-[#0F0F0F]">
               {{ step.title }}
             </p>
-            <p class="mt-1 text-sm text-[#7A7874]">
+            <p class="mt-1  text-sm text-[#7A7874]">
               {{ step.description }}
             </p>
           </div>
@@ -170,7 +170,7 @@ const menuLinks = [
 
     <section class="container mx-auto mt-24 px-4">
       <div
-        class="rounded-[60px] bg-[#0F0F0F] px-[48px] py-[72px] text-center text-white shadow-[0_30px_90px_rgba(0,0,0,0.35)] max-md:px-[32px]"
+        class="rounded-[8px] bg-[#0F0F0F] px-[48px] py-[72px] text-center text-white max-md:px-[32px]"
       >
         <h3 class="mt-6 font-[masvol] text-[52px] leading-tight">Готовы создать мечту?</h3>
         <p class="mx-auto mt-4 max-w-[520px] text-sm uppercase tracking-[0.2em] text-[#D0CDC6]">
@@ -190,11 +190,11 @@ const menuLinks = [
         <h3 class="font-[masvol] text-[48px] text-[#0F0F0F]">Вопросы и ответы</h3>
       </div>
 
-      <div class="mt-12 w-[910px] space-y-4">
+      <div class="mt-12 max-w-[910px] space-y-4">
         <details
           v-for="faq in faqs"
           :key="faq.question"
-          class="rounded-[28px] bg-white px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.05)]"
+          class="rounded-[8px] bg-white px-6 py-5"
         >
           <summary class="flex text-[24px] font-zero font-[masvol] cursor-pointer items-center justify-between text-left text-lg text-[#0F0F0F]">
             {{ faq.question }}
@@ -204,7 +204,7 @@ const menuLinks = [
               <!-- <Icon name="ph:plus" size="24" /> -->
             </span>
           </summary>
-          <p class="mt-4 font-[masvol] text-sm text-[#7A7874]">
+          <p class="mt-4 text-sm text-[#7A7874]">
             {{ faq.answer }}
           </p>
         </details>

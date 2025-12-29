@@ -63,6 +63,9 @@ const {
         products: {
           populate: ["images", "collection"],
         },
+        variants: {
+          populate: ["size", "image"],
+        },
       },
       locale: currentLocale.value,
       pagination: {
@@ -147,34 +150,128 @@ const descriptionText = computed(
     "Описание недоступно. Скоро здесь появится дополнительная информация."
 );
 
+const parseMultilineField = (value?: string | null): string[] => {
+  if (!value) {
+    return [];
+  }
+  return value
+    .split(/\r?\n+/)
+    .map((entry) => entry.replace(/\/+$/g, "").trim())
+    .filter(Boolean);
+};
+
 const composition = computed(() => {
-  const fabric = product.value?.fabric
-    ? `${product.value.fabric}`
-    : "Состав уточняйте у менеджера";
-  return [fabric];
+  const materialItems = parseMultilineField(product.value?.material);
+  if (materialItems.length) {
+    return materialItems;
+  }
+  const fallback = product.value?.fabric
+    ? [`${product.value.fabric}`]
+    : ["Состав уточняйте у менеджера"];
+  return fallback;
 });
 
-const careInstructions = computed(() => [
-  "Только химчистка",
-  "Деликатная стирка",
-  "Не отбеливать",
-]);
-
-const availableSizesText = computed(() => {
-  const sizes = product.value?.availableSizes;
-  return sizes?.length ? sizes.join(", ") : "Размеры уточняйте у менеджера";
+const careInstructions = computed(() => {
+  const careItems = parseMultilineField(product.value?.care);
+  if (careItems.length) {
+    return careItems;
+  }
+  return ["Только химчистка", "Деликатная стирка", "Не отбеливать"];
 });
 
-const sizeOptions = computed(() => {
+type SizeOption = {
+  value: string;
+  label: string;
+  available: boolean;
+  variantId?: number | null;
+};
+
+const normalizeSizeLabel = (value?: string | null) => {
+  if (!value) {
+    return null;
+  }
+  const trimmed = value.trim();
+  return trimmed || null;
+};
+
+const variantSizeOptions = computed<SizeOption[]>(() => {
+  const variants = product.value?.variants;
+  if (!variants?.length) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const sortedVariants = [...variants].sort((a, b) => {
+    const aOrder = a.size?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = b.size?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+    if (aOrder !== bOrder) {
+      return aOrder - bOrder;
+    }
+    const aLabel = a.size?.label ?? a.size?.title ?? "";
+    const bLabel = b.size?.label ?? b.size?.title ?? "";
+    return aLabel.localeCompare(bLabel);
+  });
+
+  return sortedVariants
+    .map((variant) => {
+      const label = normalizeSizeLabel(variant.size?.label ?? variant.size?.title ?? null);
+      if (!label) {
+        return null;
+      }
+      const value = label.toUpperCase();
+      if (seen.has(value)) {
+        return null;
+      }
+      seen.add(value);
+      return {
+        value,
+        label: value,
+        available: variant.isAvailable !== false,
+        variantId: variant.id,
+      };
+    })
+    .filter((option): option is SizeOption => Boolean(option));
+});
+
+const fallbackSizeOptions = computed<SizeOption[]>(() => {
   const sizes = product.value?.availableSizes;
   if (!sizes?.length) {
     return [];
   }
+  const seen = new Set<string>();
   return sizes
-    .map((size) =>
-      typeof size === "string" ? size.trim() : String(size ?? "")
-    )
-    .filter((size): size is string => Boolean(size));
+    .map((size) => {
+      const raw = typeof size === "string" ? size.trim() : String(size ?? "");
+      if (!raw) {
+        return null;
+      }
+      const value = raw.toUpperCase();
+      if (seen.has(value)) {
+        return null;
+      }
+      seen.add(value);
+      return {
+        value,
+        label: value,
+        available: true,
+      };
+    })
+    .filter((option): option is SizeOption => Boolean(option));
+});
+
+const sizeOptions = computed<SizeOption[]>(() => {
+  if (variantSizeOptions.value.length) {
+    return variantSizeOptions.value;
+  }
+  return fallbackSizeOptions.value;
+});
+
+const availableSizesText = computed(() => {
+  if (variantSizeOptions.value.length) {
+    return variantSizeOptions.value.map((option) => option.label).join(", ");
+  }
+  const fallback = product.value?.availableSizes;
+  return fallback?.length ? fallback.join(", ") : "Размеры уточняйте у менеджера";
 });
 
 const hasSizeOptions = computed(() => sizeOptions.value.length > 0);
@@ -184,7 +281,8 @@ const selectedSize = ref<string | null>(null);
 watch(
   sizeOptions,
   (sizes) => {
-    selectedSize.value = sizes[0] ?? null;
+    const firstAvailable = sizes.find((option) => option.available);
+    selectedSize.value = firstAvailable?.value ?? sizes[0]?.value ?? null;
   },
   { immediate: true }
 );
@@ -267,7 +365,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 </script>
 
 <template>
-  <div class="pt-[72px]">
+  <div class="bg-[#FBFAF9]">
     <div
       class="flex min-h-[calc(100vh-72px)] max-md:flex-col max-lg:flex md:basis-[50%]"
     >
@@ -280,7 +378,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
           <div
             v-for="(value, index) in productImages"
             :key="`product-image-${index}`"
-            class="relative min-h-[calc(100vh-72px)] flex items-center justify-center"
+            class="relative min-h-[calc(100vh)] flex items-center justify-center"
           >
             <img
               :src="value"
@@ -311,7 +409,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
         </div>
       </div>
       <div
-        class="h-[calc(100vh-72px)] overflow-y-auto px-[72px] py-[80px] bg-white max-xl:px-12 max-lg:px-10 max-md:px-8 max-sm:px-4 max-sm:py-8 max-md:h-auto max-md:relative md:sticky md:top-[72px] md:basis-[50%]"
+        class="h-[calc(100vh-72px)] overflow-y-auto px-[72px] py-[80px] bg-[#FBFAF9] max-xl:px-12 max-lg:px-10 max-md:px-8 max-sm:px-4 max-sm:py-8 max-md:h-auto max-md:relative md:sticky md:top-[72px] md:basis-[50%]"
       >
         <div v-if="isProductLoading" class="text-center text-[#0F0F0F] py-10">
           Загрузка информации о товаре...
@@ -324,9 +422,8 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
         <div v-else class="flex flex-col gap-8 w-full max-w-[620px] text-[#0F0F0F]">
 
           <div class="flex flex-col gap-3">
-            <span class="text-xs tracking-[0.4em] text-[#C16371] uppercase flex items-center gap-3">
+            <span class="text-xs text-[#C16371] flex items-center gap-3">
               {{ collectionName }}
-              <span class="w-1 h-1 rounded-full bg-[#C16371]" />
             </span>
             <h1 class="text-[72px] font-[masvol] leading-[1] max-lg:text-[56px] max-md:text-[46px] max-sm:text-[36px]">
               {{ product.name }}
@@ -338,28 +435,28 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
-              <p class="text-xs uppercase tracking-[0.6em] tracking-[0.6em] text-[#3D3D3D]">Размер</p>
+              <p class="font-bold uppercase text-[14px] text-[#0F0F0F]">Размер</p>
               <span
                 v-if="selectedSize"
-                class="text-xs uppercase tracking-[0.3em] text-[#C16371]"
+                class="text-xs uppercase text-[#C16371]"
               >
                 {{ selectedSize ? selectedSize.toUpperCase() : "" }}
               </span>
             </div>
             <div v-if="hasSizeOptions" class="flex flex-wrap gap-3">
               <button
-                v-for="size in sizeOptions"
-                :key="size"
+                v-for="option in sizeOptions"
+                :key="option.value"
                 type="button"
-                class="px-6 h-[44px] rounded-full border text-[13px] uppercase tracking-[0.25em] transition-all"
+                class="px-3 h-[22px] rounded-full border text-[14px] uppercase transition-all"
                 :class="[
-                  selectedSize === size
+                  selectedSize === option.value
                     ? '!bg-[#0F0F0F] !text-white !border-[#0F0F0F]'
                     : 'bg-transparent border-[#E3DED7] text-[#3D3D3D]',
                 ]"
-                @click="selectedSize = size"
+                @click="selectedSize = option.value"
               >
-                {{ size.toUpperCase() }}
+                {{ option.value.toUpperCase() }}
               </button>
             </div>
             <p
@@ -371,7 +468,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
           </div>
           <div class="flex gap-5">
             <Button
-              class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase tracking-[0.25em] w-full max-w-[280px]"
+              class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase w-full max-w-[280px]"
               variant="outlined"
               severity="primary"
               @click="openCallbackModal"
@@ -402,7 +499,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('composition')"
               >
-                <p class="text-[14px] leading-5 uppercase font-bold text-[#0F0F0F] tracking-[0.05em]">Состав</p>
+                <p class="text-[14px] leading-5 uppercase font-bold text-[#0F0F0F]">Состав</p>
                 <Icon
                   :name="detailsSections.composition ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -466,16 +563,16 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
   </div>
   <div
     v-if="hasComplementaryProducts"
-    class="complementary-products-section px-4 py-16 max-sm:py-10"
+    class="complementary-products-section px-4 py-16 max-sm:py-10 bg-[#FBFAF9]"
   >
     <div class="complementary-products container mx-auto">
       <div
-        class="complementary-products__header flex items-center justify-between mb-10 max-sm:flex-col max-sm:items-start max-sm:gap-6"
+        class="complementary-products__header flex items-center justify-between mb-10 max-sm:mb-2.5 max-sm:flex-col max-sm:items-start max-sm:gap-6"
       >
         <h2 class="text-[44px] font-[masvol] text-[#0F0F0F] max-sm:text-[32px]">
           Дополните образ
         </h2>
-        <div class="complementary-products__controls flex gap-4">
+        <div class="max-md:hidden complementary-products__controls flex gap-4">
           <button
             type="button"
             class="complementary-products__control"
@@ -495,7 +592,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
       <ClientOnly>
         <swiper-container
           ref="complementarySliderRef"
-          class="complementary-products__slider"
+          class="complementary-products__slider max-md:hidden"
           :space-between="24"
           :slides-per-view="1.05"
           :breakpoints="{
@@ -543,7 +640,41 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
           </swiper-slide>
         </swiper-container>
       </ClientOnly>
-    </div>
+      <div class="md:hidden flex flex-wrap gap-x-2">
+        <div v-for="item in complementaryProductCards" :key="item.id" class="mb-8 shrink-0 grow-0 basis-[48%] ">
+          <div
+            class="complementary-card"
+            @click="goToComplementaryProduct(item)"
+          >
+            <div class="complementary-card__image">
+              <img :src="item.image" :alt="item.name" />
+              <button
+                type="button"
+                class="complementary-card__favorite"
+                :aria-pressed="isProductLiked(item.id)"
+                @click.stop="toggleFavoriteProduct(item.id)"
+              >
+                <Icon
+                  name="app-icon:heart-outlined"
+                  mode="svg"
+                  :color="isProductLiked(item.id) ? '#000' : '#0F0F0F'"
+                  :class="isProductLiked(item.id) ? 'heart--liked' : ''"
+                  size="22"
+                />
+              </button>
+            </div>
+            <div class="complementary-card__info">
+              <p class="complementary-card__title">
+                {{ item.name }}
+              </p>
+              <span class="complementary-card__price">
+                {{ item.price }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
   </div>
   <AppCallBackModal
     v-model:visible="isCallbackModalOpen"
@@ -561,7 +692,6 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 .product-mobile-gallery__image {
   width: 100%;
   height: 100%;
-  border-radius: 32px;
 }
 
 .product-mobile-gallery__image img {
@@ -584,7 +714,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 }
 
 .complementary-products-section {
-  background: #f8f6f2;
+  background: #FBFAF9;
 }
 
 .complementary-products__slider {
@@ -614,17 +744,23 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
   flex-direction: column;
   gap: 18px;
   color: #0f0f0f;
+  @media (max-width: 767px) {
+    gap: 12px;
+  }
 }
 
 .complementary-card__image {
   background: #fff;
-  border-radius: 32px;
   padding: 32px;
   min-height: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  @media (max-width: 767px) {
+    padding: 16px;
+    min-height: 194px;
+  }
 }
 
 .complementary-card__image img {
@@ -646,6 +782,12 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
   justify-content: center;
   background: #fff;
   transition: background-color 0.2s ease;
+  @media (max-width: 767px) {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
 }
 
 .complementary-card__favorite:hover {
@@ -663,9 +805,60 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 
 .complementary-card__title {
   font-weight: 500;
+  @media (width < 768px) {
+    font-weight: 300;
+    font-size: 12px;
+  }
 }
 
 .complementary-card__price {
   color: #6a6967;
+  @media (width < 768px) {
+    font-size: 12px;
+    color: #3D3D3D;
+    font-weight: 500;
+  }
+}
+
+.size-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #e3ded7;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 13px;
+  color: #3d3d3d;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.size-badge--selected {
+  background-color: #0f0f0f;
+  border-color: #0f0f0f;
+  color: #fff;
+}
+
+.size-badge--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.size-badge__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background-color: #39b28c;
+}
+
+.size-badge__dot--unavailable {
+  background-color: #d6cfc6;
+}
+
+.size-badge__label {
+  text-transform: uppercase;
 }
 </style>

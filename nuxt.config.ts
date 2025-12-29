@@ -25,6 +25,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['./app/assets/css/main.css', './app/assets/css/fonts.css'],
+  plugins: [
+    '~/plugins/yandexMaps.client',
+  ],
   vite: {
     plugins: [
       tailwindcss(),
@@ -43,7 +46,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'https://amora-brand.uz/api',
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL ?? 'https://amora-brand.uz',
-      yandexMapsApiKey: "12f92244-d62d-4314-b321-ab0d15f86f84",
+      yandexMapsApiKey: "ec38d090-6f6b-4720-a520-fc56416114a1",
       vueQuery: {
         queryClientOptions: {
           defaultOptions: {

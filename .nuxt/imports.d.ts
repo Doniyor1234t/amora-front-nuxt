@@ -31,7 +31,7 @@ export { setInterval } from '#app/compat/interval';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
 export { useApiClient, useApiQuery, useApiMutation, useStrapi, useStrapiQuery } from '../app/composables/useApiService';
-export { mapCollectionEntity, mapProductEntity, mapCollectionsResponse, mapProductsResponse, mapProductFromResponse, mapCollectionFromResponse, CollectionImage, Collection, Product, ProductsResponse, CollectionsResponse, StrapiCollectionAttributes, StrapiProductAttributes, MediaNormalizer } from '../app/utils/catalogMappers';
+export { mapCollectionEntity, mapProductEntity, mapCollectionsResponse, mapProductsResponse, mapProductFromResponse, mapCollectionFromResponse, CollectionImage, Collection, Product, ProductVariant, VariantSize, ProductsResponse, CollectionsResponse, StrapiCollectionAttributes, StrapiProductAttributes, StrapiProductVariant, StrapiSizeAttributes, MediaNormalizer } from '../app/utils/catalogMappers';
 export { useAuthStore, AuthUser } from '../app/stores/auth';
 export { useLikesStore } from '../app/stores/likes';
 export { useSwiper } from '../node_modules/nuxt-swiper/dist/runtime/composables/useSwiper.client';
