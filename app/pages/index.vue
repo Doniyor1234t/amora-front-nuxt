@@ -605,7 +605,7 @@ const isCallBackVisible = ref(false);
             <ProductsSlider hideHeader :items="productsCarousel" />
           </div>
         </ClientOnly>
-        <div class="max-md:grid md:hidden">
+        <div class="max-md:grid max-md:grid-cols-2 md:hidden">
           <div
             v-for="(item, idx) in productsCarousel.slice(0, 6)"
             :key="item.id ?? idx"
