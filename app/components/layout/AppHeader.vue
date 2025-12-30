@@ -80,8 +80,9 @@ const iconColor = computed(() => {
 });
 
 const shouldShowTransparentHeader = computed(
-  () => isHomePage.value && !isScrolled.value
+  () => !isScrolled.value
 );
+const isOtherPage = computed(() => !isHomePage.value);
 </script>
 
 <template>
@@ -89,6 +90,7 @@ const shouldShowTransparentHeader = computed(
     :class="[
       'header fixed top-0 left-0 w-full z-10',
       { 'header--scrolled': !shouldShowTransparentHeader },
+      { 'default-header-bg': isOtherPage }
     ]"
   >
     <div class="container flex h-[72px] items-center max-sm:h-[60px]">
@@ -186,7 +188,7 @@ const shouldShowTransparentHeader = computed(
       </NuxtLink>
 
       <div class="flex gap-2">
-        <Button variant="text" severity="secondary" class="max-sm:hidden!">
+        <Button variant="text" severity="secondary" class="hidden! sm:inline-flex">
           <Icon
             name="app-icon:loop"
             mode="svg"
@@ -195,18 +197,15 @@ const shouldShowTransparentHeader = computed(
           />
         </Button>
 
-        <Button
-          variant="text"
-          severity="secondary"
-          class="sm:hidden relative inline-flex"
-          @click="handleFavoritesClick"
-        >
-          <Icon
-            name="app-icon:heart-outlined"
-            mode="svg"
-            :color="iconColor"
-            height="24px"
-          />
+        <div class="sm:hidden relative flex items-center">
+          <Button variant="text" severity="secondary" @click="handleFavoritesClick">
+            <Icon
+              name="app-icon:heart-outlined"
+              mode="svg"
+              :color="iconColor"
+              height="24px"
+            />
+          </Button>
           <span
             v-if="favoriteCount"
             class="favorites-badge"
@@ -214,7 +213,7 @@ const shouldShowTransparentHeader = computed(
           >
             {{ favoriteCount }}
           </span>
-        </Button>
+        </div>
 
         <Button variant="text" severity="secondary" class="max-sm:!hidden" @click="handleProfileClick">
           <Icon
@@ -261,6 +260,16 @@ const shouldShowTransparentHeader = computed(
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   border-bottom-color: rgba(15, 15, 15, 0.08);
+}
+
+.default-header-bg{
+  background: transparent;
+  backdrop-filter: blur(0);
+  border-bottom: none;
+}
+
+.default-header-bg .logo-svg {
+  color: #0f0f0f;
 }
 
 .logo-link {
