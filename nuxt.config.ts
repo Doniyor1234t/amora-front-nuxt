@@ -89,6 +89,7 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Premium atelier, bespoke tailoring and fashion collections by AMORA.' },
+        { name: "theme-color", content: "#ffffff" },
 
         // Open Graph
         { property: 'og:title', content: 'AMORA - Atelier & Fashion House' },
@@ -98,9 +99,15 @@ export default defineNuxtConfig({
 
         // Twitter
         { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'AMORA - Atelier & Fashion House' },
+        { name: 'twitter:description', content: 'Premium atelier, bespoke tailoring and fashion collections by AMORA.' },
+        { name: 'twitter:image', content: '/og-image.jpg' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: "manifest", href: "/site.webmanifest" },
       ],
     },
   }
