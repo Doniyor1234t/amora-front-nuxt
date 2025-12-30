@@ -16,10 +16,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   const ymaps = createYmaps({
     apikey: apiKey,
     lang: "ru_RU",
-    initializeOn: "onPluginInit",
-    scriptAttributes: {
-      crossorigin: "anonymous",
-    },
+    // initializeOn: "onPluginInit",
+    // scriptAttributes: {
+    //   crossorigin: "anonymous",
+    // },
     // version: "3.0",
   });
 

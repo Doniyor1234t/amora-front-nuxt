@@ -30,9 +30,9 @@ type NuxtAppInjections =
   InjectionType<typeof import("../../node_modules/@nuxt/icon/dist/runtime/plugin.js")> &
   InjectionType<typeof import("../../node_modules/nuxt/dist/app/plugins/warn.dev.server.js")> &
   InjectionType<typeof import("../../node_modules/nuxt/dist/app/plugins/check-if-layout-used.js")> &
+  InjectionType<typeof import("../../app/plugins/yandexMaps.client")> &
   InjectionType<typeof import("../../app/plugins/api-client")> &
-  InjectionType<typeof import("../../app/plugins/vue-query")> &
-  InjectionType<typeof import("../../app/plugins/yandexMaps.client")>
+  InjectionType<typeof import("../../app/plugins/vue-query")>
 
 declare module '#app' {
   interface NuxtApp extends NuxtAppInjections { }
