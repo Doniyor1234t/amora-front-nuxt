@@ -808,7 +808,7 @@ const isCallBackVisible = ref(false);
     <!-- Конец блока "Оставить заявку -->
 
     <section class="slide-section">
- hint: 'Бутик AMORA',      <div class="">
+      <div class="">
         <div class="contact-layout">
           <div class="contact-map max-md:order-1">
             <ClientOnly>
@@ -818,6 +818,7 @@ const isCallBackVisible = ref(false);
                 :marker="{
                   coordinates: [41.334772, 69.323135],
                   hint: 'Бутик AMORA',
+                  description: 'ул. Амира Темура 107/1, ТЦ «Паркент» 2 этаж'
                 }"
                 height="800px"
                 class="contact-map__canvas"

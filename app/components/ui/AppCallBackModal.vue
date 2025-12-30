@@ -261,7 +261,7 @@ onBeforeUnmount(() => {
   >
     <div class="flex flex-col gap-[20px] w-[446px] max-sm:w-[100%]">
 
-      <div v-if="true" class="text-center space-y-5 py-4">
+      <div v-if="isSubmitted" class="text-center space-y-5 py-4">
         <div class="flex flex-col items-center gap-4">
           <svg
             width="48"
