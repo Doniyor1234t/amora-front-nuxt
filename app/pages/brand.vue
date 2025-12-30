@@ -298,27 +298,27 @@ const quickLinks = [
           </svg>
         </h4>
 
-        <h1 class="text-[#0F0F0F] text-[52px] mt-[12px] font-[masvol] max-sm:text-[32px]">
+        <h1 class="text-[#0F0F0F] text-[52px] mt-[12px] max-sm:text-center  font-[masvol] max-sm:text-[32px]">
           Мы создаём одежду, а не просто вещи
         </h1>
       </div>
 
-      <div class="grid grid-cols-4 gap-4 h-[400px] max-sm:grid-cols-2 max-sm:h-[200px] max-sm:gap-2">
+      <div class="grid grid-cols-4 gap-4 h-[400px] max-sm:grid-cols-2 max-sm:gap-2">
         <div
           v-for="(feature, index) in features"
           :key="index"
-          class="bg-white rounded-[30px] sm:rounded-[40px] flex flex-col justify-between items-center pt-[48px] pb-[32px]"
+          class="bg-white rounded-[8px] sm:rounded-[8px] flex flex-col justify-between items-center pt-[48px] pb-[32px]"
         >
           <div
-            class="rounded-[100px] border-[1px] border-[#0F0F0F] p-[20px] w-[72px] h-[72px] flex justify-center items-center"
+            class="rounded-[8px] border-[1px] border-[#0F0F0F] p-[20px] w-[72px] h-[72px] flex justify-center items-center"
             v-html="feature.svg"
           >
           </div>
           <div class="flex flex-col items-center text-center mt-4">
-            <h2 class="text-[#0F0F0F] text-[24px] font-[masvol]">
+            <h2 class="text-[#0F0F0F] text-[24px] max-md:text-[18px] font-[masvol]">
               {{ feature.title }}
             </h2>
-            <p class="text-[#3D3D3D] text-[14px] mt-2">
+            <p class="text-[#3D3D3D] text-[14px] max-md:text-[12px] mt-2">
               {{ feature.description }}
             </p>
           </div>
@@ -360,8 +360,8 @@ const quickLinks = [
       </div>
     </section> -->
 
-    <section class="container py-[260px] mx-auto mt-20 px-4">
-      <div class="w-[700px] flex flex-col gap-2 items-center content-center mx-auto text-center px-[48px] py-[56px] text-center max-md:px-[32px]">
+    <section class="container py-[260px] max-md:py-[100px] mx-auto mt-20 px-4">
+      <div class="w-[700px] max-md:w-full flex flex-col gap-2 items-center content-center mx-auto text-center px-[48px] py-[56px] text-center max-md:px-[32px]">
         <Icon name="ri:double-quotes-l" size="48" class="text-[#C4BBAF]" />
         <p class="text-[42px] font-[masvol] leading-snug text-[#6D6A65] max-md:text-[30px]">
           “Наша миссия — раскрывать внутреннюю красоту женщины через внешний облик, даря ей уверенность в каждом движении.”
@@ -370,16 +370,16 @@ const quickLinks = [
     </section>
 
     <section class="container mx-auto mt-20 px-4">
-      <h3 class="text-center font-[masvol] text-[52px] text-[#1F1B16]">Атмосфера творчества</h3>
+      <h3 class="text-center font-[masvol] text-[52px] max-md:text-[32px] text-[#1F1B16]">Атмосфера творчества</h3>
       <div class="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div class="overflow-hidden bg-white shadow-[0_25px_90px_rgba(40,34,28,0.1)]">
+        <div class="overflow-hidden bg-white">
           <img src="/images/Collection-bg-2.jpg" alt="Sketch large" class="h-full w-full object-cover" />
         </div>
         <div class="grid gap-6 sm:grid-cols-2">
           <div
             v-for="(image, index) in galleryImages"
             :key="image"
-            class="overflow-hidden bg-white shadow-[0_20px_70px_rgba(40,34,28,0.08)]"
+            class="overflow-hidden bg-white"
           >
             <img :src="image" :alt="`Атмосфера ${index + 1}`" class="h-full w-full object-cover" />
           </div>
@@ -388,16 +388,16 @@ const quickLinks = [
     </section>
 
     <section class="container mx-auto mt-24 px-4">
-      <div class="grid gap-12 rounded-[60px] bg-white px-[48px] py-[64px] shadow-[0_35px_110px_rgba(33,29,24,0.12)] max-lg:px-[32px]">
-        <div class="flex items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="grid gap-12 rounded-[8px] bg-white px-[48px] py-[64px] max-lg:px-[32px]">
+        <div class="flex max-md:flex-col items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div class="rounded-[36px] min-h-[500px] bg-[#F4F1EC]">
             <img
               src="/images/Collection-bg-6.jpg"
               alt="Founder portrait"
-              class="h-full w-full rounded-[28px] object-cover"
+              class="h-full w-full rounded-[8px] object-cover"
             />
           </div>
-          <div class="min-w-[752px]">
+          <div class="min-w-[752px] max-md:min-w-full">
             <p class="text-xs uppercase tracking-[0.5em] text-[#B0A79D]">• основательница бренда •</p>
             <h3 class="mt-4 font-[masvol] text-[50px] text-[#1F1B16]">{{ founder.name }}</h3>
             <div class="mt-6 space-y-4 text-sm leading-relaxed text-[#6F6A63]">

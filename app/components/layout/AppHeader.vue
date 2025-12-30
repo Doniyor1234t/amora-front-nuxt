@@ -153,8 +153,8 @@ const isOtherPage = computed(() => !isHomePage.value);
             class="font-[masvol] text-[52px] max-sm:text-[34px]"
             >О бренде</NuxtLink
           >
-          <NuxtLink to="/contacts" class="font-[masvol] text-[52px] max-sm:text-[34px]"
-            >Контакты</NuxtLink
+          <!-- <NuxtLink to="/contacts" class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            >Контакты</NuxtLink -->
           >
         </div>
       </Drawer>
