@@ -195,8 +195,10 @@
   }
 
   .footer-button {
-    width: 100%;
+    /* width: 100%; */
     justify-content: flex-start;
+    /* font-size: 9px; */
+    /* padding: 10px 20px; */
   }
 
   .footer-links__list {

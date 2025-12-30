@@ -34,6 +34,7 @@ export const NuxtRouteAnnouncer: typeof import("../node_modules/nuxt/dist/app/co
 export const NuxtImg: typeof import("../node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue").default
 export const NuxtPicture: typeof import("../node_modules/@nuxt/image/dist/runtime/components/NuxtPicture.vue").default
 export const Icon: typeof import("../node_modules/@nuxt/icon/dist/runtime/components/index").default
+export const NuxtIsland: typeof import("../node_modules/@nuxt/hints/dist/runtime/core/components/nuxt-island").default
 export const AutoComplete: typeof import("primevue/autocomplete").default
 export const Calendar: typeof import("primevue/calendar").default
 export const CascadeSelect: typeof import("primevue/cascadeselect").default
@@ -165,7 +166,6 @@ export const Style: typeof import("../node_modules/nuxt/dist/head/runtime/compon
 export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/components").Head
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components").Html
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components").Body
-export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island").default
 export const LazyLayoutAppFooter: LazyComponent<typeof import("../app/components/layout/AppFooter.vue").default>
 export const LazyLayoutAppHeader: LazyComponent<typeof import("../app/components/layout/AppHeader.vue").default>
 export const LazySharedBanner: LazyComponent<typeof import("../app/components/shared/Banner.vue").default>
@@ -186,6 +186,7 @@ export const LazyNuxtRouteAnnouncer: LazyComponent<typeof import("../node_module
 export const LazyNuxtImg: LazyComponent<typeof import("../node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue").default>
 export const LazyNuxtPicture: LazyComponent<typeof import("../node_modules/@nuxt/image/dist/runtime/components/NuxtPicture.vue").default>
 export const LazyIcon: LazyComponent<typeof import("../node_modules/@nuxt/icon/dist/runtime/components/index").default>
+export const LazyNuxtIsland: LazyComponent<typeof import("../node_modules/@nuxt/hints/dist/runtime/core/components/nuxt-island").default>
 export const LazyAutoComplete: LazyComponent<typeof import("primevue/autocomplete").default>
 export const LazyCalendar: LazyComponent<typeof import("primevue/calendar").default>
 export const LazyCascadeSelect: LazyComponent<typeof import("primevue/cascadeselect").default>
@@ -317,6 +318,5 @@ export const LazyStyle: LazyComponent<typeof import("../node_modules/nuxt/dist/h
 export const LazyHead: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components").Head>
 export const LazyHtml: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components").Html>
 export const LazyBody: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components").Body>
-export const LazyNuxtIsland: LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/nuxt-island").default>
 
 export const componentNames: string[]

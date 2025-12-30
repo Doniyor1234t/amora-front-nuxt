@@ -74,7 +74,7 @@ function createHead(options = {}) {
   return head;
 }
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"Premium atelier, bespoke tailoring and fashion collections by AMORA."},{"property":"og:title","content":"AMORA - Atelier & Fashion House"},{"property":"og:description","content":"Premium atelier, bespoke tailoring and fashion collections by AMORA."},{"property":"og:type","content":"website"},{"property":"og:image","content":"/og-image.jpg"},{"name":"twitter:card","content":"summary_large_image"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"}],"style":[],"script":[],"noscript":[],"title":"Amora"};
 
 const appRootTag = "div";
 

@@ -34,6 +34,7 @@ interface _GlobalComponents {
   'NuxtImg': typeof import("../../node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue").default
   'NuxtPicture': typeof import("../../node_modules/@nuxt/image/dist/runtime/components/NuxtPicture.vue").default
   'Icon': typeof import("../../node_modules/@nuxt/icon/dist/runtime/components/index").default
+  'NuxtIsland': typeof import("../../node_modules/@nuxt/hints/dist/runtime/core/components/nuxt-island").default
   'AutoComplete': typeof import("primevue/autocomplete").default
   'Calendar': typeof import("primevue/calendar").default
   'CascadeSelect': typeof import("primevue/cascadeselect").default
@@ -165,7 +166,6 @@ interface _GlobalComponents {
   'Head': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Head
   'Html': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Html
   'Body': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Body
-  'NuxtIsland': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island").default
   'LazyLayoutAppFooter': LazyComponent<typeof import("../../app/components/layout/AppFooter.vue").default>
   'LazyLayoutAppHeader': LazyComponent<typeof import("../../app/components/layout/AppHeader.vue").default>
   'LazySharedBanner': LazyComponent<typeof import("../../app/components/shared/Banner.vue").default>
@@ -186,6 +186,7 @@ interface _GlobalComponents {
   'LazyNuxtImg': LazyComponent<typeof import("../../node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue").default>
   'LazyNuxtPicture': LazyComponent<typeof import("../../node_modules/@nuxt/image/dist/runtime/components/NuxtPicture.vue").default>
   'LazyIcon': LazyComponent<typeof import("../../node_modules/@nuxt/icon/dist/runtime/components/index").default>
+  'LazyNuxtIsland': LazyComponent<typeof import("../../node_modules/@nuxt/hints/dist/runtime/core/components/nuxt-island").default>
   'LazyAutoComplete': LazyComponent<typeof import("primevue/autocomplete").default>
   'LazyCalendar': LazyComponent<typeof import("primevue/calendar").default>
   'LazyCascadeSelect': LazyComponent<typeof import("primevue/cascadeselect").default>
@@ -317,7 +318,6 @@ interface _GlobalComponents {
   'LazyHead': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components").Head>
   'LazyHtml': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components").Html>
   'LazyBody': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components").Body>
-  'LazyNuxtIsland': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island").default>
 }
 
 declare module 'vue' {

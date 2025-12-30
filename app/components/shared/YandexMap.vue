@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { PropType } from "vue";
+import "vue-yandex-maps/css";
 import {
   YandexMap,
   YandexMapDefaultFeaturesLayer,
@@ -35,6 +36,11 @@ const mapSettings = computed<YandexMapSettings>(() => ({
   },
   behaviors: ["drag", "scrollZoom", "touch"] as const,
 }));
+
+const mapStyle = computed(() => ({
+  minHeight: props.height,
+  height: props.height,
+}));
 </script>
 
 <template>
@@ -42,7 +48,7 @@ const mapSettings = computed<YandexMapSettings>(() => ({
     <YandexMap
       :settings="mapSettings"
       class="w-full overflow-hidden rounded-[40px] border border-[#DCD6CE]"
-      :style="{ minHeight: height }"
+      :style="mapStyle"
     >
       <YandexMapDefaultSchemeLayer />
       <YandexMapDefaultFeaturesLayer />

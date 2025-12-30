@@ -36,11 +36,17 @@ const swiper = useSwiper(containerRef);
     >
       <swiper-slide v-for="(slide, idx) in props.items" :key="idx">
         <div class="relative w-full h-full">
-          <img
-            :src="slide.img"
-            alt=""
-            class="object-cover object-top w-full h-full max-sm:object-[70%]"
-          />
+          <picture class="block w-full h-full">
+            <source
+              media="(max-width: 767px)"
+              :srcset="slide.mobileImg ?? slide.img"
+            />
+            <img
+              :src="slide.img"
+              alt=""
+              class="object-cover object-top w-full h-full max-sm:object-cover"
+            />
+          </picture>
           <!-- <div
             class="absolute inset-0 flex items-center justify-start px-[8%] max-lg:px-[6%] max-md:px-6 max-md:hidden"
           >

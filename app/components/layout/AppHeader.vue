@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch, onBeforeUnmount } from "vue";
 import { storeToRefs } from "pinia";
 import AppSelectButton from "../ui/AppSelectButton.vue";
 import Drawer from "primevue/drawer";
@@ -18,6 +18,7 @@ const options = ref([
 ]);
 
 const visible = ref(false);
+const isScrolled = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -28,8 +29,26 @@ const likesStore = useLikesStore();
 const { likedIds } = storeToRefs(likesStore);
 const favoriteCount = computed(() => likedIds.value.length);
 
+const updateScrollState = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  isScrolled.value = window.scrollY > 24;
+};
+
 onMounted(() => {
   authStore.initialize();
+  updateScrollState();
+  window.addEventListener("scroll", updateScrollState, { passive: true });
+});
+
+onBeforeUnmount(() => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.removeEventListener("scroll", updateScrollState);
 });
 
 const handleProfileClick = () => {
@@ -50,10 +69,28 @@ const handleFavoritesClick = () => {
   visible.value = false;
   router.push("/favorites");
 };
+
+const isHomePage = computed(() => route.path === "/");
+
+const iconColor = computed(() => {
+  if (isHomePage.value && !isScrolled.value) {
+    return "#FFFFFF";
+  }
+  return "#0F0F0F";
+});
+
+const shouldShowTransparentHeader = computed(
+  () => isHomePage.value && !isScrolled.value
+);
 </script>
 
 <template>
-  <header class="header fixed top-0 left-0 w-full z-10">
+  <header
+    :class="[
+      'header fixed top-0 left-0 w-full z-10',
+      { 'header--scrolled': !shouldShowTransparentHeader },
+    ]"
+  >
     <div class="container flex h-[72px] items-center max-sm:h-[60px]">
       <Drawer v-model:visible="visible" class="!w-[45%] max-sm:!w-[100%]">
         <div class="max-sm:w-full max-sm:flex max-sm:justify-between">
@@ -66,7 +103,7 @@ const handleFavoritesClick = () => {
           <Icon
             name="app-icon:user"
             mode="svg"
-            color="#0F0F0F"
+            :color="iconColor"
             height="24px"
             class="md:!hidden"
           />
@@ -76,11 +113,11 @@ const handleFavoritesClick = () => {
           <Icon
             name="app-icon:heart-outlined"
             mode="svg"
-            color="#0F0F0F"
+            :color="iconColor"
             height="24px"
             class="md:!hidden"
           />
-          <p class="text-sm text-[#0F0F0F] md:!hidden">
+          <p class="text-sm md:!hidden" :style="{ color: iconColor }">
             {{ favoriteCount }}
           </p>
         </Button>
@@ -129,7 +166,7 @@ const handleFavoritesClick = () => {
         <Icon
           name="app-icon:menu-hamburger"
           mode="svg"
-          color="#3F3F46"
+          :color="iconColor"
           width="40px"
           height="32px"
         />
@@ -149,15 +186,41 @@ const handleFavoritesClick = () => {
       </NuxtLink>
 
       <div class="flex gap-2">
-        <Button variant="text" severity="secondary">
-          <Icon name="app-icon:loop" mode="svg" color="#0F0F0F" height="24px" />
+        <Button variant="text" severity="secondary" class="max-sm:hidden!">
+          <Icon
+            name="app-icon:loop"
+            mode="svg"
+            :color="iconColor"
+            height="24px"
+          />
+        </Button>
+
+        <Button
+          variant="text"
+          severity="secondary"
+          class="sm:hidden relative inline-flex"
+          @click="handleFavoritesClick"
+        >
+          <Icon
+            name="app-icon:heart-outlined"
+            mode="svg"
+            :color="iconColor"
+            height="24px"
+          />
+          <span
+            v-if="favoriteCount"
+            class="favorites-badge"
+            :style="{ color: iconColor }"
+          >
+            {{ favoriteCount }}
+          </span>
         </Button>
 
         <Button variant="text" severity="secondary" class="max-sm:!hidden" @click="handleProfileClick">
           <Icon
             name="app-icon:user"
             mode="svg"
-            color="#0F0F0F"
+            :color="iconColor"
             height="24px"
             class="max-sm:hidden"
           />
@@ -167,13 +230,14 @@ const handleFavoritesClick = () => {
           <Icon
             name="app-icon:heart-outlined"
             mode="svg"
-            color="#0F0F0F"
+            :color="iconColor"
             height="24px"
             class="max-sm:hidden"
           />
           <span
             v-if="favoriteCount"
             class="favorites-badge"
+            :style="{ color: iconColor }"
           >
             {{ favoriteCount }}
           </span>
@@ -184,17 +248,34 @@ const handleFavoritesClick = () => {
 </template>
 
 <style scoped>
+.header {
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.header--scrolled {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom-color: rgba(15, 15, 15, 0.08);
+}
+
 .logo-link {
   display: inline-flex;
 }
 
 .logo-svg {
-  color: #000;
-  /* mix-blend-mode: difference; */
-  /* filter: invert(1); */
+  color: #ffffff;
   position: relative;
   z-index: 10;
   transition: color 0.2s ease;
+}
+
+.header--scrolled .logo-svg {
+  color: #0f0f0f;
 }
 
 .favorites-badge {
@@ -202,13 +283,5 @@ const handleFavoritesClick = () => {
   line-height: 1;
   text-align: center;
   font-weight: 400;
-}
-
-@media (max-width: 640px) {
-  .logo-svg {
-    mix-blend-mode: normal;
-    filter: none;
-    color: #0f0f0f;
-  }
 }
 </style>

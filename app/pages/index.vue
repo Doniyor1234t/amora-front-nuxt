@@ -5,15 +5,110 @@ import ProductsSlider from "@/components/shared/ProductsSlider.vue";
 import YandexMap from "@/components/shared/YandexMap.vue";
 import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 import { useStrapi, useStrapiQuery } from "@/composables/useApiService";
-import type { StrapiListResponse } from "@/types/strapi";
+import type {
+  StrapiEntity,
+  StrapiListResponse,
+  StrapiMediaRelation,
+  StrapiRelationValue,
+  StrapiSingleResponse,
+} from "@/types/strapi";
 import {
   type Product,
   type ProductsResponse,
   type StrapiProductAttributes,
+  mapProductEntity,
   mapProductsResponse,
+  type MediaNormalizer,
 } from "@/utils/catalogMappers";
 
-const banners = ref([
+interface BannerSlide {
+  id?: number;
+  img: string;
+  mobileImg?: string | null;
+  title?: string | null;
+  subtitle?: string | null;
+  description?: string | null;
+}
+
+interface StrapiBannerAttributes {
+  title?: string | null;
+  subtitle?: string | null;
+  description?: string | null;
+  isActive?: boolean | null;
+  image?: StrapiMediaRelation;
+  mobile_image?: StrapiMediaRelation;
+}
+
+type BannerEntity =
+  | StrapiEntity<StrapiBannerAttributes>
+  | (StrapiBannerAttributes & { id?: number });
+
+type ProductEntity =
+  | StrapiEntity<StrapiProductAttributes>
+  | (StrapiProductAttributes & { id?: number });
+
+interface StrapiHomepageAttributes {
+  hero_banners?: BannerEntity[] | StrapiRelationValue<BannerEntity>;
+  featured_products?: ProductEntity[] | StrapiRelationValue<ProductEntity>;
+  products?: ProductEntity[] | StrapiRelationValue<ProductEntity>;
+  single_banner?: BannerEntity | null;
+}
+
+interface HomepageContent {
+  banners: BannerSlide[];
+  featureBannerImage?: string | null;
+  featureBannerMobileImage?: string | null;
+  products: Product[];
+}
+
+const defaultHomepageContent: HomepageContent = {
+  banners: [],
+  featureBannerImage: null,
+  featureBannerMobileImage: null,
+  products: [],
+};
+
+const hasRelationData = (value: unknown): value is { data: unknown } =>
+  typeof value === "object" && value !== null && "data" in value;
+
+const relationToArray = <T>(
+  relation?: StrapiRelationValue<T> | T | T[] | null
+): T[] => {
+  if (!relation) {
+    return [];
+  }
+
+  if (Array.isArray(relation)) {
+    return relation;
+  }
+
+  if (hasRelationData(relation)) {
+    const data = relation.data;
+    if (!data) {
+      return [];
+    }
+    return Array.isArray(data) ? data : [data];
+  }
+
+  return [relation];
+};
+
+const isStrapiEntity = <T>(value: unknown): value is StrapiEntity<T> =>
+  typeof value === "object" && value !== null && "attributes" in value;
+
+const toProductEntity = (
+  entity: ProductEntity
+): StrapiEntity<StrapiProductAttributes> => {
+  if (isStrapiEntity<StrapiProductAttributes>(entity)) {
+    return entity;
+  }
+  return {
+    id: entity.id ?? 0,
+    attributes: entity,
+  };
+};
+
+const fallbackBanners: BannerSlide[] = [
   {
     img: "/images/Slider-bg-1.png",
     title: "NEW COLLECTION",
@@ -42,7 +137,10 @@ const banners = ref([
     description:
       "Нежная палитра в комбинации с нарочито объемными фасонами подчеркивают женственность их обладательницы",
   },
-]);
+];
+
+const placeholderBannerImage =
+  fallbackBanners[0]?.img ?? "/images/Slider-bg-1.png";
 
 const features = [
   {
@@ -206,6 +304,206 @@ const fallbackCarouselItems = Array.from({ length: 10 }, (_, idx) => ({
 
 const { normalizeMediaCollection } = useStrapi();
 
+const getBannerAttributes = (entity: BannerEntity) =>
+  isStrapiEntity<StrapiBannerAttributes>(entity)
+    ? entity.attributes ?? ((entity as unknown) as StrapiBannerAttributes)
+    : entity;
+
+const isBannerActive = (entity: BannerEntity) =>
+  getBannerAttributes(entity).isActive ?? true;
+
+const getProductAttributes = (entity: ProductEntity) =>
+  isStrapiEntity<StrapiProductAttributes>(entity)
+    ? entity.attributes ?? ((entity as unknown) as StrapiProductAttributes)
+    : entity;
+
+const isProductActive = (entity: ProductEntity) =>
+  getProductAttributes(entity).isActive ?? true;
+
+const mapBannerEntity = (entity?: BannerEntity | null): BannerSlide | null => {
+  if (!entity) {
+    return null;
+  }
+  const attributes = getBannerAttributes(entity);
+  const [image] = normalizeMediaCollection(attributes.image);
+  const [mobileImage] = normalizeMediaCollection(attributes.mobile_image);
+  const bannerId = isStrapiEntity<StrapiBannerAttributes>(entity)
+    ? entity.id
+    : entity.id;
+
+  return {
+    id: bannerId,
+    img: image?.url ?? image?.path ?? placeholderBannerImage,
+    mobileImg:
+      mobileImage?.url ??
+      mobileImage?.path ??
+      image?.url ??
+      image?.path ??
+      placeholderBannerImage,
+    title: attributes.title ?? null,
+    subtitle: attributes.subtitle ?? null,
+    description: attributes.description ?? null,
+  };
+};
+
+const mapHomepageResponse = (
+  response: StrapiSingleResponse<StrapiHomepageAttributes>,
+  normalize: MediaNormalizer
+): HomepageContent => {
+  const rawData = response.data;
+  const attributes = rawData
+    ? (isStrapiEntity<StrapiHomepageAttributes>(rawData)
+        ? rawData.attributes
+        : (rawData as unknown as StrapiHomepageAttributes))
+    : null;
+
+  if (!attributes) {
+    return {
+      ...defaultHomepageContent,
+    };
+  }
+
+  const heroBanners = relationToArray<BannerEntity>(
+    attributes.hero_banners ?? null
+  )
+    .filter((entity): entity is BannerEntity => Boolean(entity))
+    .filter(isBannerActive)
+    .map((entity) => mapBannerEntity(entity))
+    .filter((banner): banner is BannerSlide => Boolean(banner));
+
+  const singleBanner = mapBannerEntity(attributes.single_banner ?? null);
+
+  const productCandidates: Array<
+    ProductEntity[] | StrapiRelationValue<ProductEntity> | undefined | null
+  > = [attributes.featured_products, attributes.products];
+
+  let productEntries: ProductEntity[] = [];
+  for (const candidate of productCandidates) {
+    const normalized = relationToArray<ProductEntity>(candidate ?? null).filter(
+      (entry): entry is ProductEntity => Boolean(entry)
+    );
+    if (normalized.length) {
+      productEntries = normalized;
+      break;
+    }
+  }
+
+  const homepageProducts = productEntries
+    .filter(isProductActive)
+    .map((entity) => mapProductEntity(toProductEntity(entity), normalize));
+
+  const fallbackBanner = heroBanners.at(-1) ?? null;
+  const featureBannerImage =
+    singleBanner?.img ?? fallbackBanner?.img ?? null;
+  const featureBannerMobileImage =
+    singleBanner?.mobileImg ??
+    fallbackBanner?.mobileImg ??
+    featureBannerImage ??
+    null;
+
+  return {
+    banners: heroBanners,
+    featureBannerImage,
+    featureBannerMobileImage,
+    products: homepageProducts,
+  };
+};
+
+const {
+  data: homepageResponse,
+  isLoading: isHomepageLoading,
+  isError: isHomepageError,
+} = useStrapiQuery<
+  StrapiSingleResponse<StrapiHomepageAttributes>,
+  Error,
+  HomepageContent
+>(
+  ["homepage"],
+  {
+    path: "/homepage",
+    query: {
+      populate: {
+        hero_banners: {
+          populate: ["image", "mobile_image"],
+        },
+        single_banner: {
+          populate: ["image", "mobile_image"],
+        },
+        featured_products: {
+          populate: ["images"],
+        },
+        products: {
+          populate: ["images"],
+        },
+      },
+    },
+  },
+  {
+    select: (response: StrapiSingleResponse<StrapiHomepageAttributes>) =>
+      mapHomepageResponse(response, normalizeMediaCollection),
+  }
+);
+
+const homepageContent = computed(
+  () => homepageResponse.value ?? defaultHomepageContent
+);
+
+const homepageBanners = computed(() => homepageContent.value.banners ?? []);
+
+const banners = computed(() => {
+  if (homepageBanners.value.length) {
+    return homepageBanners.value;
+  }
+
+  return fallbackBanners;
+});
+
+const homepageProducts = computed(() => homepageContent.value.products ?? []);
+
+const shouldFetchRecentProducts = computed(() => {
+  if (isHomepageError.value) {
+    return true;
+  }
+
+  if (isHomepageLoading.value && !homepageResponse.value) {
+    return false;
+  }
+
+  if (!homepageResponse.value) {
+    return false;
+  }
+
+  return homepageProducts.value.length === 0;
+});
+
+const featureBannerImageSrc = computed(() => {
+  if (homepageContent.value.featureBannerImage) {
+    return homepageContent.value.featureBannerImage;
+  }
+
+  if (homepageBanners.value.length) {
+    const last = homepageBanners.value[homepageBanners.value.length - 1];
+    return last?.img ?? last?.mobileImg ?? placeholderBannerImage;
+  }
+
+  const fallbackLast = fallbackBanners[fallbackBanners.length - 1];
+  return fallbackLast?.img ?? placeholderBannerImage;
+});
+
+const featureBannerMobileSrc = computed(() => {
+  if (homepageContent.value.featureBannerMobileImage) {
+    return homepageContent.value.featureBannerMobileImage;
+  }
+
+  if (homepageBanners.value.length) {
+    const last = homepageBanners.value[homepageBanners.value.length - 1];
+    return last?.mobileImg ?? last?.img ?? placeholderBannerImage;
+  }
+
+  const fallbackLast = fallbackBanners[fallbackBanners.length - 1];
+  return fallbackLast?.mobileImg ?? fallbackLast?.img ?? placeholderBannerImage;
+});
+
 const {
   data: recentProductsResponse,
   isLoading: isRecentLoading,
@@ -232,7 +530,9 @@ const {
     },
   },
   {
-    select: (response: StrapiListResponse<StrapiProductAttributes>) => mapProductsResponse(response, normalizeMediaCollection),
+    enabled: shouldFetchRecentProducts,
+    select: (response: StrapiListResponse<StrapiProductAttributes>) =>
+      mapProductsResponse(response, normalizeMediaCollection),
   }
 );
 
@@ -256,6 +556,19 @@ const formatPrice = (price?: string, currency?: string): string => {
 const recentProducts = computed(() => recentProductsResponse.value?.items ?? []);
 
 const productsCarousel = computed(() => {
+  if (homepageProducts.value.length) {
+    return homepageProducts.value.map((product: Product) => ({
+      id: product.id,
+      slug: product.slug,
+      img: getProductImage(product),
+      name: product.name,
+      price: formatPrice(
+        product.price,
+        product.currency ? product.currency : undefined
+      ),
+    }));
+  }
+
   if (isRecentLoading.value || isRecentError.value || !recentProducts.value.length) {
     return fallbackCarouselItems;
   }
@@ -292,7 +605,7 @@ const isCallBackVisible = ref(false);
             <ProductsSlider hideHeader :items="productsCarousel" />
           </div>
         </ClientOnly>
-        <div class="products-grid md:hidden">
+        <div class="max-md:grid md:hidden">
           <div
             v-for="(item, idx) in productsCarousel.slice(0, 6)"
             :key="item.id ?? idx"
@@ -313,11 +626,17 @@ const isCallBackVisible = ref(false);
     <section class="slide-section max-md:mb-[-120px]">
       <div class="slide-section__inner">
         <div class="relative w-full h-[100vh]">
-          <img
-            :src="'/images/Slider-bg-2.png'"
-            alt=""
-            class="object-cover object-top w-full h-full max-sm:object-[70%]"
-          />
+          <picture class="block w-full h-full">
+            <source
+              media="(max-width: 767px)"
+              :srcset="featureBannerMobileSrc"
+            />
+            <img
+              :src="featureBannerImageSrc"
+              alt=""
+              class="object-cover object-top w-full h-full max-sm:object-[70%]"
+            />
+          </picture>
         </div>
       </div>
     </section>
@@ -398,13 +717,10 @@ const isCallBackVisible = ref(false);
 
           <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
             <img
-              src="/images/main-collection-1.png"
+              src="https://cms.amora-brand.uz/uploads/Individualnyj_poshiv_5ae71b9238.png"
               class="w-full h-full max-h-[100vh] object-cover object-top"
               alt=""
             />
-            <div
-              class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-            ></div>
           </div>
         </div>
       </div>
@@ -415,7 +731,7 @@ const isCallBackVisible = ref(false);
         <div class="grid grid-cols-2 w-full max-lg:gap-6 max-md:grid-cols-1">
           <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
             <img
-              src="/images/main-collection-2.png"
+              src="https://cms.amora-brand.uz/uploads/G_T_Factory_f86b905c07.png"
               class="w-full h-full max-h-[100vh] object-cover object-top"
               alt=""
             />
@@ -491,7 +807,7 @@ const isCallBackVisible = ref(false);
     </section>
     <!-- Конец блока "Оставить заявку -->
 
-    <!-- <section class="slide-section">
+    <section class="slide-section">
       <div class="slide-section__inner">
         <div class="contact-layout">
           <div class="contact-map max-md:order-1">
@@ -511,7 +827,7 @@ const isCallBackVisible = ref(false);
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 
@@ -522,7 +838,7 @@ const isCallBackVisible = ref(false);
 }
 
 .products-grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 7px;
   width: 100%;
@@ -641,6 +957,7 @@ const isCallBackVisible = ref(false);
   }
 
   .products-grid {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 0 16px;
   }

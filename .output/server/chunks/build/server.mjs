@@ -522,7 +522,7 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-B1MH1Ux_.mjs')
+    component: () => import('./index-CFh_dxpk.mjs')
   },
   {
     name: "atelie",
@@ -538,7 +538,7 @@ const _routes = [
     name: "webform",
     path: "/webform",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./webform-DJ-rvAKz.mjs')
+    component: () => import('./webform-BRLbyckq.mjs')
   },
   {
     name: "contacts",
@@ -548,7 +548,7 @@ const _routes = [
   {
     name: "favorites",
     path: "/favorites",
-    component: () => import('./favorites-CXDoMNZU.mjs')
+    component: () => import('./favorites-DMmJDjrD.mjs')
   },
   {
     name: "auth",
@@ -566,7 +566,7 @@ const _routes = [
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-MG2EIvqB.mjs')
+    component: () => import('./_id_-CDO3MGz6.mjs')
   },
   {
     name: "terms-of-use",
@@ -576,7 +576,7 @@ const _routes = [
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-DMpbp16t.mjs')
+    component: () => import('./index-CEoVktSx.mjs')
   },
   {
     name: "privacy-policy",
@@ -587,12 +587,12 @@ const _routes = [
     name: "collections-id",
     path: "/collections/:id()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./_id_-CunMLmch.mjs')
+    component: () => import('./_id_-gP7Cho4s.mjs')
   },
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-Baru2guw.mjs')
+    component: () => import('./index-G2_6wMT_.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -2495,8 +2495,8 @@ const plugins = [
 ];
 const layouts = {
   blank: defineAsyncComponent(() => import('./blank-CLoBaelL.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-CtPQxSLp.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-DH64vFEZ.mjs').then((m) => m.default || m))
+  default: defineAsyncComponent(() => import('./default-zdHsp2i1.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-Chq9lBxp.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
