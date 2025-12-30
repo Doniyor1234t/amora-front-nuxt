@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
+
 const features = [
   {
     title: "Идеальная посадка",
@@ -86,6 +88,8 @@ const menuLinks = [
   { label: "O бренде", to: "/brand" },
   { label: "Контакты", to: "/contacts" },
 ]
+
+const isCallBackVisible = ref(false);
 </script>
 
 <template>
@@ -106,6 +110,7 @@ const menuLinks = [
         <button
           type="button"
           class="mt-10 rounded-[36px] border border-[#0F0F0F] px-[40px] py-[16px] text-[13px] uppercase tracking-[0.25em] text-[#0F0F0F] transition hover:bg-[#0F0F0F] hover:text-white"
+          @click="isCallBackVisible = true"
         >
           Записаться на консультацию
         </button>
@@ -179,6 +184,7 @@ const menuLinks = [
         <button
           type="button"
           class="mx-auto mt-10 rounded-[36px] border border-white px-[40px] py-[16px] text-[13px] uppercase tracking-[0.25em] transition hover:bg-white hover:text-[#0F0F0F]"
+          @click="isCallBackVisible = true"
         >
           Записаться сейчас
         </button>
@@ -211,6 +217,12 @@ const menuLinks = [
       </div>
     </section>
   </div>
+
+  <AppCallBackModal
+    v-model:visible="isCallBackVisible"
+    service-type="tailoring"
+    title="Записаться на пошив"
+  />
 </template>
 
 <style scoped>

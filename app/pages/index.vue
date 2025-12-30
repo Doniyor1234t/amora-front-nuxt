@@ -582,6 +582,17 @@ const productsCarousel = computed(() => {
   }));
 });
 
+
+const router = useRouter();
+
+const goToProduct = (item) => {
+  const identifier = item?.slug ?? item?.id;
+  if (!identifier) {
+    return;
+  }
+  router.push(`/catalog/${identifier}`);
+};
+
 const collectionSlider = ref<any>(null);
 
 const isCallBackVisible = ref(false);
@@ -610,6 +621,7 @@ const isCallBackVisible = ref(false);
             v-for="(item, idx) in productsCarousel.slice(0, 6)"
             :key="item.id ?? idx"
             class="products-grid__item"
+            @click="goToProduct(item)"
           >
             <img
               :src="item.img"
