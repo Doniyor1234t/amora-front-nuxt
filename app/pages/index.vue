@@ -808,7 +808,7 @@ const isCallBackVisible = ref(false);
     <!-- Конец блока "Оставить заявку -->
 
     <section class="slide-section">
-      <div class="">
+      <div class="slide-section__inner max-md:p-0!">
         <div class="contact-layout">
           <div class="contact-map max-md:order-1">
             <ClientOnly>
