@@ -813,10 +813,10 @@ const isCallBackVisible = ref(false);
           <div class="contact-map max-md:order-1">
             <ClientOnly>
               <YandexMap
-                :center="[41.334772, 69.323135]"
+                :center="[69.323135, 41.334772]"
                 :zoom="17"
                 :marker="{
-                  coordinates: [41.334772, 69.323135],
+                  coordinates: [69.323135, 41.334772],
                   hint: 'Бутик AMORA',
                   description: 'ул. Амира Темура 107/1, ТЦ «Паркент» 2 этаж'
                 }"
@@ -907,7 +907,6 @@ const isCallBackVisible = ref(false);
 
 .contact-map {
   flex: 1 1 55%;
-  border-radius: 48px;
   overflow: hidden;
 }
 
