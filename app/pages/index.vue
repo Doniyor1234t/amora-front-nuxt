@@ -692,7 +692,7 @@ const isCallBackVisible = ref(false);
               </h4>
 
               <h2
-                class="text-[#0F0F0F] text-[52px] text-center pb-[24px] tracking-[0.05em] font-[masvol] max-sm:text-[34px]"
+                class="text-[#0F0F0F] text-[52px] text-center pb-[24px]  max-sm:text-[34px]"
               >
                 Создаём изделия, которые подчёркивают вашу индивидуальность
               </h2>
@@ -787,7 +787,7 @@ const isCallBackVisible = ref(false);
               </h4>
 
               <h2
-                class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
+                class="text-[#0F0F0F] text-[52px] text-center pb-[24px]  max-sm:text-[34px]"
               >
                 Премиальное обучение по конструированию и моделированию одежды
               </h2>

@@ -1,219 +1,168 @@
 <script setup lang="ts">
 import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 
-const features = [
+const services = [
   {
-    title: "Идеальная посадка",
-    description: "Лекала строятся индивидуально под ваши мерки и желания.",
-    icon: "ri:ruler-line",
+    title: "Примерка с выездом",
+    description: "Персональная примерка в удобном для вас месте",
+    icon: "app-icon:ruller-icon",
   },
   {
-    title: "Эксклюзивный дизайн",
-    description: "Возможность создать уникальную вещь, которой не будет ни у кого.",
-    icon: "ri:sparkling-2-line",
+    title: "Экспресс пошив за 2 дня",
+    description: "Ускоренный пошив изделия с сохранением качества",
+    icon: "app-icon:star-icon",
   },
   {
-    title: "Безупречное качество",
-    description: "Ручная работа, премиальная обработка, шёлк и витонченность.",
-    icon: "ri:scissors-2-line",
-  }
+    title: "Онлайн заказ",
+    description: "Возможность заказа онлайн, без визита на примерку",
+    icon: "app-icon:scissors-icon",
+  },
 ]
 
-const steps = [
-  {
-    title: "Резка ткани",
-    description: "Точность до миллиметра.",
-  },
-  {
-    title: "Примерка",
-    description: "Поиск идеальной формы.",
-  },
-  {
-    title: "Драпировка",
-    description: "Скульптурирование ткани.",
-  },
-  {
-    title: "Детали",
-    description: "Финальные штрихи.",
-  },
-  {
-    title: "Готово",
-    description: "Ваш уникальный образ.",
-  },
+const priceList = [
+  { title: "Легкие платья ", 
+  price: "170$" },
+  { title: "Сарафаны", 
+  price: "130$" },
+  { title: "Жакеты по фигуре", 
+  price: "250$" },
+  { title: "Пиджаки", 
+  price: "350$" },
+  { title: "Брюки ,  Юбки , Блузки", 
+  price: "130$" },
+  { title: "Двойки", 
+  price: "220$" },
+  { title: "Корсет", 
+  price: "300$" },
+  { title: "Нарядное платье", 
+  price: "350$" },
+  { title: "Авторское платье", 
+  price: "500$" },
+  { title: "Корсетное платье", 
+  price: "700$" },
+  { title: "Драпированное платье", 
+  price: "1 200$" },
+  { title: "Платье от Дизайнера ", 
+  price: "1 500$" },
 ]
 
 const faqs = [
   {
     question: "Сколько времени занимает пошив?",
     answer:
-      "Сроки пошива зависят от сложности изделия и загруженности ателье. В среднем процесс длится от 2 до 4 недель, однако мы всегда согласуем желаемые сроки лично.",
+      "Сроки пошива зависят от сложности изделия и загруженности ателье. В среднем процесс занимает от 2 до 4 недель. Срочный пошив возможен за дополнительную плату.",
   },
   {
     question: "Как формируется стоимость?",
     answer:
-      "Стоимость складывается из сложности работы, лекал, технологии обработки и стоимости материалов. На очной встрече мы можем назвать точную конечную сумму.",
+      "Стоимость складывается из сложности работы (фасон, технология обработки) и стоимости материалов. Точную цену мы можем назвать только после обсуждения эскиза.",
   },
   {
-    question: "Можно ли принести свою ткань?",
+    question: "Можно ли прийти со своей тканью?",
     answer:
-      "Да, мы работаем как с нашими материалами, так и с тканью заказчика. Наш специалист предложит лучшее решение и подберёт ткань из внутренней коллекции при необходимости.",
+      "Да, мы работаем как с нашими материалами, так и с тканью заказчика. Наш специалист проконсультирует вас по пригодности ткани для выбранной модели.",
   },
   {
     question: "Сколько примерок потребуется?",
     answer:
-      "Обычно требуется 2-3 примерки. Первая для макета, вторая для изделия в ткани и финальная перед выдачей. Мы подстраиваемся под ваш график и можем проводить примерки онлайн.",
+      "Обычно требуется 2-3 примерки: первая для макета, вторая для изделия в ткани и финальная перед сдачей. Для сложных изделий может потребоваться больше встреч.",
   },
-]
-
-const contacts = [
-  {
-    label: "Адрес",
-    value: "Урда, 4-я Буюк Турон, дом 2",
-  },
-  {
-    label: "Телефон",
-    value: "+998 93 034-44-44",
-  },
-  {
-    label: "График",
-    value: "Пн–Вс 10:00 – 22:00",
-  },
-]
-
-const menuLinks = [
-  { label: "Коллекции", to: "/collections" },
-  { label: "Каталог", to: "/catalog" },
-  { label: "Ателье", to: "/atelie" },
-  { label: "School", to: "/school" },
-  { label: "O бренде", to: "/brand" },
-  { label: "Контакты", to: "/contacts" },
 ]
 
 const isCallBackVisible = ref(false);
 </script>
 
 <template>
-  <div class="bg-[#F6F5F2] pb-20 max-md:pt-0 pt-[104px]">
-    <section class="container mx-auto px-4">
-      <div
-        class="rounded-[8px] bg-white px-[48px] py-[298px] text-center max-md:px-[32px]"
-      >
-        <p class="text-xs uppercase tracking-[0.4em] text-[#7F7C77]">
-          • Ателье AMORA •
-        </p>
-        <h1 class="mt-4 font-[masvol] text-[72px] leading-tight text-[#0F0F0F] max-md:text-[52px]">
-          Индивидуальный пошив
-        </h1>
-        <p class="mx-auto mt-4 max-w-[520px] text-sm uppercase tracking-[0.2em] text-[#7F7C77]">
-          Создаём вещи, отражающие ваш характер и мечты.
-        </p>
-        <button
-          type="button"
-          class="mt-10 rounded-[36px] border border-[#0F0F0F] px-[40px] py-[16px] text-[13px] uppercase tracking-[0.25em] text-[#0F0F0F] transition hover:bg-[#0F0F0F] hover:text-white"
-          @click="isCallBackVisible = true"
-        >
-          Записаться на консультацию
-        </button>
-      </div>
+  <div class="bg-[#FBFAF9] pb-24">
+    <section class="relative isolate mx-auto flex min-h-[100vh] w-full items-end overflow-hidden bg-black/60">
+      <img
+        src="https://cms.amora-brand.uz/uploads/2_Banner_18ee12192d.png"
+        alt="Ателье AMORA"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
     </section>
 
-    <section class="container mx-auto mt-24 px-4">
-      <div class="text-center">
-        <h2 class="mt-3 font-[masvol] text-[56px] text-[#0F0F0F]">Искусство быть собой</h2>
-        <p class="mx-auto mt-5 max-w-[560px] text-sm uppercase tracking-[0.2em] text-[#7F7C77]">
-          Индивидуальный пошив в AMORA — это не просто создание одежды, это процесс воплощения вашей индивидуальности в ткани.
-        </p>
-      </div>
-
-      <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <div
-          v-for="feature in features"
-          :key="feature.title"
-          class="rounded-[8px] bg-white px-[40px] h-[320px] py-[48px] text-center flex flex-col items-center justify-between"
-        >
-          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#0F0F0F]">
-            <Icon :name="feature.icon" size="28" class="text-[#0F0F0F]" />
-          </div>
-          <div class="">
-            <h3 class="mt-6 text-lg font-[masvol] font-semibold uppercase tracking-[0.15em] text-[#0F0F0F]">
-              {{ feature.title }}
-            </h3>
-            <p class="mt-3 text-sm text-[#7F7C77]">
-              {{ feature.description }}
-            </p>
+    <section class="container mx-auto mt-16 px-4 md:hidden">
+      <h2 class="mb-6 text-[30px] font-light text-center leading-tight text-[#14120F] max-md:text-[30px]">
+        Индивидуальный пошив в ателье
+      </h2>
+      <div class="bg-white px-5 py-5 max-md:px-6 lg:px-14">
+        <div class="grid gap-4 md:grid-cols-2">
+          <div
+            v-for="item in priceList"
+            :key="item.title"
+            class="flex items-center justify-between pb-4 text-[#14120F]"
+          >
+            <p class="text-sm tracking-[0.05em]">{{ item.title }}</p>
+            <span class="font-light tracking-[0.15em]">{{ item.price }}</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="container mx-auto mt-24 flex flex-col gap-12 px-4 lg:flex-row">
-      <div class="lg:w-1/3">
-        <p class="text-xs uppercase tracking-[0.02em] text-[#7F7C77]">• Процесс пошива •</p>
-        <h3 class="mt-4 font-[masvol] text-[48px] leading-snug text-[#0F0F0F]">
-          История каждого изделия начинается с рук мастера.
+    <section class="container mx-auto mt-16 px-4">
+      <div class="text-center">
+        <h3 class="mt-4 text-[52px] font-light text-[#0F0F0F] max-md:text-[30px]">
+          Дополнительные услуги:
         </h3>
       </div>
-
-      <div class="lg:w-2/3 space-y-4">
-        <div
-          v-for="(step, index) in steps"
-          :key="step.title"
-          class="flex items-center gap-8 rounded-[8px] bg-white px-10 py-8"
+      <div class="mt-12 max-md:mt-6 grid gap-6 md:grid-cols-3">
+        <article
+          v-for="service in services"
+          :key="service.title"
+          class=" bg-[#fff] p-8 text-center"
         >
-          <div class="text-[52px] font-[masvol] w-[72px] text-center font-[0] text-[#0F0F0F]">{{ index + 1 }}</div>
-          <div>
-            <p class="text-lg font-[masvol]  font-semibold tracking-[0.2em] text-[#0F0F0F]">
-              {{ step.title }}
-            </p>
-            <p class="mt-1  text-sm text-[#7A7874]">
-              {{ step.description }}
-            </p>
-          </div>
-        </div>
+          <span class="flex mx-auto h-18 w-18 items-center justify-center rounded-full border border-[#D0CBC4] text-[#14120F]">
+            <Icon :name="service.icon" size="28" />
+          </span>
+          <h4 class="mt-24 text-2xl text-[#0F0F0F]">{{ service.title }}</h4>
+          <p class="mt-2 text-sm text-[#3D3D3D]">
+            {{ service.description }}
+          </p>
+        </article>
       </div>
     </section>
 
-    <section class="container mx-auto mt-24 px-4">
-      <div
-        class="rounded-[8px] bg-[#0F0F0F] px-[48px] py-[72px] text-center text-white max-md:px-[32px]"
-      >
-        <h3 class="mt-6 font-[masvol] text-[52px] leading-tight">Готовы создать мечту?</h3>
-        <p class="mx-auto mt-4 max-w-[520px] text-sm uppercase tracking-[0.2em] text-[#D0CDC6]">
-          Запишитесь на бесплатную консультацию со стилистом, чтобы обсудить ваши желания и мечты.
+    <section class="container mx-auto mt-20 px-4">
+      <div class="flex flex-col items-center text-center">
+        <h3 class="mt-3 text-[52px] text-[#0F0F0F] max-md:text-[30px]">
+          Вопросы и ответы
+        </h3>
+      </div>
+      <div class="mx-auto mt-10 max-w-[640px] space-y-4">
+        <details
+          v-for="faq in faqs"
+          :key="faq.question"
+          class="bg-white px-6 py-5 max-md:px-4 max-md:py-4"
+        >
+          <summary class="flex cursor-pointer items-center justify-between text-left text-lg text-[#0F0F0F]">
+            <span class="text-[26px] font-light max-md:text-[18px]">{{ faq.question }}</span>
+            <span class="faq-toggle ml-4 text-2xl text-[#B86F62] transition-transform duration-200">
+              <Icon name="app-icon:arrow-bottom" size="12"/>
+            </span>
+          </summary>
+          <p class="mt-3 text-sm max-md:text-[12px] text-[#3D3D3D]">
+            {{ faq.answer }}
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="container mx-auto mt-20 px-4">
+      <div class="bg-[#CF998D] px-8 py-24 text-center text-white max-md:px-6">
+        <h3 class="mt-4 text-[52px] leading-tight max-md:text-[36px]">
+          Готовы создать мечту?
+        </h3>
+        <p class="mx-auto max-w-[662px] mt-3 font-light text-[18px] tracking-[0.05em] text-white/80">
+          Запишитесь на бесплатную консультацию со стилистом, чтобы обсудить ваш будущий наряд
         </p>
         <button
           type="button"
-          class="mx-auto mt-10 rounded-[36px] border border-white px-[40px] py-[16px] text-[13px] uppercase tracking-[0.25em] transition hover:bg-white hover:text-[#0F0F0F]"
+          class="mx-auto mt-8 border border-white px-10 py-3 text-[13px] uppercase tracking-[0.3em] transition hover:bg-white hover:text-[#B86F62]"
           @click="isCallBackVisible = true"
         >
           Записаться сейчас
         </button>
-      </div>
-    </section>
-
-    <section class="container flex flex-col items-center mx-auto mt-24 px-4">
-      <div class="text-center">
-        <h3 class="font-[masvol] text-[48px] text-[#0F0F0F]">Вопросы и ответы</h3>
-      </div>
-
-      <div class="mt-12 max-w-[910px] space-y-4">
-        <details
-          v-for="faq in faqs"
-          :key="faq.question"
-          class="rounded-[8px] bg-white px-6 py-5"
-        >
-          <summary class="flex text-[24px] font-zero font-[masvol] cursor-pointer items-center justify-between text-left text-lg text-[#0F0F0F]">
-            {{ faq.question }}
-            <span class="faq-toggle ml-4 text-2xl transition-transform duration-200">
-              <!-- arrow icon -->
-               <Icon name="ph:arrow-up" size="24" />
-              <!-- <Icon name="ph:plus" size="24" /> -->
-            </span>
-          </summary>
-          <p class="mt-4 text-sm text-[#7A7874]">
-            {{ faq.answer }}
-          </p>
-        </details>
       </div>
     </section>
   </div>

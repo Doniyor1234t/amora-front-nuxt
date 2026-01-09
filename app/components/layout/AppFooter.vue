@@ -73,7 +73,7 @@
 
 <style scoped>
 .app-footer {
-  background: #f8f7f4;
+  background: #FBFAF9;
   color: #0f0f0f;
   padding: 72px 0 48px;
 }

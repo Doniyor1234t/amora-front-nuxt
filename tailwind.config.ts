@@ -9,7 +9,7 @@ export default <Config>{
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Montserrat', 'ui-sans-serif', 'system-ui'],
+        sans: ['Garet', 'ui-sans-serif', 'system-ui'],
         myfont: ['masvol', 'sans-serif'],
       },
       fontWeight: {

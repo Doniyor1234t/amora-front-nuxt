@@ -1,239 +1,108 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import AppCallBackModal from "@/components/ui/AppCallBackModal.vue";
 
 const isCallBackVisible = ref(false);
 
 const hero = {
-  badge: "C.T. Factory",
-  title: "Школа дизайна",
-  description: "Освойте профессию дизайнера одежды и создавайте уникальные коллекции под руководством экспертов.",
-  cta: "Выбрать курс",
+  badge: "G.T. Factory",
+  title: "G.T. Factory",
+  description: "Премиальное обучение по конструированию и моделированию одежды.",
+  cta: "Оставить заявку",
+  image: "https://cms.amora-brand.uz/uploads/2_Banner_18ee12192d.png",
 };
 
 const courses = [
   {
-    badge: "Конструирование и моделирование",
-    title: "Art of Fashion",
-    description:
-      "Полный цикл создания изделия: от эскиза до посадки по фигуре. Изучение премиальной обработки, авторских техник и построения сложных форм. Практика на базе ателье AMORA с реальными тканями.",
+    title: "Конструирование и моделирование",
+    description: [
+      "Полный цикл создания изделий: от эскиза до посадки по фигуре.",
+      "Изучение премиальной обработки, авторских техник и построения сложных форм.",
+      "Практика на базе Ателье AMORA с реальными тканями.",
+      "Подходит для будущих дизайнеров и владельцев брендов.",
+    ],
     note: "Подходит для будущих дизайнеров и владельцев брендов.",
-    button: "Оставить заявку",
-    image: "/images/Collection-bg-3.jpg",
+    imageDesktop: "https://cms.amora-brand.uz/uploads/Image_89b9b69e47.png",
+    imageMobile: "https://cms.amora-brand.uz/uploads/Image_2_c052a9824e.png",
   },
   {
-    badge: "Gerber цифровое моделирование",
-    title: "Digital Fashion",
-    description:
-      "Быстрое и точное создание лекал в профессиональной среде Gerber. Моделирование, градация размеров, оптимизация производства.",
-    note: "Полный разбор инструментов с нуля до Pro. Для технологов, конструкторов и тех, кто хочет открыть своё производство.",
-    button: "Оставить заявку",
-    image: "/images/Collection-bg-2.jpg",
+    title: "Gerber - цифровое моделирование",
+    description: [
+      "Быстрое и точное создание лекал в профессиональной среде Gerber.",
+      "Моделирование, градация размеров, оптимизация производства.",
+      "Полный разбор инструментария с нуля до PRO.",
+      "Для технологов, конструкторов и тех, кто хочет открыть свое производство.",
+    ],
+    note: "Полный разбор инструментов с нуля до PRO. Для технологов, конструкторов и тех, кто хочет открыть своё производство.",
+    imageDesktop: "https://cms.amora-brand.uz/uploads/Image_1_6c5e136ef3.png",
+    imageMobile: "https://cms.amora-brand.uz/uploads/Image_3_b504b9e40c.png",
   },
-];
-
-const contactInfo = [
-  { label: "Телефон", value: "+998 (33) 324-44-44" },
-  { label: "Адрес", value: "ул. Исмаилата, 16А" },
-  { label: "График", value: "Пн–Вс: 10:00 — 22:00" },
-];
-
-const socials = [
-  { icon: "ri:instagram-line", href: "https://instagram.com" },
-  { icon: "ri:youtube-line", href: "https://youtube.com" },
-  { icon: "ri:telegram-line", href: "https://t.me" },
-];
-
-const menuLinks = [
-  { label: "Коллекции", href: "/collections" },
-  { label: "Каталог", href: "/catalog" },
-  { label: "Ателье", href: "/atelie" },
-  { label: "School", href: "/school" },
-  { label: "О бренде", href: "/brand" },
-  { label: "Контакты", href: "/webform" },
 ];
 </script>
 
 <template>
-  <div class="bg-[#F6F4F1] pb-20 pt-[88px] text-[#1F1B16]">
-    <section class="container mx-auto px-4">
-      <div class="rounded-[8px] bg-white px-6 py-67 text-center shadow-[0_40px_120px_rgba(35,31,27,0.08)]">
-        <p class="text-xs uppercase tracking-[0.05em] text-[#C79D9B]">• {{ hero.badge }} •</p>
-        <h1 class="mt-6 font-[masvol] text-[68px] text-[#1F1B16] max-md:text-[48px]">
-          {{ hero.title }}
-        </h1>
-        <p class="mx-auto mt-4 max-w-3xl text-sm uppercase tracking-[0.2em] text-[#8F8982]">
-          {{ hero.description }}
-        </p>
-        <button
-          type="button"
-          class="mx-auto mt-8 inline-flex items-center gap-3 rounded-[80px] border border-[#1F1B16] px-10 py-3 text-[12px] tracking-[0.3em] text-[#1F1B16] transition hover:bg-[#1F1B16] hover:text-white"
-        >
-          {{ hero.cta }}
-          <span class="text-lg">→</span>
-        </button>
-      </div>
+  <div class="bg-[#FBFAF9] text-[#1F1B16]">
+    <section class="relative isolate flex min-h-[100vh] w-full items-end overflow-hidden bg-black/40">
+      <img
+        :src="hero.image"
+        alt="G.T. Factory"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
     </section>
 
-
-
-    <div class="grid mt-[64px] grid-cols-2 max-sm:mt-[100px] max-sm:mx-5 max-sm:grid-cols-1" v-for="value in courses.slice(0, 1)">
-      <div class="flex justify-center items-center">
-        <div class="flex flex-col items-center max-w-[440px]">
-          <h4
-            class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] "
+    <section
+      v-for="(course, index) in courses"
+      :key="course.title"
+      class="mx-auto grid gap-0 lg:grid-cols-2"
+    >
+      <div
+        :class="[
+          'order-2 flex flex-col justify-center items-center bg-[#FBFAF9] max-md:py-[64px] max-md:px-[16px] text-center lg:px-16 lg:py-20 lg:text-left',
+          index % 2 === 0 ? 'lg:order-1 max-md:order-1' : 'lg:order-2 max-md:order-1',
+        ]"
+      >
+        <h2 class="mt-6 text-[48px] text-center leading-tight text-[#0F0F0F] max-md:text-[32px]">
+          {{ course.title }}
+        </h2>
+        <div class="mt-6 space-y-4">
+          <p
+            v-for="(paragraph, pIndex) in course.description"
+            :key="pIndex"
+            class="text-sm leading-relaxed max-md:text-[14px] text-center"
           >
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-            {{ value.badge }}
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-          </h4>
-
-          <h2
-            class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
-          >
-            {{ value.title }}
-          </h2>
-          <p class="text-sm text-center text-[#7A7874]">{{ value.description }}</p>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
-            variant="outlined"
-            severity="secondary"
-            @click="isCallBackVisible = true"
-          >
-            ПОДРОБНЕЕ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
-
-          <!-- модальное окно -->
-          <AppCallBackModal
-            v-model:visible="isCallBackVisible"
-            service-type="training"
-            title="Записаться на обучение"
+            {{ paragraph }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="mt-8 w-fit border border-[#0F0F0F] px-10 py-3 text-[12px] uppercase tracking-[0.3em] text-[#0F0F0F] transition hover:bg-[#0F0F0F] hover:text-white lg:w-auto"
+          @click="isCallBackVisible = true"
+        >
+          Оставить заявку
+        </button>
+      </div>
+      <div
+        :class="[
+          'relative order-1 h-[420px] overflow-hidden lg:h-full',
+          index % 2 === 0 ? 'lg:order-2' : 'lg:order-1',
+        ]"
+      >
+        <picture>
+          <source :srcset="course.imageMobile" media="(max-width: 768px)" />
+          <img
+            :src="course.imageDesktop"
+            :alt="course.title"
+            class="h-full w-full object-cover"
           />
-        </div>
+        </picture>
+        <div class="absolute inset-0 bg-black/25" />
       </div>
-
-      <div class="relative">
-        <img
-          src="/images/Request-bg-1.png"
-          class="w-full max-h-[100vh] object-cover object-top"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 max-sm:grid-cols-1 max-sm:mx-5" v-for="value in courses.slice(1, 2)">
-      <div class="relative max-sm:order-2">
-        <img
-          src="/images/Request-bg-2.jpg"
-          class="w-full max-h-[100vh] object-cover object-top"
-          alt=""
-        />
-        <div
-          class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-        ></div>
-      </div>
-
-      <div class="flex justify-center items-center">
-        <div class="flex flex-col items-center max-w-[440px]">
-          <h4
-            class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] max-sm:mt-6"
-          >
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-            {{ value.badge }}
-            <svg
-              width="6"
-              height="6"
-              class="shrink-0"
-              viewBox="0 0 6 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                fill="#C16371"
-              />
-            </svg>
-          </h4>
-
-          <h2
-            class="text-[#0F0F0F] text-[52px] text-center pb-[24px] font-[masvol] max-sm:text-[34px]"
-          >
-            {{ value.title }}
-          </h2>
-          <p class="text-sm text-center text-[#7A7874]">{{ value.description }}</p>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-5 max-sm:mb-6"
-            variant="outlined"
-            severity="secondary"
-          >
-            ПОДРОБНЕЕ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
+
+  <AppCallBackModal
+    v-model:visible="isCallBackVisible"
+    service-type="training"
+    title="Записаться на обучение"
+  />
 </template>

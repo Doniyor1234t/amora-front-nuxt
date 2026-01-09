@@ -279,7 +279,7 @@ onBeforeUnmount(() => {
             />
           </svg>
           <div class="flex flex-col gap-2">
-            <h3 class="text-[40px] max-md:text-[32px] font-[masvol] text-[#0F0F0F]">
+            <h3 class="text-[40px] max-md:text-[32px]  text-[#0F0F0F]">
               Ваша заявка принята.
             </h3>
             <p class="text-xs max-md:text-[12px] tracking-[0.08em] leading-[18px] font-light text-[#6E6E6E]">
@@ -323,7 +323,7 @@ onBeforeUnmount(() => {
       >
         <div class="flex flex-col gap-2 max-md:gap-2.5 mb-4">
           <h2
-            class="text-center text-[52px] leading-none text-[#0F0F0F] font-[masvol] max-sm:text-[32px]"
+            class="text-center text-[52px] leading-none text-[#0F0F0F]  max-sm:text-[32px]"
           >
             {{ props.title }}
           </h2>
@@ -469,7 +469,7 @@ onBeforeUnmount(() => {
 }
 
 .phone-input-wrapper :deep(.phone_input) {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Garet", sans-serif;
   width: 100%;
   display: flex;
   align-items: center;

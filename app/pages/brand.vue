@@ -232,73 +232,22 @@ const quickLinks = [
           </h2>
         </div>
         <div>
-          <p class="text-[#3D3D3D] text-[14px] max-sm:text-[12px]">
-            AMORA — это премиальный fashion-бренд и ателье, основанное на идее
-            мягкой женственности, натуральных тканей и утончённых силуэтов.
-            Каждое изделие создаётся вручную нашими мастерами — от первых
-            эскизов до финальной драпировки, сохраняя couture-подход и
-            европейское качество.
+          <p class="text-[#3D3D3D] font-sans font-light tracking-[0.05em] leading-[20px] text-[14px] max-sm:text-[12px]">
+            AMORA — это премиальный fashion-бренд и ателье, основанное на идее мягкой женственности, натуральных тканей и утончённых силуэтов. Каждое изделие создаётся вручную нашими мастерами — от первых эскизов до финальной драпировки, сохраняя couture-подход и европейское качество.
           </p>
           <p class="text-[#3D3D3D] text-[14px] mt-[20px]">
-            Мы создаём одежду, в которой сочетаются ручная работа, сложный крой
-            и современная элегантность
+            Мы создаём одежду, в которой сочетаются ручная работа, сложный крой и современная элегантность
           </p>
-          <Button
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px] mt-[24px] max-sm:!px-[12px] max-sm:h-[32px] max-sm:!text-[12px]"
-            variant="outlined"
-            severity="secondary"
-          >
-            НАША ИСТОРИЯ
-            <svg
-              width="36"
-              height="20"
-              viewBox="0 0 36 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path
-                d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                stroke="#0F0F0F"
-              />
-            </svg>
-          </Button>
         </div>
       </div>
     </div>
     <div class="container pb-[64px]">
-      <div class="flex flex-col items-center py-[64px]">
-        <h4 class="text-[#3D3D3D] text-[14px] flex items-center gap-2">
-          <svg
-            width="6"
-            height="6"
-            class="shrink-0"
-            viewBox="0 0 6 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-              fill="#C16371"
-            />
-          </svg>
-          ПОЧЕМУ МЫ?
-          <svg
-            width="6"
-            height="6"
-            class="shrink-0"
-            viewBox="0 0 6 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-              fill="#C16371"
-            />
-          </svg>
+      <div class="flex flex-col items-center py-[64px] w-[448px] items-center text-center mx-auto max-sm:w-full">
+        <h4 class="text-[#3D3D3D] leading-[16px] text-[14px] flex items-center gap-2">
+          Почему мы?
         </h4>
 
-        <h1 class="text-[#0F0F0F] text-[52px] mt-[12px] max-sm:text-center  font-[masvol] max-sm:text-[32px]">
+        <h1 class="text-[#0F0F0F] text-[52px] leading-[56px]  mt-[12px]  max-sm:text-center  font-[masvol] max-sm:text-[32px]">
           Мы создаём одежду, а не просто вещи
         </h1>
       </div>
@@ -364,7 +313,7 @@ const quickLinks = [
       <div class="w-[700px] max-md:w-full flex flex-col gap-2 items-center content-center mx-auto text-center px-[48px] py-[56px] text-center max-md:px-[32px]">
         <Icon name="ri:double-quotes-l" size="48" class="text-[#C4BBAF]" />
         <p class="text-[42px] font-[masvol] leading-snug text-[#6D6A65] max-md:text-[30px]">
-          “Наша миссия — раскрывать внутреннюю красоту женщины через внешний облик, даря ей уверенность в каждом движении.”
+          "Наша миссия — раскрывать внутреннюю красоту женщины через внешний облик, даря ей уверенность в каждом движении."
         </p>
       </div>
     </section>

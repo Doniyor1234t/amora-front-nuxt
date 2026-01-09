@@ -70,7 +70,7 @@ const handleFavoritesClick = () => {
   router.push("/favorites");
 };
 
-const isHomePage = computed(() => route.path === "/");
+const isHomePage = computed(() => route.path === "/" || route.path === "/atelie" || route.path === "/school");
 
 const iconColor = computed(() => {
   if (isHomePage.value && !isScrolled.value) {
@@ -130,30 +130,30 @@ const isOtherPage = computed(() => !isHomePage.value);
         >
           <NuxtLink
             to="/catalog"
-            class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            class=" text-[52px] max-sm:text-[34px]"
             >Каталог</NuxtLink
           >
           <NuxtLink
             to="/collections"
-            class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            class=" text-[52px] max-sm:text-[34px]"
             >Коллекции</NuxtLink
           >
           <NuxtLink
             to="/atelie"
-            class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            class=" text-[52px] max-sm:text-[34px]"
             >Ателье AMORA</NuxtLink
           >
           <NuxtLink
             to="/school"
-            class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            class=" text-[52px] max-sm:text-[34px]"
             >Школа G.T. Factory</NuxtLink
           >
           <NuxtLink
             to="/brand"
-            class="font-[masvol] text-[52px] max-sm:text-[34px]"
+            class=" text-[52px] max-sm:text-[34px]"
             >О бренде</NuxtLink
           >
-          <!-- <NuxtLink to="/contacts" class="font-[masvol] text-[52px] max-sm:text-[34px]"
+          <!-- <NuxtLink to="/contacts" class=" text-[52px] max-sm:text-[34px]"
             >Контакты</NuxtLink> -->
         </div>
       </Drawer>

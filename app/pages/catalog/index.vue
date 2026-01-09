@@ -426,7 +426,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
 <template>
   <div class="pt-[72px]">
     <div class="container mb-[32px] mt-[48px]">
-      <h2 class="text-[#0F0F0F] text-[52px] font-[masvol] max-sm:text-[34px]">
+      <h2 class="text-[#0F0F0F] text-[52px]  max-sm:text-[34px]">
         Каталог
       </h2>
 

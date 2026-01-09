@@ -425,17 +425,17 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
             <span class="text-xs text-[#C16371] flex items-center gap-3">
               {{ collectionName }}
             </span>
-            <h1 class="text-[72px] font-[masvol] leading-[1] max-lg:text-[56px] max-md:text-[46px] max-sm:text-[36px]">
+            <h1 class="text-[64px] leading-[1] max-lg:text-[56px] max-md:text-[46px] max-sm:text-[36px]">
               {{ product.name }}
             </h1>
-            <p class="font-semibold text-[20px] max-sm:text-[20px]">
+            <p class="font-light text-[20px] max-sm:text-[20px]">
               {{ formatPrice(product.price, product.currency ? product.currency : undefined) }}
             </p>
           </div>
 
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
-              <p class="font-bold uppercase text-[14px] text-[#0F0F0F]">Размер</p>
+              <p class="font-light uppercase text-[14px] text-[#0F0F0F]">Размер</p>
               <span
                 v-if="selectedSize"
                 class="text-xs uppercase text-[#C16371]"
@@ -448,7 +448,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 v-for="option in sizeOptions"
                 :key="option.value"
                 type="button"
-                class="px-3 h-[22px] rounded-full border text-[14px] uppercase transition-all"
+                class="px-3 h-[22px] border text-[14px] uppercase transition-all"
                 :class="[
                   selectedSize === option.value
                     ? '!bg-[#0F0F0F] !text-white !border-[#0F0F0F]'
@@ -461,14 +461,14 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
             </div>
             <p
               v-else
-              class="text-[15px] uppercase tracking-[0.2em] text-[#CDC6BF]"
+              class="text-[15px] uppercase text-[#CDC6BF]"
             >
               {{ availableSizesText }}
             </p>
           </div>
           <div class="flex gap-5">
             <Button
-              class="!rounded-[999px] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase w-full max-w-[280px]"
+              class="!rounded-[0] !text-white !px-[48px] !h-[54px] !bg-[#0F0F0F] !border-[#0F0F0F] uppercase w-full max-w-[280px]"
               variant="outlined"
               severity="primary"
               @click="openCallbackModal"
@@ -478,7 +478,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
   
             <button
               type="button"
-              class="h-12 w-12 rounded-full border border-[#E4E0DA] flex items-center justify-center hover:bg-[#F7F5F0] transition-colors"
+              class="h-12 w-12 flex items-center justify-center transition-colors"
               :aria-pressed="isFavorite"
               @click="toggleFavorite"
             >
@@ -499,7 +499,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('composition')"
               >
-                <p class="text-[14px] leading-5 uppercase font-bold text-[#0F0F0F]">Состав</p>
+                <p class="text-[14px] leading-5 uppercase font-light text-[#0F0F0F]">Состав</p>
                 <Icon
                   :name="detailsSections.composition ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -521,7 +521,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('care')"
               >
-                <p class="text-[14px] uppercase tracking-[0.05em] font-semibold text-[#0F0F0F] ">Уход</p>
+                <p class="text-[14px] uppercase tracking-[0.05em] font-light text-[#0F0F0F] ">Уход</p>
                 <Icon
                   :name="detailsSections.care ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -543,7 +543,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
                 class="w-full flex items-center justify-between"
                 @click="toggleSection('description')"
               >
-                <p class="text-[14px] uppercase tracking-[0.05em] font-semibold text-[#0F0F0F] ">Описание</p>
+                <p class="text-[14px] uppercase tracking-[0.05em] font-light text-[#0F0F0F] ">Описание</p>
                 <Icon
                   :name="detailsSections.description ? 'ph:caret-up' : 'ph:caret-down'"
                   size="20"
@@ -569,7 +569,7 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
       <div
         class="complementary-products__header flex items-center justify-between mb-10 max-sm:mb-2.5 max-sm:flex-col max-sm:items-start max-sm:gap-6"
       >
-        <h2 class="text-[44px] font-[masvol] text-[#0F0F0F] max-sm:text-[32px]">
+        <h2 class="text-[44px] text-[#0F0F0F] max-sm:text-[32px]">
           Дополните образ
         </h2>
         <div class="max-md:hidden complementary-products__controls flex gap-4">
@@ -578,14 +578,14 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
             class="complementary-products__control"
             @click="slideComplementaryProducts('prev')"
           >
-            <Icon name="ph:arrow-left" size="16" />
+            <Icon name="app-icon:arrow-left" mode="svg" size="16" />
           </button>
           <button
             type="button"
             class="complementary-products__control"
             @click="slideComplementaryProducts('next')"
           >
-            <Icon name="ph:arrow-right" size="16" />
+            <Icon name="app-icon:arrow-right" mode="svg" size="16" />
           </button>
         </div>
       </div>
@@ -722,8 +722,8 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 }
 
 .complementary-products__control {
-  width: 52px;
-  height: 52px;
+  width: 92px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid #d7d1ca;
   display: inline-flex;
@@ -736,6 +736,10 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 .complementary-products__control:hover {
   background-color: #0f0f0f;
   color: #fff;
+}
+
+.complementary-products__control:hover svg path {
+  stroke: #fff;
 }
 
 .complementary-card {
@@ -775,8 +779,6 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
   right: 20px;
   width: 44px;
   height: 44px;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 15, 15, 0.08);
   display: inline-flex;
   align-items: center;
   justify-content: center;
