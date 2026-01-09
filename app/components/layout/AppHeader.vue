@@ -146,7 +146,7 @@ const isOtherPage = computed(() => !isHomePage.value);
           <NuxtLink
             to="/school"
             class=" text-[52px] max-sm:text-[34px]"
-            >Школа G.T. Factory</NuxtLink
+            >G.T. Factory</NuxtLink
           >
           <NuxtLink
             to="/brand"

@@ -19,7 +19,10 @@ import {
   mapProductEntity,
   mapProductsResponse,
   type MediaNormalizer,
+  type CollectionEntity,
+  type StrapiCollectionAttributes,
 } from "@/utils/catalogMappers";
+import { useLikesStore } from "@/stores/likes";
 
 interface BannerSlide {
   id?: number;
@@ -52,6 +55,14 @@ interface StrapiHomepageAttributes {
   featured_products?: ProductEntity[] | StrapiRelationValue<ProductEntity>;
   products?: ProductEntity[] | StrapiRelationValue<ProductEntity>;
   single_banner?: BannerEntity | null;
+  collections?: CollectionEntity[] | StrapiRelationValue<CollectionEntity>;
+}
+
+interface CollectionHighlight {
+  id?: number;
+  title: string;
+  banner: string;
+  products: Product[];
 }
 
 interface HomepageContent {
@@ -59,6 +70,7 @@ interface HomepageContent {
   featureBannerImage?: string | null;
   featureBannerMobileImage?: string | null;
   products: Product[];
+  collectionSections: CollectionHighlight[];
 }
 
 const defaultHomepageContent: HomepageContent = {
@@ -66,6 +78,7 @@ const defaultHomepageContent: HomepageContent = {
   featureBannerImage: null,
   featureBannerMobileImage: null,
   products: [],
+  collectionSections: [],
 };
 
 const hasRelationData = (value: unknown): value is { data: unknown } =>
@@ -317,6 +330,11 @@ const getProductAttributes = (entity: ProductEntity) =>
     ? entity.attributes ?? ((entity as unknown) as StrapiProductAttributes)
     : entity;
 
+const getCollectionAttributes = (entity: CollectionEntity) =>
+  isStrapiEntity<StrapiCollectionAttributes>(entity)
+    ? entity.attributes ?? ((entity as unknown) as StrapiCollectionAttributes)
+    : entity;
+
 const isProductActive = (entity: ProductEntity) =>
   getProductAttributes(entity).isActive ?? true;
 
@@ -392,6 +410,42 @@ const mapHomepageResponse = (
     .filter(isProductActive)
     .map((entity) => mapProductEntity(toProductEntity(entity), normalize));
 
+  const collectionEntries = relationToArray<CollectionEntity>(
+    attributes.collections ?? null
+  ).filter((entity): entity is CollectionEntity => Boolean(entity));
+
+  const collectionSections = collectionEntries
+    .map((collectionEntity) => {
+      const collectionAttributes = getCollectionAttributes(collectionEntity);
+      const [coverImage] =
+        normalize(collectionAttributes.cover ?? collectionAttributes.images) ?? [];
+      const collectionProducts = relationToArray<ProductEntity>(
+        collectionAttributes.products ?? null
+      )
+        .filter((entity): entity is ProductEntity => Boolean(entity))
+        .map((entity) => mapProductEntity(toProductEntity(entity), normalize));
+
+      if (!collectionProducts.length && !coverImage) {
+        return null;
+      }
+
+      const bannerImage =
+        coverImage?.url ??
+        coverImage?.path ??
+        collectionProducts[0]?.images?.[0]?.url ??
+        collectionProducts[0]?.images?.[0]?.path ??
+        placeholderBannerImage;
+      return {
+        id: isStrapiEntity<StrapiCollectionAttributes>(collectionEntity)
+          ? collectionEntity.id
+          : collectionEntity.id,
+        title: collectionAttributes.name,
+        banner: bannerImage,
+        products: collectionProducts,
+      };
+    })
+    .filter((section): section is CollectionHighlight => Boolean(section));
+
   const fallbackBanner = heroBanners.at(-1) ?? null;
   const featureBannerImage =
     singleBanner?.img ?? fallbackBanner?.img ?? null;
@@ -406,6 +460,7 @@ const mapHomepageResponse = (
     featureBannerImage,
     featureBannerMobileImage,
     products: homepageProducts,
+    collectionSections,
   };
 };
 
@@ -435,6 +490,15 @@ const {
         products: {
           populate: ["images"],
         },
+        collections: {
+          populate: {
+            cover: { populate: "*" },
+            images: { populate: "*" },
+            products: {
+              populate: ["images"],
+            },
+          },
+        },
       },
     },
   },
@@ -459,6 +523,10 @@ const banners = computed(() => {
 });
 
 const homepageProducts = computed(() => homepageContent.value.products ?? []);
+
+const collectionHighlights = computed(
+  () => homepageContent.value.collectionSections ?? []
+);
 
 const shouldFetchRecentProducts = computed(() => {
   if (isHomepageError.value) {
@@ -585,6 +653,21 @@ const productsCarousel = computed(() => {
 
 const router = useRouter();
 
+const requestCards = [
+  {
+    title: "Индивидуальный пошив",
+    description: "Создаём изделия, которые подчёркивают вашу индивидуальность",
+    image: "https://cms.amora-brand.uz/uploads/Individualnyj_poshiv_0419872da8.png",
+    action: () => router.push("/atelie"),
+  },
+  {
+    title: "G.T. Factory",
+    description: "Премиальное обучение по конструированию и моделированию одежды",
+    image: "https://cms.amora-brand.uz/uploads/G_T_Factory_abfbfb686a.png",
+    action: () => router.push("/school"),
+  },
+];
+
 const goToProduct = (item) => {
   const identifier = item?.slug ?? item?.id;
   if (!identifier) {
@@ -594,6 +677,14 @@ const goToProduct = (item) => {
 };
 
 const collectionSlider = ref<any>(null);
+
+const likesStore = useLikesStore();
+
+const toggleProductLike = (productId: number) => {
+  likesStore.toggle(productId);
+};
+
+const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 
 const isCallBackVisible = ref(false);
 </script>
@@ -635,7 +726,7 @@ const isCallBackVisible = ref(false);
       </div>
     </section>
 
-    <section class="slide-section max-md:mb-[-120px]">
+    <section v-if="!!featureBannerImageSrc" class="slide-section max-md:mb-[-120px]">
       <div class="slide-section__inner">
         <div class="relative w-full h-[100vh]">
           <picture class="block w-full h-full">
@@ -653,86 +744,70 @@ const isCallBackVisible = ref(false);
       </div>
     </section>
 
-    <section class="slide-section">
-      <div class="slide-section__inner">
-        <!-- Начао блока "Оставить заявку"-->
-        <div class="grid grid-cols-2 w-full max-lg:gap-6 max-md:grid-cols-1 max-md:mt-10">
-          <div class="flex justify-center items-center max-md:order-2">
-            <div class="flex flex-col items-center max-w-[592px] text-center max-md:px-6">
-              <h4
-                class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px]"
-              >
-                <svg
-                  width="6"
-                  height="6"
-                  class="shrink-0"
-                  viewBox="0 0 6 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                    fill="#C16371"
-                  />
-                </svg>
-                ИНДИВИДУАЛЬНЫЙ ПОШИВ AMORA
-                <svg
-                  width="6"
-                  height="6"
-                  class="shrink-0"
-                  viewBox="0 0 6 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                    fill="#C16371"
-                  />
-                </svg>
-              </h4>
+    <section
+      v-for="highlight in collectionHighlights"
+      :key="highlight.id ?? highlight.title"
+      class="slide-section--banner"
+    >
+      <div class="flex-col gap-10">
+        <div class="relative w-full h-[100vh] overflow-hidden">
+          <img
+            :src="highlight.banner"
+            :alt="highlight.title"
+            class="h-full w-full object-cover"
+          />
+        </div>
 
-              <h2
-                class="text-[#0F0F0F] text-[52px] text-center pb-[24px]  max-sm:text-[34px]"
-              >
-                Создаём изделия, которые подчёркивают вашу индивидуальность
-              </h2>
-              <Button
-                class="!rounded-[80px] !bg-black !text-white !px-[28px] h-[44px] mt-5 max-sm:mb-6"
-                variant="outlined"
-                severity="secondary"
-                @click="isCallBackVisible = true"
-              >
-                ПОДРОБНЕЕ
-                <svg
-                  width="36"
-                  height="20"
-                  viewBox="0 0 36 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M0 10L36 10" stroke="#fff" />
-                  <path
-                    d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                    stroke="#fff"
-                  />
-                </svg>
-              </Button>
-
-              <!-- модальное окно -->
-              <AppCallBackModal
-                v-model:visible="isCallBackVisible"
-                service-type="tailoring"
-                title="Записаться на пошив"
-              />
-            </div>
+        <div class="w-full relative z-1000 bg-[#FBFAF9] px-6 py-12 text-black lg:px-12">
+          <div class="flex items-center justify-between max-md:flex-col max-md:items-start max-md:gap-4">
+            <h3 class="text-3xl font-light">
+              {{ highlight.title }}
+            </h3>
+            <NuxtLink
+              to="/collections"
+              class="text-xs uppercase tracking-[0.3em] text-white/70 underline-offset-4 hover:underline"
+            >
+              Смотреть все коллекции
+            </NuxtLink>
           </div>
-
-          <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
-            <img
-              src="https://cms.amora-brand.uz/uploads/Individualnyj_poshiv_5ae71b9238.png"
-              class="w-full h-full max-h-[100vh] object-cover object-top"
-              alt=""
-            />
+          <div class="mt-8 grid gap-6 max-md:gap-2 max-md:grid-cols-2 xl:grid-cols-4">
+            <article
+              v-for="product in highlight.products.slice(0, 4)"
+              :key="product.id"
+              class="collection-card"
+              @click="goToProduct(product)"
+            >
+              <div class="collection-card__image">
+                <img
+                  :src="getProductImage(product)"
+                  :alt="product.name"
+                  loading="lazy"
+                />
+                <button
+                  type="button"
+                  class="collection-card__favorite"
+                  :class="{ 'collection-card__favorite--active': isProductLiked(product.id) }"
+                  :aria-pressed="isProductLiked(product.id)"
+                  aria-label="Добавить в избранное"
+                  @click.stop="toggleProductLike(product.id)"
+                >
+                  <Icon
+                    name="app-icon:heart-outlined"
+                    mode="svg"
+                    size="22"
+                    :class="isProductLiked(product.id) ? 'heart--liked' : ''"
+                  />
+                </button>
+              </div>
+              <div class="collection-card__info">
+                <p class="collection-card__title">
+                  {{ product.name }}
+                </p>
+                <span class="collection-card__price">
+                  {{ formatPrice(product.price, product.currency ?? undefined) }}
+                </span>
+              </div>
+            </article>
           </div>
         </div>
       </div>
@@ -740,80 +815,36 @@ const isCallBackVisible = ref(false);
 
     <section class="slide-section">
       <div class="slide-section__inner">
-        <div class="grid grid-cols-2 w-full max-lg:gap-6 max-md:grid-cols-1">
-          <div class="relative h-full max-md:min-h-[420px] max-md:order-1">
+        <!-- Начао блока "Оставить заявку"-->
+        <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
+          <article
+            v-for="card in requestCards"
+            :key="card.title"
+            class="relative isolate flex min-h-[100vh] max-md:min-h-[468px] items-end overflow-hidden bg-black/70"
+          >
             <img
-              src="https://cms.amora-brand.uz/uploads/G_T_Factory_f86b905c07.png"
-              class="w-full h-full max-h-[100vh] object-cover object-top"
-              alt=""
+              :src="card.image"
+              :alt="card.title"
+              class="absolute inset-0 h-full w-full object-cover"
             />
-            <div
-              class="absolute top-0 left-0 w-full h-full bg-black opacity-25"
-            ></div>
-          </div>
-
-          <div class="flex justify-center items-center max-md:order-2">
-            <div class="flex flex-col items-center max-w-[592px] text-center max-md:px-6">
-              <h4
-                class="text-[#0F0F0F] text-[14px] flex items-center gap-2 mb-[12px] max-sm:mt-6"
-              >
-                <svg
-                  width="6"
-                  height="6"
-                  class="shrink-0"
-                  viewBox="0 0 6 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                    fill="#C16371"
-                  />
-                </svg>
-                G.T. Factory
-                <svg
-                  width="6"
-                  height="6"
-                  class="shrink-0"
-                  viewBox="0 0 6 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.59814 0L3.17109 2.00762L5.19622 1.5L3.74404 3L5.19622 4.5L3.17109 3.99238L2.59814 6L2.0252 3.99238L6.84261e-05 4.5L1.45225 3L6.84261e-05 1.5L2.0252 2.00762L2.59814 0Z"
-                    fill="#C16371"
-                  />
-                </svg>
-              </h4>
-
-              <h2
-                class="text-[#0F0F0F] text-[52px] text-center pb-[24px]  max-sm:text-[34px]"
-              >
-                Премиальное обучение по конструированию и моделированию одежды
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            <div class="relative flex flex-col justify-center z-10 w-full px-10 py-12 max-md:px-7 text-white max-md:text-center">
+              <h2 class="text-[58px] max-md:text-[28px] text-center leading-tight ">
+                {{ card.title }}
               </h2>
+              <p class="mt-4 text-lg max-md:text-[12px] text-center text-white/80">
+                {{ card.description }}
+              </p>
               <Button
-                class="!rounded-[80px] !bg-black !text-white !px-[28px] h-[44px] mt-5 max-sm:mb-6"
+                class="!rounded-[0] mx-auto text-center mt-8 text-[#FFF]! !border !border-white !bg-transparent !px-7 !py-3 !text-xs !uppercase tracking-[0.3em] transition hover:!bg-white hover:!text-black"
                 variant="outlined"
                 severity="secondary"
-                @click="isCallBackVisible = true"
+                @click="card.action()"
               >
                 ПОДРОБНЕЕ
-                <svg
-                  width="36"
-                  height="20"
-                  viewBox="0 0 36 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M0 10L36 10" stroke="#fff" />
-                  <path
-                  d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
-                  stroke="#fff"
-                  />
-                </svg>
               </Button>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </section>
@@ -876,7 +907,7 @@ const isCallBackVisible = ref(false);
   /* min-height: 100vh; */
   display: flex;
   align-items: stretch;
-  background-color: #fff;
+  background-color: #FBFAF9;
 }
 
 .slide-section--banner {
@@ -898,6 +929,88 @@ const isCallBackVisible = ref(false);
 
 .slide-section__inner > * {
   width: 100%;
+}
+
+.collection-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.collection-card__image {
+  background: #fff;
+  padding: 32px;
+  min-height: 360px;
+  max-height: 382px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  @media (max-width: 767px) {
+    padding: 20px;
+    min-height: 220px;
+  }
+}
+
+.collection-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.collection-card__favorite {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  color: #0f0f0f;
+  @media (max-width: 767px) {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+.collection-card__favorite:hover,
+.collection-card__favorite--active {
+  /* background-color: #f7f5f0; */
+}
+
+.collection-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+}
+
+.heart--liked g {
+  fill: #000 !important;
+}
+
+.collection-card__title {
+  font-size: 14px;
+  color: #3D3D3D;
+  letter-spacing: 0.18em;
+  @media (width < 768px) {
+    font-size: 12px;
+  }
+}
+
+.collection-card__price {
+  font-size: 12px;
+  font-weight: 500;
+  color: #3D3D3D;
 }
 
 .slide-section__fill {

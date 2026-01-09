@@ -724,7 +724,6 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 .complementary-products__control {
   width: 92px;
   height: 44px;
-  border-radius: 999px;
   border: 1px solid #d7d1ca;
   display: inline-flex;
   align-items: center;
@@ -739,7 +738,10 @@ const isProductLiked = (productId: number) => likesStore.isLiked(productId);
 }
 
 .complementary-products__control:hover svg path {
-  stroke: #fff;
+  fill: #fff !important;
+}
+:deep(.complementary-products__control svg path) {
+  stroke: currentColor !important;
 }
 
 .complementary-card {

@@ -83,7 +83,12 @@ export interface StrapiCollectionAttributes {
   isActive?: boolean | null;
   cover?: StrapiMediaRelation;
   images?: StrapiMediaRelation;
+  products?: StrapiRelationValue<StrapiEntity<StrapiProductAttributes>>;
 }
+
+export type CollectionEntity =
+  | StrapiEntity<StrapiCollectionAttributes>
+  | (StrapiCollectionAttributes & { id?: number });
 
 export interface StrapiProductAttributes {
   name: string;
