@@ -113,7 +113,6 @@
   margin-top: 12px;
   border-color: rgba(0, 0, 0, 0.25);
   color: #0f0f0f;
-  border-radius: 80px;
   padding: 14px 32px;
   width: fit-content;
   background: transparent;
@@ -140,7 +139,6 @@
 
 .footer-socials__item {
   background: #0f0f0f;
-  border-radius: 999px;
   padding: 10px;
   display: inline-flex;
   align-items: center;

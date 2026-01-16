@@ -517,22 +517,22 @@ const _routes = [
   {
     name: "brand",
     path: "/brand",
-    component: () => import('./brand-3SIbXPse.mjs')
+    component: () => import('./brand-B3EQB_LF.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BPYcR8UA.mjs')
+    component: () => import('./index-DQXZuvxT.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-BLCWK9W-.mjs')
+    component: () => import('./atelie-fQj5UvEg.mjs')
   },
   {
     name: "school",
     path: "/school",
-    component: () => import('./school-DfrKSFJ0.mjs')
+    component: () => import('./school-BXn0_ekG.mjs')
   },
   {
     name: "webform",
@@ -548,7 +548,7 @@ const _routes = [
   {
     name: "favorites",
     path: "/favorites",
-    component: () => import('./favorites-D6NRRk3_.mjs')
+    component: () => import('./favorites-Ci4uZmLr.mjs')
   },
   {
     name: "auth",
@@ -560,13 +560,13 @@ const _routes = [
     name: "auth-sign-up",
     path: "/auth/sign-up",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./sign-up-BsiGX0tD.mjs')
+    component: () => import('./sign-up-Cd-8Nr0p.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-D7_UGdxk.mjs')
+    component: () => import('./_id_-3XVT73vm.mjs')
   },
   {
     name: "terms-of-use",
@@ -576,7 +576,7 @@ const _routes = [
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-BnUI1OVm.mjs')
+    component: () => import('./index-CW8Qh0BK.mjs')
   },
   {
     name: "privacy-policy",
@@ -587,12 +587,12 @@ const _routes = [
     name: "collections-id",
     path: "/collections/:id()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./_id_-DcWds6On.mjs')
+    component: () => import('./_id_-DfZrcBn4.mjs')
   },
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-BDXye7DB.mjs')
+    component: () => import('./index-0voNTI7N.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1195,7 +1195,7 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyIcon = defineAsyncComponent(() => import('./index-DR-npUW2.mjs').then((r) => r["default"] || r.default || r));
+const LazyIcon = defineAsyncComponent(() => import('./index-DqgBJCIA.mjs').then((r) => r["default"] || r.default || r));
 const LazyAutoComplete = defineAsyncComponent(() => import('./index-DL_tswa4.mjs').then((r) => r["default"] || r.default || r));
 const LazyCalendar = defineAsyncComponent(() => import('./index-BMELRj96.mjs').then((r) => r["default"] || r.default || r));
 const LazyCascadeSelect = defineAsyncComponent(() => import('./index-CEuvIZq-.mjs').then((r) => r["default"] || r.default || r));
@@ -2494,9 +2494,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-DmbfaE4z.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-KVqV9meq.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-Dk2e1xFf.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-QkDLHd6O.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-D54URHtt.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-BoQsE9O7.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",

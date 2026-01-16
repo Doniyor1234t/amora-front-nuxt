@@ -32,6 +32,7 @@ const currentPage = ref(1);
 const { normalizeMediaCollection } = useStrapi();
 
 const router = useRouter();
+const route = useRoute();
 const goToProduct = (product: Product) => {
   // Product detail queries expect a slug because Strapi's public API can't use `/products/:id` with i18n.
   // Fallback to the numeric id only if slug is missing to preserve legacy links.
@@ -421,6 +422,30 @@ const toggleFavorite = (productId: number) => {
 };
 
 const isFavorite = (productId: number) => likesStore.isLiked(productId);
+
+const syncCategoryFromRoute = () => {
+  const categoryQuery = route.query.category;
+  const normalizedCategory = Array.isArray(categoryQuery)
+    ? categoryQuery[0]
+    : categoryQuery;
+  const nextValue =
+    typeof normalizedCategory === "string" ? normalizedCategory : "";
+
+  if (selectedCategory.value === nextValue) {
+    return;
+  }
+
+  selectedCategory.value = nextValue;
+};
+
+syncCategoryFromRoute();
+
+watch(
+  () => route.query.category,
+  () => {
+    syncCategoryFromRoute();
+  }
+);
 </script>
 
 <template>
@@ -497,7 +522,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
               <div ref="sizeDropdownRef" class="relative">
                 <button
                   type="button"
-                  class="flex items-center gap-2 rounded-full border border-[#DADADA] px-7 py-3 text-xs tracking-[0.16em] uppercase text-[#0F0F0F]"
+                  class="flex items-center gap-2 border border-[#DADADA] px-7 py-3 text-xs tracking-[0.16em] uppercase text-[#0F0F0F]"
                   @click.stop="toggleSizeDropdown"
                 >
                   {{ activeSizeLabel }}
@@ -526,7 +551,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
                 >
                   <div
                     v-if="sizeDropdownOpen"
-                    class="absolute left-0 z-20 mt-2 w-56 rounded-3xl border border-[#E6E6E6] bg-white py-2 shadow-2xl"
+                    class="absolute left-0 z-20 mt-2 w-56 border border-[#E6E6E6] bg-white py-2 shadow-2xl"
                   >
                     <button
                       v-for="option in sizeDropdownOptions"
@@ -549,7 +574,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
               <div ref="sortDropdownRef" class="relative">
                 <button
                   type="button"
-                  class="flex items-center gap-2 rounded-full border border-[#DADADA] px-7 py-3 text-xs tracking-[0.16em] uppercase text-[#0F0F0F]"
+                  class="flex items-center gap-2 border border-[#DADADA] px-7 py-3 text-xs tracking-[0.16em] uppercase text-[#0F0F0F]"
                   @click.stop="toggleSortDropdown"
                 >
                   {{ activeSortLabel }}
@@ -578,7 +603,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
                 >
                   <div
                     v-if="sortDropdownOpen"
-                    class="absolute left-0 z-20 mt-2 w-60 rounded-3xl border border-[#E6E6E6] bg-white py-2 shadow-2xl"
+                    class="absolute left-0 z-20 mt-2 w-60 border border-[#E6E6E6] bg-white py-2 shadow-2xl"
                   >
                     <button
                       v-for="option in sortDropdownOptions"
@@ -607,7 +632,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
           <div class="flex items-center justify-between gap-3 md:hidden">
             <Button
               @click="collectionDrawer = true"
-              class="!rounded-[80px] !text-[#0F0F0F] !px-[24px] h-[44px] max-sm:!text-[12px] max-sm:!px-[16px] max-sm:h-[36px] w-1/2"
+              class="!rounded-[0] !text-[#0F0F0F] !px-[24px] h-[44px] max-sm:!text-[12px] max-sm:!px-[16px] max-sm:h-[36px] w-1/2"
               variant="outlined"
               severity="secondary"
             >
@@ -627,7 +652,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
             </Button>
 
             <Button
-              class="!rounded-[80px] !text-[#0F0F0F] !px-[24px] h-[44px] max-sm:!text-[12px] max-sm:!px-[16px] max-sm:h-[36px] w-1/2"
+              class="!rounded-[0] !text-[#0F0F0F] !px-[24px] h-[44px] max-sm:!text-[12px] max-sm:!px-[16px] max-sm:h-[36px] w-1/2"
               variant="outlined"
               severity="secondary"
               @click="filterDrawer = true"
@@ -658,10 +683,10 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
                 :key="`skeleton-${index}`"
                 class="w-full flex flex-col gap-4"
               >
-                <div class="bg-[#F5F5F5] rounded-3xl overflow-hidden h-[360px] animate-pulse" />
+                <div class="bg-[#F5F5F5] overflow-hidden h-[360px] animate-pulse" />
                 <div class="px-[24px] py-[20px] space-y-3">
-                  <div class="h-3 w-3/4 bg-[#E2E2E2] rounded-full animate-pulse" />
-                  <div class="h-3 w-1/2 bg-[#E2E2E2] rounded-full animate-pulse" />
+                  <div class="h-3 w-3/4 bg-[#E2E2E2] animate-pulse" />
+                  <div class="h-3 w-1/2 bg-[#E2E2E2] animate-pulse" />
                 </div>
               </div>
             </div>
@@ -679,7 +704,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
             </div>
             <div v-else class="relative">
               <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+                class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
               >
                 <div
                   v-for="product in products"
@@ -738,10 +763,10 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
                     :key="`overlay-skeleton-${index}`"
                     class="hidden sm:flex flex-col gap-4 animate-pulse"
                   >
-                    <div class="bg-[#F5F5F5] rounded-3xl h-[320px]" />
+                    <div class="bg-[#F5F5F5] h-[320px]" />
                     <div class="px-[24px] py-[12px] space-y-2">
-                      <div class="h-3 w-2/3 bg-[#E2E2E2] rounded-full" />
-                      <div class="h-3 w-1/2 bg-[#E2E2E2] rounded-full" />
+                      <div class="h-3 w-2/3 bg-[#E2E2E2]" />
+                      <div class="h-3 w-1/2 bg-[#E2E2E2]" />
                     </div>
                   </div>
                 </div>
@@ -805,7 +830,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
                 type="button"
                 @click="goToPage(item)"
                 :class="[
-                  'w-8 h-8 rounded-full flex items-center justify-center transition-colors',
+                  'w-8 h-8 flex items-center justify-center transition-colors',
                   item === currentPage
                     ? 'bg-black text-white'
                     : 'text-[#3D3D3D] hover:bg-black/5'
@@ -917,7 +942,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
         <div class="w-full grid grid-cols-2 gap-[24px]">
           <Button
             @click="resetCategoryFilter(); collectionDrawer = false"
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px]"
+            class="!rounded-[0] !text-[#0F0F0F] !px-[28px] h-[44px]"
             variant="outlined"
             severity="secondary"
           >
@@ -925,7 +950,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
           </Button>
           <Button
             @click="collectionDrawer = false"
-            class="!rounded-[80px] !text-[#FFFFFF] !px-[28px] !h-[44px] !bg-[#0F0F0F]"
+            class="!rounded-[0] !text-[#FFFFFF] !px-[28px] !h-[44px] !bg-[#0F0F0F]"
             variant="outlined"
             severity="primary"
           >
@@ -998,7 +1023,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
         <div class="w-full grid grid-cols-2 gap-[24px]">
           <Button
             @click="resetProductFilters(); filterDrawer = false"
-            class="!rounded-[80px] !text-[#0F0F0F] !px-[28px] h-[44px]"
+            class="!rounded-[0] !text-[#0F0F0F] !px-[28px] h-[44px]"
             variant="outlined"
             severity="secondary"
           >
@@ -1006,7 +1031,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
           </Button>
           <Button
             @click="filterDrawer = false"
-            class="!rounded-[80px] !text-[#FFFFFF] !px-[28px] !h-[44px] !bg-[#0F0F0F]"
+            class="!rounded-[0] !text-[#FFFFFF] !px-[28px] !h-[44px] !bg-[#0F0F0F]"
             variant="outlined"
             severity="primary"
           >
