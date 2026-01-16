@@ -139,14 +139,14 @@ const productFilters = computed(() => {
   };
 
   if (selectedCategory.value) {
-    filters.categories = {
+    filters.category = {
       slug: { $eqi: selectedCategory.value },
     };
   }
 
   const sizeSelections = normalizedSizeSelection.value;
   if (sizeSelections.length === 1) {
-    filters.availableSizes = {
+    filters.sizes = {
       $containsi: sizeSelections[0],
     };
   } else if (sizeSelections.length > 1) {
@@ -159,7 +159,7 @@ const productFilters = computed(() => {
       ...existingAnd,
       {
         $or: sizeSelections.map((size) => ({
-          availableSizes: { $containsi: size },
+          sizes: { $containsi: size },
         })),
       },
     ];

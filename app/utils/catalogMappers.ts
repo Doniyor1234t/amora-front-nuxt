@@ -104,6 +104,7 @@ export interface StrapiProductAttributes {
   color?: string | null;
   fit?: string | null;
   availableSizes?: string[] | null;
+  sizes?: string | string[] | null;
   products?: StrapiEntityRelation<StrapiProductAttributes>;
   variants?: StrapiProductVariant[];
   material?: string | null;
@@ -153,6 +154,21 @@ export const mapCollectionEntity = (
   normalize: MediaNormalizer
 ): Collection => {
   const attributes = getEntityAttributes(entity);
+  const rawAvailableSizes =
+    attributes.availableSizes ?? attributes.sizes ?? null;
+  const normalizedAvailableSizes = Array.isArray(rawAvailableSizes)
+    ? rawAvailableSizes
+        .map((size) =>
+          typeof size === "string" ? size.trim() : String(size ?? "").trim()
+        )
+        .filter((entry) => Boolean(entry))
+    : typeof rawAvailableSizes === "string"
+      ? rawAvailableSizes
+          .split(/[,;]/)
+          .map((entry) => entry.trim())
+          .filter((entry) => Boolean(entry))
+      : null;
+
   return {
     id: entity.id,
     name: attributes.name,
@@ -256,7 +272,7 @@ export const mapProductEntity = (
     fabric: attributes.fabric ?? null,
     color: attributes.color ?? null,
     fit: attributes.fit ?? null,
-    availableSizes: attributes.availableSizes ?? null,
+    availableSizes: normalizedAvailableSizes,
     products: relatedProducts.length ? relatedProducts : null,
     variants: productVariants.length ? productVariants : null,
     material: attributes.material ?? null,
