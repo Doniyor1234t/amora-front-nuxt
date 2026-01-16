@@ -20,7 +20,7 @@
       class="w-full max-w-[526px] rounded-[60px] bg-white px-[40px] py-[40px] shadow-[0_40px_120px_rgba(0,0,0,0.06)] max-md:px-[40px] max-sm:px-[28px]"
     >
       <div class="text-center">
-        <h1 class="font-[masvol] text-[52px] leading-none text-[#0F0F0F] max-sm:text-[44px]">
+        <h1 class="text-[52px] leading-none text-[#0F0F0F] max-sm:text-[44px]">
           Регистрация
         </h1>
       </div>

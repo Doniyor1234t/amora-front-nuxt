@@ -310,7 +310,7 @@ const features = [
 
 const fallbackCarouselItems = Array.from({ length: 10 }, (_, idx) => ({
   id: `fallback-${idx}`,
-  img: `/images/products/dress-1.png`,
+  img: `/images/products/Image.png`,
   name: "НАЗВАНИЕ ПЛАТЬЯ",
   price: "200$",
 }));

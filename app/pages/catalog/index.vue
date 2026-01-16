@@ -10,6 +10,7 @@ import {
   type Product,
   type ProductsResponse,
   type StrapiProductAttributes,
+  type StrapiSizeAttributes,
   mapProductsResponse,
 } from "@/utils/catalogMappers";
 
@@ -25,6 +26,14 @@ type CategoryFilterOption = {
   label: string;
   value: string;
 };
+
+type SizeFilterOption = {
+  label: string;
+  value: string;
+};
+
+const normalizeSizeOptionValue = (value?: string | null) =>
+  typeof value === "string" ? value.trim() : "";
 
 const PAGE_SIZE = 12;
 const currentPage = ref(1);
@@ -69,21 +78,49 @@ const categoryFilters = computed<CategoryFilterOption[]>(
   () => categoriesResponse.value ?? []
 );
 
-const sizeDropdownOptions = [
+const { data: sizeOptionsResponse } = useStrapiQuery<
+  StrapiListResponse<StrapiSizeAttributes>,
+  Error,
+  SizeFilterOption[]
+>(
+  ["sizes"],
+  () => ({
+    path: "/sizes",
+    query: {
+      filters: {
+        isActive: { $eq: true },
+      },
+      sort: ["sortOrder:asc", "label:asc", "title:asc"],
+      pagination: {
+        page: 1,
+        pageSize: 200,
+      },
+    },
+  }),
+  {
+    select: (response: StrapiListResponse<StrapiSizeAttributes>) =>
+      response.data
+        .map((entity) => {
+          const attributes =
+            entity.attributes ?? ((entity as unknown) as StrapiSizeAttributes);
+          const normalizedLabel =
+            normalizeSizeOptionValue(attributes.label) ||
+            normalizeSizeOptionValue(attributes.title);
+          const label = normalizedLabel || `Размер ${entity.id}`;
+          const value = normalizedLabel || label;
+          return {
+            label,
+            value,
+          };
+        })
+        .filter((option) => Boolean(option.value)),
+  }
+);
+
+const sizeDropdownOptions = computed<SizeFilterOption[]>(() => [
   { label: "Все размеры", value: "all" },
-  { label: "XXS", value: "xxs" },
-  { label: "XS", value: "xs" },
-  { label: "S", value: "s" },
-  { label: "S/M", value: "sm" },
-  { label: "M", value: "m" },
-  { label: "L", value: "l" },
-  { label: "L/XL", value: "lxl" },
-  { label: "XL", value: "xl" },
-  { label: "32", value: "32" },
-  { label: "34", value: "34" },
-  { label: "36", value: "36" },
-  { label: "38", value: "38" },
-];
+  ...(sizeOptionsResponse.value ?? []),
+]);
 
 const sortDropdownOptions = [
   { label: "Сначала новые", value: "new" },
@@ -93,14 +130,31 @@ const sortDropdownOptions = [
   { label: "Цена по возрастанию", value: "price-asc" },
 ];
 
-const sizeFilterOptions = sizeDropdownOptions.filter(
-  (option) => option.value !== "all"
+const sizeFilterOptions = computed<SizeFilterOption[]>(() =>
+  sizeDropdownOptions.value.filter((option) => option.value !== "all")
 );
 
 const selectedCategory = ref("");
-const selectedSizeFilter = ref(sizeDropdownOptions[0]?.value ?? "all");
+const selectedSizeFilter = ref("all");
 const selectedSortFilter = ref(sortDropdownOptions[0]?.value ?? "new");
 const selectedSizeFilters = ref<string[]>([]);
+
+watch(
+  () => sizeFilterOptions.value.map((option) => option.value),
+  (availableValues) => {
+    if (
+      selectedSizeFilter.value !== "all" &&
+      !availableValues.includes(selectedSizeFilter.value)
+    ) {
+      selectedSizeFilter.value = sizeDropdownOptions.value[0]?.value ?? "all";
+    }
+
+    selectedSizeFilters.value = selectedSizeFilters.value.filter((size) =>
+      availableValues.includes(size)
+    );
+  },
+  { immediate: true }
+);
 const sizeDropdownOpen = ref(false);
 const sortDropdownOpen = ref(false);
 const sizeDropdownRef = ref<HTMLElement | null>(null);
@@ -182,6 +236,7 @@ const {
   isLoading: isProductsLoading,
   isFetching: isProductsFetching,
   isError: isProductsError,
+  error: productsError,
 } = useStrapiQuery<
   StrapiListResponse<StrapiProductAttributes>,
   Error,
@@ -208,6 +263,14 @@ const {
     keepPreviousData: true,
     select: (response: StrapiListResponse<StrapiProductAttributes>) =>
       mapProductsResponse(response, normalizeMediaCollection),
+  }
+);
+watch(
+  () => productsError.value,
+  (error) => {
+    if (error) {
+      console.error("Failed to load products:", error);
+    }
   }
 );
 
@@ -308,7 +371,7 @@ const goToNextPage = () => {
 
 const activeSizeLabel = computed(
   () =>
-    sizeDropdownOptions.find(
+    sizeDropdownOptions.value.find(
       (option) => option.value === selectedSizeFilter.value
     )?.label ?? "Размер"
 );
@@ -386,7 +449,7 @@ const resetCategoryFilter = () => {
 const resetProductFilters = () => {
   selectedSortFilter.value = sortDropdownOptions[0]?.value ?? "new";
   selectedSizeFilters.value = [];
-  selectedSizeFilter.value = sizeDropdownOptions[0]?.value ?? "all";
+  selectedSizeFilter.value = sizeDropdownOptions.value[0]?.value ?? "all";
 };
 
 const handleDocumentClick = (event: MouseEvent) => {
@@ -451,11 +514,11 @@ watch(
 <template>
   <div class="pt-[72px]">
     <div class="container mb-[32px] mt-[48px]">
-      <h2 class="text-[#0F0F0F] text-[52px]  max-sm:text-[34px]">
+      <h2 class="text-[#0F0F0F] text-[52px]  max-sm:text-[32px]">
         Каталог
       </h2>
 
-      <div class="mt-[40px] flex flex-col gap-[32px] lg:flex-row">
+      <div class="mt-[40px] max-lg:mt-[20px] flex flex-col gap-[32px] lg:flex-row">
         <aside class="hidden lg:block w-[260px] xl:w-[300px] shrink-0">
           <div class="sticky top-[120px] flex flex-col gap-10">
             <div>

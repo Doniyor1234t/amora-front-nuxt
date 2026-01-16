@@ -52,7 +52,7 @@ async function onSubmit() {
       <div class="p-[40px] bg-white rounded-[60px]">
         <div v-if="!isSubmitted" class="w-[446px]">
           <div>
-            <h2 class="text-[52px] font-[masvol] text-center">
+            <h2 class="text-[52px] text-center">
               Открытие нового пространства AMORA
             </h2>
             <p class="text-[14px] text-center mt-[16px] uppercase">
@@ -120,7 +120,7 @@ async function onSubmit() {
             </svg>
           </div>
 
-          <h2 class="text-[52px] font-[masvol]">Ваша заявка принята.</h2>
+          <h2 class="text-[52px] ">Ваша заявка принята.</h2>
 
           <p class="mt-4 text-[14px] leading-relaxed">
             Мы будем рады разделить с вами атмосферу новой коллекции и

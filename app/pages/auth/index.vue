@@ -12,7 +12,7 @@
       class="w-full max-w-[526px] rounded-[60px] bg-white px-[40px] py-[40px] shadow-[0_40px_120px_rgba(0,0,0,0.06)] max-lg:px-[48px] max-md:px-[32px] max-sm:px-[24px]"
     >
       <div class="text-center">
-        <h1 class="text-[52px] leading-none font-[masvol] text-[#0F0F0F] max-sm:text-[44px]">
+        <h1 class="text-[52px] leading-none text-[#0F0F0F] max-sm:text-[44px]">
           Вход в AMORA
         </h1>
       </div>

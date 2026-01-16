@@ -111,7 +111,7 @@ const formatPrice = (price?: string, currency?: string) => {
     <div class="container py-12">
       <div class="flex flex-col gap-4 mb-10">
         <p class="text-xs tracking-[0.4em] uppercase text-[#C16371]">Избранное</p>
-        <h1 class="text-[52px] font-[masvol] max-sm:text-[34px]">Любимые изделия</h1>
+        <h1 class="text-[52px] max-sm:text-[34px]">Любимые изделия</h1>
         <p class="text-[#7D7D7D] text-sm max-w-[520px]">
           Здесь собраны все изделия, которые вы отметили ❤. Продолжайте выбирать и возвращайтесь к ним позже.
         </p>

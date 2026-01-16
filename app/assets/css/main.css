@@ -5,6 +5,10 @@ body {
     font-family: 'Garet', 'ui-sans-serif', 'system-ui';
 }
 
+.p-drawer .p-drawer-header {
+    padding: 8px 16px !important;
+}
+
 .container {
     margin-left: auto;
     margin-right: auto;

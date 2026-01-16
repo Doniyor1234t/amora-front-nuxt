@@ -498,47 +498,50 @@ const unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU = /* @__PURE__ */ defin
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-const __nuxt_page_meta$4 = {
+const __nuxt_page_meta$5 = {
   layout: "blank"
+};
+const __nuxt_page_meta$4 = {
+  layout: "default"
 };
 const __nuxt_page_meta$3 = {
   layout: "default"
 };
 const __nuxt_page_meta$2 = {
-  layout: "default"
+  layout: "header-only"
 };
 const __nuxt_page_meta$1 = {
-  layout: "header-only"
+  layout: "default"
 };
 const __nuxt_page_meta = {
-  layout: "header-only"
+  layout: "default"
 };
 const _routes = [
   {
     name: "brand",
     path: "/brand",
-    component: () => import('./brand-B3EQB_LF.mjs')
+    component: () => import('./brand-BvP03aRW.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-DQXZuvxT.mjs')
+    component: () => import('./index-D928s45E.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-fQj5UvEg.mjs')
+    component: () => import('./atelie-ZhOAdrKe.mjs')
   },
   {
     name: "school",
     path: "/school",
-    component: () => import('./school-BXn0_ekG.mjs')
+    component: () => import('./school-sho6F490.mjs')
   },
   {
     name: "webform",
     path: "/webform",
-    meta: __nuxt_page_meta$4 || {},
-    component: () => import('./webform-BRLbyckq.mjs')
+    meta: __nuxt_page_meta$5 || {},
+    component: () => import('./webform-CjMvaBb_.mjs')
   },
   {
     name: "contacts",
@@ -548,25 +551,25 @@ const _routes = [
   {
     name: "favorites",
     path: "/favorites",
-    component: () => import('./favorites-Ci4uZmLr.mjs')
+    component: () => import('./favorites-D8lGH8tz.mjs')
   },
   {
     name: "auth",
     path: "/auth",
-    meta: __nuxt_page_meta$3 || {},
-    component: () => import('./index-CEY8nKAm.mjs')
+    meta: __nuxt_page_meta$4 || {},
+    component: () => import('./index-BIGB1C_G.mjs')
   },
   {
     name: "auth-sign-up",
     path: "/auth/sign-up",
-    meta: __nuxt_page_meta$2 || {},
-    component: () => import('./sign-up-Cd-8Nr0p.mjs')
+    meta: __nuxt_page_meta$3 || {},
+    component: () => import('./sign-up-U41BGUaa.mjs')
   },
   {
     name: "catalog-id",
     path: "/catalog/:id()",
-    meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-3XVT73vm.mjs')
+    meta: __nuxt_page_meta$2 || {},
+    component: () => import('./_id_-BSJOwdsL.mjs')
   },
   {
     name: "terms-of-use",
@@ -576,7 +579,7 @@ const _routes = [
   {
     name: "catalog",
     path: "/catalog",
-    component: () => import('./index-CW8Qh0BK.mjs')
+    component: () => import('./index-Cddw0X8X.mjs')
   },
   {
     name: "privacy-policy",
@@ -586,13 +589,14 @@ const _routes = [
   {
     name: "collections-id",
     path: "/collections/:id()",
-    meta: __nuxt_page_meta || {},
-    component: () => import('./_id_-DfZrcBn4.mjs')
+    meta: __nuxt_page_meta$1 || {},
+    component: () => import('./_id_-JjPgHM6P.mjs')
   },
   {
     name: "collections",
     path: "/collections",
-    component: () => import('./index-0voNTI7N.mjs')
+    meta: __nuxt_page_meta || {},
+    component: () => import('./index-K5O2yoZY.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1195,7 +1199,7 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyIcon = defineAsyncComponent(() => import('./index-DqgBJCIA.mjs').then((r) => r["default"] || r.default || r));
+const LazyIcon = defineAsyncComponent(() => import('./index-D5HttfMH.mjs').then((r) => r["default"] || r.default || r));
 const LazyAutoComplete = defineAsyncComponent(() => import('./index-DL_tswa4.mjs').then((r) => r["default"] || r.default || r));
 const LazyCalendar = defineAsyncComponent(() => import('./index-BMELRj96.mjs').then((r) => r["default"] || r.default || r));
 const LazyCascadeSelect = defineAsyncComponent(() => import('./index-CEuvIZq-.mjs').then((r) => r["default"] || r.default || r));
@@ -2494,9 +2498,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-QkDLHd6O.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-D54URHtt.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-BoQsE9O7.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-Bsumbndq.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-D7IFoS29.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-CLNZZV_f.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",

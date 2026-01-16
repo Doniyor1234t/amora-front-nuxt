@@ -149,32 +149,48 @@ const normalizePrice = (price?: string | number | null) => {
   return typeof price === "string" ? price : String(price);
 };
 
+const normalizeAvailableSizes = (
+  rawSizes?: string | string[] | null
+): string[] | null => {
+  if (!rawSizes) {
+    return null;
+  }
+
+  if (Array.isArray(rawSizes)) {
+    const normalized = rawSizes
+      .map((size) =>
+        typeof size === "string" ? size.trim() : String(size ?? "").trim()
+      )
+      .filter((entry) => Boolean(entry));
+    return normalized.length ? normalized : null;
+  }
+
+  if (typeof rawSizes === "string") {
+    const normalized = rawSizes
+      .split(/[,;]/)
+      .map((entry) => entry.trim())
+      .filter((entry) => Boolean(entry));
+    return normalized.length ? normalized : null;
+  }
+
+  return null;
+};
+
 export const mapCollectionEntity = (
   entity: StrapiEntity<StrapiCollectionAttributes>,
   normalize: MediaNormalizer
 ): Collection => {
   const attributes = getEntityAttributes(entity);
-  const rawAvailableSizes =
-    attributes.availableSizes ?? attributes.sizes ?? null;
-  const normalizedAvailableSizes = Array.isArray(rawAvailableSizes)
-    ? rawAvailableSizes
-        .map((size) =>
-          typeof size === "string" ? size.trim() : String(size ?? "").trim()
-        )
-        .filter((entry) => Boolean(entry))
-    : typeof rawAvailableSizes === "string"
-      ? rawAvailableSizes
-          .split(/[,;]/)
-          .map((entry) => entry.trim())
-          .filter((entry) => Boolean(entry))
-      : null;
+  const galleryImages = normalize(attributes.images);
+  const coverImages =
+    galleryImages.length > 0 ? galleryImages : normalize(attributes.cover);
 
   return {
     id: entity.id,
     name: attributes.name,
     slug: attributes.slug,
     description: attributes.description ?? null,
-    images: normalize(attributes.images),
+    images: coverImages,
   };
 };
 
@@ -213,6 +229,9 @@ export const mapProductEntity = (
   normalize: MediaNormalizer
 ): Product => {
   const attributes = getEntityAttributes(entity);
+  const normalizedAvailableSizes = normalizeAvailableSizes(
+    attributes.availableSizes ?? attributes.sizes ?? null
+  );
   const collectionEntity = getFirstRelationItem(attributes.collection);
   const collectionAttributes = collectionEntity
     ? getEntityAttributes(collectionEntity)

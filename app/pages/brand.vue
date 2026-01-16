@@ -227,7 +227,7 @@ const quickLinks = [
     <div class="container py-[52px] max-sm:py-[20px]">
       <div class="grid grid-cols-2 max-sm:grid-cols-1 max-sm:gap-[20px]">
         <div>
-          <h2 class="text-[#0F0F0F] text-[52px] font-[masvol] max-sm:text-[32px]">
+          <h2 class="text-[#0F0F0F] text-[52px] max-sm:text-[32px]">
             AMORA - бренд, рождённый эстетикой женственности
           </h2>
         </div>
@@ -247,7 +247,7 @@ const quickLinks = [
           Почему мы?
         </h4>
 
-        <h1 class="text-[#0F0F0F] text-[52px] leading-[56px]  mt-[12px]  max-sm:text-center  font-[masvol] max-sm:text-[32px]">
+        <h1 class="text-[#0F0F0F] text-[52px] leading-[56px]  mt-[12px]  max-sm:text-center  max-sm:text-[32px]">
           Мы создаём одежду, а не просто вещи
         </h1>
       </div>
@@ -264,7 +264,7 @@ const quickLinks = [
           >
           </div>
           <div class="flex flex-col items-center text-center mt-4">
-            <h2 class="text-[#0F0F0F] text-[24px] max-md:text-[18px] font-[masvol]">
+            <h2 class="text-[#0F0F0F] text-[24px] max-md:text-[18px]">
               {{ feature.title }}
             </h2>
             <p class="text-[#3D3D3D] text-[14px] max-md:text-[12px] mt-2">
@@ -285,7 +285,7 @@ const quickLinks = [
     <section class="container mx-auto mt-16 px-4">
       <div class="flex gap-12 shadow-[0_30px_100px_rgba(54,48,41,0.08)] max-lg:px-[32px]">
         <div class="">
-          <h2 class="mt-4 font-[masvol] text-[64px] leading-tight text-[#1F1B16] max-md:text-[44px]">
+          <h2 class="mt-4 text-[64px] leading-tight text-[#1F1B16] max-md:text-[44px]">
             AMORA — бренд, рождённый эстетикой женственности
           </h2>
         </div>
@@ -312,14 +312,14 @@ const quickLinks = [
     <section class="container py-[260px] max-md:py-[100px] mx-auto mt-20 px-4">
       <div class="w-[700px] max-md:w-full flex flex-col gap-2 items-center content-center mx-auto text-center px-[48px] py-[56px] text-center max-md:px-[32px]">
         <Icon name="ri:double-quotes-l" size="48" class="text-[#C4BBAF]" />
-        <p class="text-[42px] font-[masvol] leading-snug text-[#6D6A65] max-md:text-[30px]">
+        <p class="text-[42px] leading-snug text-[#6D6A65] max-md:text-[30px]">
           "Наша миссия — раскрывать внутреннюю красоту женщины через внешний облик, даря ей уверенность в каждом движении."
         </p>
       </div>
     </section>
 
     <section class="container mx-auto mt-20 px-4">
-      <h3 class="text-center font-[masvol] text-[52px] max-md:text-[32px] text-[#1F1B16]">Атмосфера творчества</h3>
+      <h3 class="text-center text-[52px] max-md:text-[32px] text-[#1F1B16]">Атмосфера творчества</h3>
       <div class="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div class="overflow-hidden bg-white">
           <img src="/images/Collection-bg-2.jpg" alt="Sketch large" class="h-full w-full object-cover" />
@@ -348,7 +348,7 @@ const quickLinks = [
           </div>
           <div class="min-w-[752px] max-md:min-w-full">
             <p class="text-xs uppercase tracking-[0.5em] text-[#B0A79D]">• основательница бренда •</p>
-            <h3 class="mt-4 font-[masvol] text-[50px] text-[#1F1B16]">{{ founder.name }}</h3>
+            <h3 class="mt-4 text-[50px] text-[#1F1B16]">{{ founder.name }}</h3>
             <div class="mt-6 space-y-4 text-sm leading-relaxed text-[#6F6A63]">
               <p v-for="text in founder.description" :key="text">
                 {{ text }}

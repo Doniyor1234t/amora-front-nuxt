@@ -100,8 +100,9 @@ const handleFavoritesClick = () => {
   visible.value = false;
   router.push("/favorites");
 };
+console.log(route.path, 'isHomePage');
 
-const isHomePage = computed(() => route.path === "/" || route.path === "/atelie" || route.path === "/school");
+const isHomePage = computed(() => route.path === "/" || route.path === "/atelie" || route.path?.includes("/collections") || route.path === "/school");
 
 const iconColor = computed(() => {
   if (isHomePage.value && !isScrolled.value) {
@@ -196,11 +197,10 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
       <Drawer
         v-model:visible="visible"
         class="!w-[45%] max-sm:!w-[100%]"
-        :showHeader="false"
         :showCloseIcon="false"
       >
         <template #header class="w-full">
-          <div class="drawer-mobile-header w-full md:hidden">
+          <div class="drawer-mobile-header w-full hidden">
             <button 
               type="button"
               class="drawer-icon-button"
@@ -266,10 +266,24 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
           </div>
         </Transition>
 
-        <div class="hidden md:flex items-center justify-between mb-10">
+        <div class="hidden md:flex items-center gap-6">
+          <Button
+            variant="text"
+            severity="secondary"
+            class="drawer-icon-button"
+            aria-label="Закрыть меню"
+            @click="visible = false"
+          >
+            <Icon 
+              name="app-icon:close"
+              mode="svg"
+              color="#0F0F0F"
+              height="32px"
+            />
+          </Button>
           <AppSelectButton v-model="value" :options="options" />
 
-          <div class="flex gap-4">
+          <!-- <div class="flex gap-4">
             <Button variant="text" severity="secondary" @click="handleProfileClick">
               <Icon name="app-icon:user" mode="svg" color="#0F0F0F" height="24px" />
             </Button>
@@ -280,7 +294,7 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
                 {{ favoriteCount }}
               </span>
             </Button>
-          </div>
+          </div> -->
         </div>
 
         <div
@@ -458,6 +472,9 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
     background-color 0.3s ease,
     border-color 0.3s ease,
     backdrop-filter 0.3s ease;
+  @media (width < 748px) {
+    padding: 8px 0;
+  }
 }
 
 .header--scrolled {
@@ -507,12 +524,19 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 48px;
+}
+
+@media (min-width: 1024px) {
+  .drawer-mobile-header {
+    display: none;
+  }
 }
 
 .drawer-icon-button {
-  width: 44px;
-  height: 44px;
+  padding: 0;
+  width: 40px;
+  height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -633,6 +657,9 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+:deep(.p-drawer .p-drawer-header) {
+  padding: 8px 16px !important;
 }
 :deep(.p-drawer-header){
   display: none;
