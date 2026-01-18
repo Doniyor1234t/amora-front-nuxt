@@ -189,7 +189,7 @@ const isFavorite = (productId: number) => likesStore.isLiked(productId);
         <div class="flex flex-wrap items-center justify-between gap-6">
           <div>
             <h2 class="text-[32px] text-[#0F0F0F]">
-              Готово к просмотру: {{ collectionName }}
+              Готово к примерке
             </h2>
             <!-- <p class="text-[#7D7D7D] text-sm tracking-[0.2em] uppercase">
               {{ totalProducts }} изделий

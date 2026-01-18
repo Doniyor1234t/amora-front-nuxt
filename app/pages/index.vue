@@ -677,6 +677,7 @@ const goToProduct = (item) => {
 };
 
 const collectionSlider = ref<any>(null);
+const mobileProductsSliderRef = ref<any>(null);
 
 const likesStore = useLikesStore();
 
@@ -685,6 +686,33 @@ const toggleProductLike = (productId: number) => {
 };
 
 const isProductLiked = (productId: number) => likesStore.isLiked(productId);
+
+const callMobileSlider = (direction: "next" | "prev") => {
+  const sliderInstance = mobileProductsSliderRef.value?.swiper;
+
+  if (!sliderInstance) {
+    return;
+  }
+
+  if (typeof sliderInstance[direction] === "function") {
+    sliderInstance[direction]();
+    return;
+  }
+
+  const fallbackMethod = direction === "next" ? "slideNext" : "slidePrev";
+
+  if (typeof sliderInstance[fallbackMethod] === "function") {
+    sliderInstance[fallbackMethod]();
+    return;
+  }
+
+  if (sliderInstance.value && typeof sliderInstance.value[fallbackMethod] === "function") {
+    sliderInstance.value[fallbackMethod]();
+  }
+};
+
+const handleMobileSliderPrev = () => callMobileSlider("prev");
+const handleMobileSliderNext = () => callMobileSlider("next");
 
 const isCallBackVisible = ref(false);
 </script>
@@ -706,22 +734,58 @@ const isCallBackVisible = ref(false);
           <div class="hidden md:block w-full">
             <ProductsSlider hideHeader :items="productsCarousel" />
           </div>
-        </ClientOnly>
-        <div class="max-md:grid max-md:grid-cols-2 md:hidden">
-          <div
-            v-for="(item, idx) in productsCarousel.slice(0, 6)"
-            :key="item.id ?? idx"
-            class="products-grid__item"
-            @click="goToProduct(item)"
-          >
-            <img
-              :src="item.img"
-              :alt="item.name"
-              class="products-grid__image"
-              loading="lazy"
+          <div class="md:hidden w-full">
+            <!-- <div class="flex items-center justify-end gap-3 px-4 mb-4">
+              <button
+                type="button"
+                class="flex h-12 w-12 items-center justify-center border border-[#e2e1df] bg-white/80 text-[#2f2e2c]"
+                aria-label="Предыдущие товары"
+                @click="handleMobileSliderPrev"
+              >
+                <svg
+                  width="32"
+                  height="18"
+                  viewBox="0 0 36 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M36 10L0 10" stroke="currentColor" />
+                  <path
+                    d="M10 0C10 4.82759 5.59322 10 0 10C5.59322 10 10 15.1724 10 20"
+                    stroke="currentColor"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="flex h-12 w-12 items-center justify-center border border-[#e2e1df] bg-white/80 text-[#2f2e2c]"
+                aria-label="Следующие товары"
+                @click="handleMobileSliderNext"
+              >
+                <svg
+                  width="32"
+                  height="18"
+                  viewBox="0 0 36 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M0 10L36 10" stroke="currentColor" />
+                  <path
+                    d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20"
+                    stroke="currentColor"
+                  />
+                </svg>
+              </button>
+            </div> -->
+            <ProductsSlider
+              hideHeader
+              :items="productsCarousel"
+              :slides-per-view="2"
+              :mobile-slides-per-view="2"
+              ref="mobileProductsSliderRef"
             />
           </div>
-        </div>
+        </ClientOnly>
         <!-- Карусель конец -->
       </div>
     </section>
@@ -889,7 +953,7 @@ const isCallBackVisible = ref(false);
 }
 
 .products-grid__item {
-  border-radius: 32px;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1036,7 +1100,7 @@ const isCallBackVisible = ref(false);
 }
 
 .contact-map__canvas {
-  border-radius: 48px;
+  border-radius: 0;
   min-height: 480px;
   overflow: hidden;
 }
@@ -1050,7 +1114,7 @@ const isCallBackVisible = ref(false);
 
 .contact-card__inner {
   background: #fff;
-  border-radius: 64px;
+  border-radius: 0;
   padding: 48px 40px;
   display: flex;
   flex-direction: column;
@@ -1063,7 +1127,7 @@ const isCallBackVisible = ref(false);
 
 .contact-card__social {
   background: #0f0f0f;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 10px;
   display: inline-flex;
   align-items: center;
@@ -1096,7 +1160,7 @@ const isCallBackVisible = ref(false);
   }
 
   .contact-card__inner {
-    border-radius: 32px;
+    border-radius: 0;
     padding: 32px 24px;
   }
 }

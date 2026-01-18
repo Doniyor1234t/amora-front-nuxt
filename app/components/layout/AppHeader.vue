@@ -214,14 +214,12 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
                 height="20px"
               />
             </button>
-            <button
-              type="button"
-              class="drawer-icon-button"
-              aria-label="Выбор языка"
-              @click="toggleLanguagePicker"
-            >
-              <Icon name="app-icon:globe" mode="svg" color="#0F0F0F" height="20px" />
-            </button>
+              <!-- <Icon name="app-icon:globe" mode="svg" color="#0F0F0F" height="20px" /> -->
+            <AppSelectButton 
+              v-model="value"
+              :options="options"
+              icon-color="#000"
+            />
   
             <NuxtLink to="/" class="drawer-logo-link" @click="visible = false">
               <svg
@@ -261,7 +259,7 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
         </template>
 
         <Transition name="fade">
-          <div v-if="isLanguagePickerOpen" class="drawer-language-chooser md:hidden">
+          <div v-if="false" class="drawer-language-chooser md:hidden">
             <AppSelectButton v-model="value" :options="options" />
           </div>
         </Transition>
@@ -281,7 +279,9 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
               height="32px"
             />
           </Button>
-          <AppSelectButton v-model="value" :options="options" />
+          <div class="md:hidden">
+            <AppSelectButton v-model="value" :options="options" />
+          </div>
 
           <!-- <div class="flex gap-4">
             <Button variant="text" severity="secondary" @click="handleProfileClick">
@@ -395,6 +395,7 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
       <AppSelectButton
         v-model="value"
         :options="options"
+        :icon-color="iconColor"
         class="max-sm:!hidden"
       />
 
@@ -432,6 +433,13 @@ const drawerCategories = computed(() => drawerCategoriesResponse.value ?? []);
             {{ favoriteCount }}
           </span>
         </div>
+
+        <AppSelectButton
+          v-model="value"
+          :options="options"
+          :icon-color="iconColor"
+          class="sm:hidden"
+        />
 
         <Button variant="text" severity="secondary" class="max-sm:!hidden" @click="handleProfileClick">
           <Icon

@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
     :closable="false"
     :showHeader="false"
     :draggable="false"
-    class="!rounded-[10px] !p-[40px] max-sm:p-[20px]! max-sm:w-[90%]"
+    class="!rounded-[0] !p-[40px] max-sm:p-[20px]! max-sm:w-[90%]"
   >
     <div class="flex flex-col gap-[20px] w-[446px] max-sm:w-[100%]">
 
@@ -294,7 +294,7 @@ onBeforeUnmount(() => {
             v-for="social in socials"
             :key="social.name"
             :href="social.url"
-            class="flex h-11 w-11 items-center justify-center rounded-full bg-black"
+            class="flex h-11 w-11 items-center justify-center rounded-[0] bg-black"
           >
             <Icon
               :name="`app-icon:${social.name}`"
@@ -309,7 +309,7 @@ onBeforeUnmount(() => {
         </div>
         <Button
           type="button"
-          class="w-full !h-[44px] !rounded-full !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white"
+          class="w-full !h-[44px] !rounded-[0] !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white"
           @click="closeDialog"
         >
           Закрыть
@@ -336,7 +336,7 @@ onBeforeUnmount(() => {
         <InputText
           v-model="form.name"
           placeholder="Имя фамилия"
-          class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
+          class="w-full !h-12 !rounded-[0] !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
         />
         <div class="phone-input-wrapper">
           <PhoneNumberWithCountryCode
@@ -353,7 +353,7 @@ onBeforeUnmount(() => {
         <InputText
           v-model="form.telegram"
           placeholder="@telegram"
-          class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
+          class="w-full !h-12 !rounded-[0] !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
         />
 
         <div v-if="showContactMethod" class="flex flex-col gap-2">
@@ -362,7 +362,7 @@ onBeforeUnmount(() => {
           </label>
           <select
             v-model="form.contactMethod"
-            class="w-full rounded-full border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
+            class="w-full rounded-[0] border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
           >
             <option value="">Не важно</option>
             <option value="PHONE">Телефон</option>
@@ -375,13 +375,13 @@ onBeforeUnmount(() => {
           v-if="showSizeField"
           v-model="form.size"
           placeholder="РАЗМЕР (S, M, 42...)"
-          class="w-full !h-12 !rounded-full !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
+          class="w-full !h-12 !rounded-[0] !border !border-[#E5E5E5] !px-[24px] !text-[14px]"
         /> -->
 
         <div v-if="showTrainingFields" class="flex flex-col gap-3">
           <select
             v-model="form.format"
-            class="w-full rounded-full border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
+            class="w-full rounded-[0] border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
           >
             <option value="">Формат обучения</option>
             <option value="ONLINE">Онлайн</option>
@@ -389,7 +389,7 @@ onBeforeUnmount(() => {
           </select>
           <select
             v-model="form.level"
-            class="w-full rounded-full border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
+            class="w-full rounded-[0] border border-[#E5E5E5] px-5 py-3 text-sm uppercase tracking-[0.2em] text-[#3D3D3D]"
           >
             <option value="">Уровень</option>
             <option value="BEGINNER">Новичок</option>
@@ -410,7 +410,7 @@ onBeforeUnmount(() => {
 
         <Button
           type="submit"
-          class="w-full !h-[44px] !rounded-full !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white flex items-center justify-center gap-2 disabled:opacity-60"
+          class="w-full !h-[44px] !rounded-[0] !bg-black !border-0 !text-[14px] tracking-[0.16em] !text-white flex items-center justify-center gap-2 disabled:opacity-60"
           :disabled="isSubmitting"
         >
           <span v-if="!isSubmitting">ОТПРАВИТЬ</span>
@@ -435,7 +435,7 @@ onBeforeUnmount(() => {
   <Transition name="toast-fade">
     <div
       v-if="toast.visible"
-      class="fixed right-6 top-6 z-[9999] rounded-[16px] px-5 py-4 shadow-[0_15px_40px_rgba(0,0,0,0.15)] text-xs tracking-[0.2em] uppercase"
+      class="fixed right-6 top-6 z-[9999] rounded-[0] px-5 py-4 shadow-[0_15px_40px_rgba(0,0,0,0.15)] text-xs tracking-[0.2em] uppercase"
       :class="toast.type === 'success' ? 'bg-[#E8F4EC] text-[#1D6B3A]' : 'bg-[#FDEBEC] text-[#AD1F2B]'"
     >
       {{ toast.message }}
@@ -476,7 +476,7 @@ onBeforeUnmount(() => {
   gap: 12px;
   min-height: 48px;
   padding: 0 18px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid #E5E5E5;
   background-color: #fff;
 }

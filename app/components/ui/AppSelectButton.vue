@@ -10,12 +10,14 @@ const props = withDefaults(
   defineProps<{
     modelValue: string;
     options?: Option[];
+    iconColor?: string;
   }>(),
   {
     options: () => [
-      { label: 'UZ', value: 'uz' },
-      { label: 'RU', value: 'ru' },
+      { label: "UZ", value: "uz" },
+      { label: "RU", value: "ru" },
     ],
+    iconColor: "#0F0F0F",
   }
 );
 
@@ -83,6 +85,7 @@ const onSelect = (value: string) => {
         class="app-select-button__icon"
         height="24"
         width="24"
+        :style="{ color: props.iconColor }"
       />
       <span class="sr-only">Выбрать язык. Сейчас: {{ selectedLabel }}</span>
     </button>
@@ -138,7 +141,7 @@ const onSelect = (value: string) => {
 }
 
 .app-select-button__icon {
-  color: #0f0f0f;
+  color: currentColor;
 }
 
 .app-select-button__dropdown {
@@ -147,7 +150,6 @@ const onSelect = (value: string) => {
   right: 0;
   min-width: 96px;
   padding: 6px;
-  border-radius: 12px;
   border: 1px solid #dedede;
   background: #fff;
   box-shadow: 0 8px 16px rgba(15, 15, 15, 0.08);
@@ -161,7 +163,6 @@ const onSelect = (value: string) => {
   width: 100%;
   text-align: left;
   padding: 6px 10px;
-  border-radius: 8px;
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;

@@ -55,6 +55,11 @@ const goToProduct = (item) => {
 defineExpose({
     swiper,
 });
+
+const autoplayOptions = {
+  delay: 4500,
+  disableOnInteraction: false,
+};
 </script>
 
 <template>
@@ -148,6 +153,7 @@ defineExpose({
         :slides-per-view="props.slidesPerView"
         class="products-slider__swiper"
         :breakpoints="breakpoints"
+        :autoplay="autoplayOptions"
       >
         <SwiperSlide
           v-for="(item, idx) in props.items"
@@ -172,7 +178,6 @@ defineExpose({
 
 <style scoped>
 .products-slider {
-  background: linear-gradient(180deg, #f8f6f2 0%, #ffffff 65%);
   color: #0f0f0f;
 }
 
@@ -196,7 +201,6 @@ defineExpose({
 
 .products-slider__control {
   border: 1px solid #e2e1df;
-  border-radius: 999px;
   padding: 10px 22px;
   color: #2f2e2c;
   transition: background 0.2s ease, color 0.2s ease;

@@ -112,7 +112,7 @@ const isCallBackVisible = ref(false);
           :key="service.title"
           class=" bg-[#fff] p-8 text-center"
         >
-          <span class="flex mx-auto h-18 w-18 items-center justify-center rounded-full border border-[#D0CBC4] text-[#14120F]">
+          <span class="flex mx-auto h-18 w-18 items-center justify-center border border-[#D0CBC4] text-[#14120F]">
             <Icon :name="service.icon" size="28" />
           </span>
           <h4 class="mt-24 text-2xl text-[#0F0F0F]">{{ service.title }}</h4>

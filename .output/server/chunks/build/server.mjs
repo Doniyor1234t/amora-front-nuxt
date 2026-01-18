@@ -525,17 +525,17 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-D928s45E.mjs')
+    component: () => import('./index-dJ8Ffc3r.mjs')
   },
   {
     name: "atelie",
     path: "/atelie",
-    component: () => import('./atelie-ZhOAdrKe.mjs')
+    component: () => import('./atelie-Vom70VV2.mjs')
   },
   {
     name: "school",
     path: "/school",
-    component: () => import('./school-sho6F490.mjs')
+    component: () => import('./school-C43G9G7V.mjs')
   },
   {
     name: "webform",
@@ -569,7 +569,7 @@ const _routes = [
     name: "catalog-id",
     path: "/catalog/:id()",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./_id_-BSJOwdsL.mjs')
+    component: () => import('./_id_-CRqqsu7R.mjs')
   },
   {
     name: "terms-of-use",
@@ -590,7 +590,7 @@ const _routes = [
     name: "collections-id",
     path: "/collections/:id()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./_id_-JjPgHM6P.mjs')
+    component: () => import('./_id_-C8SSE9hd.mjs')
   },
   {
     name: "collections",
@@ -2498,9 +2498,9 @@ const plugins = [
   vue_query_mAdjlicKbpO1UnAZ7vXXXzGIhtuQpOlfwkLVjVkGKxE
 ];
 const layouts = {
-  blank: defineAsyncComponent(() => import('./blank-Bsumbndq.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-D7IFoS29.mjs').then((m) => m.default || m)),
-  "header-only": defineAsyncComponent(() => import('./header-only-CLNZZV_f.mjs').then((m) => m.default || m))
+  blank: defineAsyncComponent(() => import('./blank-jYX47zuW.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-KBElM6tV.mjs').then((m) => m.default || m)),
+  "header-only": defineAsyncComponent(() => import('./header-only-3GtXGzvN.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
