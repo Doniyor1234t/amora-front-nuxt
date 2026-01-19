@@ -256,10 +256,10 @@ const quickLinks = [
         <div
           v-for="(feature, index) in features"
           :key="index"
-          class="bg-white rounded-[8px] sm:rounded-[8px] flex flex-col justify-between items-center pt-[48px] pb-[32px]"
+          class="bg-white rounded-[0] sm:rounded-[0] flex flex-col justify-between items-center pt-[48px] pb-[32px]"
         >
           <div
-            class="rounded-[8px] border-[1px] border-[#0F0F0F] p-[20px] w-[72px] h-[72px] flex justify-center items-center"
+            class="rounded-[0] border-[1px] border-[#0F0F0F] p-[20px] w-[72px] h-[72px] flex justify-center items-center"
             v-html="feature.svg"
           >
           </div>
@@ -300,7 +300,7 @@ const quickLinks = [
           </p>
           <button
             type="button"
-            class="inline-flex items-center gap-3 rounded-[80px] border border-[#2A2824] px-[32px] py-[14px] text-[11px] tracking-[0.4em] text-[#2A2824] transition hover:bg-[#2A2824] hover:text-white"
+            class="inline-flex items-center gap-3 rounded-[0] border border-[#2A2824] px-[32px] py-[14px] text-[11px] tracking-[0.4em] text-[#2A2824] transition hover:bg-[#2A2824] hover:text-white"
           >
             Наша история
             <span class="text-[16px]">→</span>
@@ -337,13 +337,13 @@ const quickLinks = [
     </section>
 
     <section class="container mx-auto mt-24 px-4">
-      <div class="grid gap-12 rounded-[8px] bg-white px-[48px] py-[64px] max-lg:px-[32px]">
+      <div class="grid gap-12 rounded-[0] bg-white px-[48px] py-[64px] max-lg:px-[32px]">
         <div class="flex max-md:flex-col items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <div class="rounded-[36px] min-h-[500px] bg-[#F4F1EC]">
+          <div class="rounded-[0] min-h-[500px] bg-[#F4F1EC]">
             <img
               src="/images/Collection-bg-6.jpg"
               alt="Founder portrait"
-              class="h-full w-full rounded-[8px] object-cover"
+              class="h-full w-full rounded-[0] object-cover"
             />
           </div>
           <div class="min-w-[752px] max-md:min-w-full">
@@ -356,7 +356,7 @@ const quickLinks = [
             </div>
             <button
               type="button"
-              class="mt-8 inline-flex items-center gap-3 rounded-[80px] border border-[#2A2824] px-[32px] py-[14px] text-[11px] tracking-[0.4em] text-[#2A2824] transition hover:bg-[#2A2824] hover:text-white"
+              class="mt-8 inline-flex items-center gap-3 rounded-[0] border border-[#2A2824] px-[32px] py-[14px] text-[11px] tracking-[0.4em] text-[#2A2824] transition hover:bg-[#2A2824] hover:text-white"
             >
               ПОДРОБНЕЕ
               <span class="text-lg">→</span>

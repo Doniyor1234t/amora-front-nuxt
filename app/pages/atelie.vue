@@ -19,32 +19,89 @@ const services = [
   },
 ]
 
-const priceList = [
-  { title: "Легкие платья ", 
-  price: "170$" },
-  { title: "Сарафаны", 
-  price: "130$" },
-  { title: "Жакеты по фигуре", 
-  price: "250$" },
-  { title: "Пиджаки", 
-  price: "350$" },
-  { title: "Брюки ,  Юбки , Блузки", 
-  price: "130$" },
-  { title: "Двойки", 
-  price: "220$" },
-  { title: "Корсет", 
-  price: "300$" },
-  { title: "Нарядное платье", 
-  price: "350$" },
-  { title: "Авторское платье", 
-  price: "500$" },
-  { title: "Корсетное платье", 
-  price: "700$" },
-  { title: "Драпированное платье", 
-  price: "1 200$" },
-  { title: "Платье от Дизайнера ", 
-  price: "1 500$" },
+const atelierMainServices = [
+  {
+    title: "DESIGNER PRIVATE ATELIER",
+    subtitle: "(персональная работа с дизайнером)",
+    items: [
+      "Личная консультация с дизайнером",
+      "Разработка идеи образа и концепции",
+      "Подбор тканей и материалов в сопровождении дизайнера",
+      "Авторский эскиз",
+      "Конструктивная разработка изделия дизайнером",
+      "Создание индивидуального лекала клиента",
+      "Примерки лично с дизайнером",
+      "Финальная посадка под фигуру",
+      "Архивирование лекала в ателье",
+      "Возможность повторного заказа по индивидуальному лекалу",
+    ],
+  },
+  {
+    title: "SIGNATURE / COUTURE",
+    subtitle: "(индивидуальный дизайн, ручная работа, ограниченное количество заказов)",
+    items: [
+      "Couture-платье (вечернее / подиумное)",
+      "Платье haute couture (ручная вышивка, сложные техники)",
+      "Авторское платье для особых событий",
+      "Платье с драпировками и архитектурным кроем",
+      "Корсет couture",
+      "Юбка couture",
+      "Индивидуальный образ «под ключ»",
+    ],
+  },
+  {
+    title: "BRIDAL / SPECIAL OCCASION",
+    subtitle: "(свадьбы, помолвки, торжества)",
+    items: [
+      "Свадебное платье couture",
+      "Свадебное платье made-to-measure",
+      "Платье для никаха",
+      "Платье для помолвки",
+      "Второе платье для свадьбы",
+      "Корсет свадебный",
+      "Фата / накидка / кейп",
+      "Индивидуальный свадебный образ",
+    ],
+  },
+  {
+    title: "EVENING & EVENT",
+    subtitle: "(вечер, выходы, красная дорожка)",
+    items: [
+      "Вечернее платье",
+      "Коктейльное платье",
+      "Платье из шёлка / бархата / органзы",
+      "Платье с ручной отделкой",
+    ]
+  },
+  {
+    title: "READY-TO-WEAR LUXE (на заказ)",
+    subtitle: "(повседневная элегантность)",
+    items: [
+      "Платье дневное",
+      "Костюм (жакет + брюки / юбка)",
+      "Жакет",
+      "Брюки",
+      "Юбка",
+      "Блуза / топ",
+      "Пальто",
+      "Тренч",
+    ]
+  },
+  {
+    title: "DECOR & DETAILS",
+    subtitle: "(можно вынести в доп. услуги)",
+    items: [
+      "Ручная вышивка",
+      "Аппликации",
+      "Драпировки",
+      "Работа с корсетом",
+      "Работа с деликатными тканями",
+      "Индивидуальный подбор тканей",
+    ]
+  },
 ]
+
+const activeMainServiceIndexes = ref<number[]>([0, 1]);
 
 const faqs = [
   {
@@ -69,6 +126,14 @@ const faqs = [
   },
 ]
 
+const toggleMainService = (index: number) => {
+  if (activeMainServiceIndexes.value.includes(index)) {
+    activeMainServiceIndexes.value = activeMainServiceIndexes.value.filter((item) => item !== index);
+  } else {
+    activeMainServiceIndexes.value = [...activeMainServiceIndexes.value, index];
+  }
+};
+
 const isCallBackVisible = ref(false);
 </script>
 
@@ -82,21 +147,61 @@ const isCallBackVisible = ref(false);
       />
     </section>
 
-    <section class="container mx-auto mt-16 px-4 md:hidden">
-      <h2 class="mb-6 text-[30px] font-light text-center leading-tight text-[#14120F] max-md:text-[30px]">
-        Индивидуальный пошив в ателье
-      </h2>
-      <div class="bg-white px-5 py-5 max-md:px-6 lg:px-14">
-        <div class="grid gap-4 md:grid-cols-2">
-          <div
-            v-for="item in priceList"
-            :key="item.title"
-            class="flex items-center justify-between pb-4 text-[#14120F]"
+    <section class="container mx-auto mt-16 px-4">
+      <div class="text-center">
+        <h2 class="text-[52px] font-light leading-tight text-[#14120F] max-md:text-[30px]">
+          Основные услуги
+        </h2>
+      </div>
+      <div class="mt-12 grid gap-10 md:grid-cols-2">
+        <article
+          v-for="(service, index) in atelierMainServices"
+          :key="service.title"
+          class="bg-[#fff] p-8 text-left"
+        >
+          <header
+            class="flex items-start justify-between gap-4"
+            @click="toggleMainService(index)"
+            role="button"
+            tabindex="0"
+            @keyup.enter="toggleMainService(index)"
+            :aria-expanded="activeMainServiceIndexes.includes(index)"
           >
-            <p class="text-sm tracking-[0.05em]">{{ item.title }}</p>
-            <span class="font-light tracking-[0.15em]">{{ item.price }}</span>
+            <div>
+              <h3 class="text-[26px] font-medium tracking-[0.02em] text-[#0F0F0F]">
+                {{ service.title }}
+              </h3>
+              <p class="mt-1 text-sm text-[#3D3D3D]">
+                {{ service.subtitle }}
+              </p>
+            </div>
+            <Icon
+              name="app-icon:arrow-bottom"
+              size="12"
+              class="text-[#B86F62]"
+              :style="{ transform: activeMainServiceIndexes.includes(index) ? 'rotate(180deg)' : 'rotate(0deg)' }"
+            />
+          </header>
+          <div v-show="activeMainServiceIndexes.includes(index)">
+            <ul
+              v-if="service.items && service.items.length"
+              class="mt-5 list-disc pl-5 text-sm text-[#0F0F0F]"
+            >
+              <li
+                v-for="item in service.items"
+                :key="item"
+              >
+                {{ item }}
+              </li>
+            </ul>
+            <p
+              v-else-if="service.description"
+              class="mt-4 text-sm text-[#3D3D3D]"
+            >
+              {{ service.description }}
+            </p>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 

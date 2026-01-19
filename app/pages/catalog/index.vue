@@ -512,7 +512,7 @@ watch(
 </script>
 
 <template>
-  <div class="pt-[72px]">
+  <div class="pt-[72px] bg-[#FBFAF9]">
     <div class="container mb-[32px] mt-[48px]">
       <h2 class="text-[#0F0F0F] text-[52px]  max-sm:text-[32px]">
         Каталог
@@ -843,7 +843,7 @@ watch(
     <!-- Пагинация -->
     <div class="container">
       <div
-        class="w-full flex justify-center mb-[100px] max-sm:mb-[20px] max-sm:mx-auto"
+        class="w-full flex justify-center pb-[100px] max-sm:pb-[20px] max-sm:mx-auto"
       >
         <nav class="flex items-center gap-12 text-sm text-[#3D3D3D]">
           <button

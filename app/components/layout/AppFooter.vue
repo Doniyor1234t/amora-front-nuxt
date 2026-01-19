@@ -11,13 +11,6 @@
             <p>Создаем элегантные силуэты из натуральных тканей.</p>
             <p>Запишитесь на примерку или консультацию стилиста.</p>
           </div>
-          <Button class="footer-button" variant="outlined" severity="secondary">
-            ЗАПИСАТЬСЯ
-            <svg width="36" height="20" viewBox="0 0 36 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 10L36 10" stroke="#0F0F0F" />
-              <path d="M26 0C26 4.82759 30.4068 10 36 10C30.4068 10 26 15.1724 26 20" stroke="#0F0F0F" />
-            </svg>
-          </Button>
         </div>
 
         <div class="footer-contact">
